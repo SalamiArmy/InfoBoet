@@ -136,17 +136,11 @@ class TriggerCricWatch(webapp2.RequestHandler):
             for chat_id in watches_split:
                 watchcric.run(bot, keyConfig, chat_id, 'Watcher')
 
-class ClearAllWatches(webapp2.RequestHandler):
-    def get(self):
-        setAllWatchesValue('')
-
 app = webapp2.WSGIApplication([
     ('/me', MeHandler),
     ('/updates', GetUpdatesHandler),
     ('/set_webhook', SetWebhookHandler),
     ('/webhook', WebhookHandler),
-    ('/allwatches', TriggerAllWatches),
     ('/watchmc', TriggerMCWatch),
-    ('/watchcric', TriggerCricWatch),
-    ('/clearallwatches', ClearAllWatches)
+    ('/watchcric', TriggerCricWatch)
 ], debug=True)
