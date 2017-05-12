@@ -26,41 +26,6 @@ bot = telegram.Bot(keyConfig.get('Telegram', 'TELE_BOT_ID'))
 
 # ================================
 
-
-class AllWatchesValue(ndb.Model):
-    # key name: AllWatches
-    currentValue = ndb.StringProperty(indexed=False, default='')
-
-# ================================
-
-def addToAllWatches(command, chat_id, request=''):
-    es = AllWatchesValue.get_or_insert('AllWatches')
-    es.currentValue += ',' + str(chat_id) + ':' + command + (':' + request.replace(',', '%2C') if request != '' else '')
-    es.put()
-
-def AllWatchesContains(command, chat_id, request=''):
-    es = AllWatchesValue.get_by_id('AllWatches')
-    if es:
-        return (',' + str(chat_id) + ':' + command + (':' + request.replace(',', '%2C') if request != '' else '')) in str(es.currentValue) or \
-               (str(chat_id) + ':' + command + (':' + request.replace(',', '%2C') if request != '' else '') + ',') in str(es.currentValue)
-    return False
-
-def setAllWatchesValue(NewValue):
-    es = AllWatchesValue.get_or_insert('AllWatches')
-    es.currentValue = NewValue
-    es.put()
-
-def getAllWatches():
-    es = AllWatchesValue.get_by_id('AllWatches')
-    if es:
-        return es.currentValue
-    return ''
-
-def removeFromAllWatches(watch):
-    setAllWatchesValue(getAllWatches().replace(',' + watch.replace(',', '%2C'), '').replace(watch.replace(',', '%2C'), ''))
-
-# ================================
-
 class MeHandler(webapp2.RequestHandler):
     def get(self):
         urlfetch.set_default_fetch_deadline(60)
@@ -86,7 +51,7 @@ class SetWebhookHandler(webapp2.RequestHandler):
 
 class WebhookHandler(webapp2.RequestHandler):
     def post(self):
-        #urlfetch.set_default_fetch_deadline(120)
+        urlfetch.set_default_fetch_deadline(120)
         body = json.loads(self.request.body)
         logging.info('request body:')
         logging.info(body)
@@ -152,26 +117,6 @@ class WebhookHandler(webapp2.RequestHandler):
                                      str(sys.exc_info()[1]))
             except:
                 print("Unexpected error sending error response:",  str(sys.exc_info()[0]) + str(sys.exc_info()[1]))
-
-
-class TriggerAllWatches(webapp2.RequestHandler):
-    def get(self):
-        AllWatches = getAllWatches()
-        watches_split = AllWatches.split(',')
-        if len(watches_split) >= 1:
-            for watch in watches_split:
-                print('got watch ' + watch)
-                split = watch.split(':')
-                if len(split) >= 2:
-                    removeGet = split[1].replace('get', '')
-                    mod = importlib.import_module('commands.watch' + removeGet)
-                    chat_id = split[0]
-                    request_text = (split[2] if len(split) == 3 else '')
-                    removeCommaEncoding = request_text.replace('%2C', ',')
-                    mod.run(bot, chat_id, 'Watcher', keyConfig, removeCommaEncoding)
-                else:
-                    print('removing from all watches: ' + watch)
-                    removeFromAllWatches(watch)
 
 from commands import watchmc
 class TriggerMCWatch(webapp2.RequestHandler):
