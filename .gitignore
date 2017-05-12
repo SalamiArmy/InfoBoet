@@ -12,3 +12,5 @@ commands/getgame.py
 commands/getpopgames.py
 commands/gettopgames.py
 commands/unwatchpopgames.py
+
+main.py
