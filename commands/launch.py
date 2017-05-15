@@ -76,7 +76,7 @@ def formatted_launch_message(blast, keyConfig):
     blast5LocalString = str(blast5UtcTime.astimezone(local_zone))
     blast5LocalTime = datetime.datetime.strptime(blast5LocalString, '%Y-%m-%d %H:%M:%S' +
                                                  timezone_string + ':00')
-    formattedLaunchInfo = 'Upcoming Rocket Launches:\nAll times are UTC' + timezone_string + '\n\n' + \
+    formattedLaunchInfo = 'Upcoming Rocket Launches:' + timezone_string + '\n\n' + \
                           str(blast1LocalTime) + \
                           '\n*' + b1['name'] + \
                           '*\nLaunching from ' + ('[' if b1['location']['pads'][0]['mapURL'] != '' else '') + \
@@ -116,5 +116,6 @@ def formatted_launch_message(blast, keyConfig):
                           ('](' + b5['location']['pads'][0]['mapURL'] + ')' if b5['location']['pads'][0][
                                                                                    'mapURL'] != '' else '') + \
                           ('\nWatch live at ' + b5['vidURL'] if 'vidURL' in b5 and b5['vidURL'] != '' and b5[
-                                                                                                              'vidURL'] != None else '')
+                                                                                                              'vidURL'] != None else '') + \
+                          '\n(All times are UTC)'
     return formattedLaunchInfo
