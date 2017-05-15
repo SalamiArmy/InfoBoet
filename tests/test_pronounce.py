@@ -8,7 +8,7 @@ import commands.pronounce as pronounce
 
 class TestTorrent(unittest.TestCase):
     def test_translate(self):
-        requestText = 'schlacken'
+        requestText = 'schwanz'
 
         keyConfig = ConfigParser.ConfigParser()
         keyConfig.read(["keys.ini", "..\keys.ini"])
