@@ -4,11 +4,3 @@ keys.ini
 lib/
 adapt/
 mcstatus/
-
-commands/unwatchtopgames.py
-commands/watchpopgames.py
-commands/watchtopgames.py
-commands/getgame.py
-commands/getpopgames.py
-commands/gettopgames.py
-commands/unwatchpopgames.py
