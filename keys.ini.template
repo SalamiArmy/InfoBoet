@@ -45,3 +45,6 @@ AutoSuggestApiKey: {Your Bing AutoSuggest Api Key}
 [GoodReads]
 key: {Your GoodReads API key}
 secret: {Your GoodReads API secret}
+
+[OMDB]
+KEY: {Your OMDB API key}

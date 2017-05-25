@@ -8,7 +8,7 @@ import telegram
 def run(bot, chat_id, user, keyConfig, message, totalResults=1):
     requestText = message.replace(bot.name, "").strip()
 
-    movieUrl = 'http://www.omdbapi.com/?plot=short&r=json&y=&t='
+    movieUrl = 'http://www.omdbapi.com/?apikey=' + keyConfig.get('OMDB', 'KEY') + '&plot=short&r=json&y=&t='
     realUrl = movieUrl + requestText.encode('utf-8')
     data = json.load(urllib.urlopen(realUrl))
     if 'Error' not in data:
