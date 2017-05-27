@@ -10,28 +10,31 @@ def run(bot, chat_id, user, keyConfig='', requestText='', totalResults=1):
     if rawAudioSourceTag:
         bot.sendMessage(chat_id=chat_id, text='http:' + rawAudioSourceTag['src'])
     else:
-        rawAudioSourceTag, error = search_pronounciations(requestText, False)
-        if rawAudioSourceTag:
-            bot.sendMessage(chat_id=chat_id, text='http:' + rawAudioSourceTag['src'])
+        if error:
+            bot.sendMessage(chat_id=chat_id, text='Es tut mir Leid ' + (user if not user == '' else 'Dave') +
+                                                  ', ' + error.text)
         else:
-            if error:
-                bot.sendMessage(chat_id=chat_id, text='Es tut mir Leid ' + (user if not user == '' else 'Dave') +
-                                                      ', ' + error.text)
-            else:
-                bot.sendMessage(chat_id=chat_id, text='Es tut mir Leid ' + (user if not user == '' else 'Dave') + \
-                                                      ', Ich habe angst, dass ich keine aussprache von finden kann ' + \
-                                                      requestText.encode('utf-8') + '.')
+            bot.sendMessage(chat_id=chat_id, text='Es tut mir Leid ' + (user if not user == '' else 'Dave') + \
+                                                  ', Ich habe angst, dass ich keine aussprache von finden kann ' + \
+                                                  requestText.encode('utf-8') + '.')
 
 
 def search_pronounciations(requestText, titleCase=True):
-    if titleCase:
-        requestText = requestText.title()
+    error, rawAudioSourceTag = search_impl(requestText)
+    if rawAudioSourceTag:
+        return rawAudioSourceTag, error
+    else:
+        rawAudioSourceTag, error = search_impl(requestText.title())
+        return rawAudioSourceTag, error
+
+
+def search_impl(requestText):
     args = {'from': 'wb',
             'q': requestText}
     full_url = 'https://www.dwds.de/' + '?' + urllib.urlencode(args)
     rawMarkup = urllib.urlopen(full_url).read()
     soup = BeautifulSoup(rawMarkup, 'html.parser')
     rawAudioSourceTag = soup.find('source', attrs={'type': 'audio/mpeg'})
-    error = soup.find('p', attrs={'class':'bg-danger'})
-    return rawAudioSourceTag, error
+    error = soup.find('p', attrs={'class': 'bg-danger'})
+    return error, rawAudioSourceTag
 
