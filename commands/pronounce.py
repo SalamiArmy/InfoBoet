@@ -23,5 +23,5 @@ def run(bot, chat_id, user, keyConfig='', requestText='', totalResults=1):
         else:
             bot.sendMessage(chat_id=chat_id, text='Es tut mir Leid ' + (user if not user == '' else 'Dave') + \
                                                   ', Ich habe angst, dass ich keine aussprache von finden kann ' + \
-                                                  requestText.encode('utf-8'))
+                                                  requestText.encode('utf-8') + '.')
 
