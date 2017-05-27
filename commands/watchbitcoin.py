@@ -9,24 +9,53 @@ from commands import bitcoin
 watchedCommandName = 'bitcoin'
 
 
-class WatchValue(ndb.Model):
+class BitcoinWatchValue(ndb.Model):
     # key name: str(chat_id)
     currentValue = ndb.StringProperty(indexed=False, default='')
+    all_chat_ids = ndb.StringProperty(indexed=False, default='')
 
 
 # ================================
 
 def setWatchValue(chat_id, request_text, NewValue):
-    es = WatchValue.get_or_insert(watchedCommandName + ':' + str(chat_id))
+    es = BitcoinWatchValue.get_or_insert(watchedCommandName + ':' + str(chat_id))
     es.currentValue = NewValue + (':' + request_text if request_text != '' else '')
     es.put()
 
 
 def getWatchValue(chat_id):
-    es = WatchValue.get_by_id(watchedCommandName + ':' + str(chat_id))
+    es = BitcoinWatchValue.get_by_id(watchedCommandName + ':' + str(chat_id))
     if es:
         return es.currentValue
     return ''
+
+def addToAllWatches(chat_id):
+    es = BitcoinWatchValue.get_or_insert(watchedCommandName + ':' + 'AllWatchers')
+    es.all_chat_ids += ',' + str(chat_id)
+    es.put()
+
+def AllWatchesContains(chat_id):
+    es = BitcoinWatchValue.get_by_id(watchedCommandName + ':' + 'AllWatchers')
+    if es:
+        return (',' + str(chat_id)) in str(es.all_chat_ids) or \
+               (str(chat_id) + ',') in str(es.all_chat_ids)
+    return False
+
+def setAllWatchesValue(NewValue):
+    es = BitcoinWatchValue.get_or_insert(watchedCommandName + ':' + 'AllWatchers')
+    es.all_chat_ids = NewValue
+    es.put()
+
+def getAllWatches():
+    es = BitcoinWatchValue.get_by_id(watchedCommandName + ':' + 'AllWatchers')
+    if es:
+        return es.all_chat_ids
+    return ''
+
+def removeFromAllWatches(watch):
+    setAllWatchesValue(getAllWatches().replace(',' + watch + ',', ',')
+                       .replace(',' + watch, '')
+                       .replace(watch + ',', ''))
 
 
 def run(bot, chat_id, user, keyConfig, message, totalResults=1):
@@ -78,8 +107,8 @@ def run(bot, chat_id, user, keyConfig, message, totalResults=1):
                 elif message[:1] != '+' and message[:1] != '-':
                     bot.sendMessage(chat_id=chat_id,
                                     text='Watch for /' + watchedCommandName + ' has not dropped below ' + message +' ZAR:\n' + formatted_price)
-        if not main.AllWatchesContains(watchedCommandName, chat_id, message):
-            main.addToAllWatches(watchedCommandName, chat_id, message)
+        if not AllWatchesContains(chat_id):
+            addToAllWatches(chat_id)
     else:
         bot.sendMessage(chat_id=chat_id, text='I\'m sorry ' + (user if not user == '' else 'Dave') +
                                               ', I\'m afraid I can\'t watch ' +
@@ -102,9 +131,8 @@ def parse_old_price_float(OldValue, bot, chat_id, message):
 
 
 def unwatch(bot, chat_id, message, sendmessage=False):
-    watches = main.getAllWatches()
-    if ',' + str(chat_id) + ':' + watchedCommandName + ':' + message + ',' in watches or ',' + str(chat_id) + ':' + watchedCommandName + ':' + message in watches:
-        main.removeFromAllWatches(str(chat_id) + ':' + watchedCommandName + ':' + message)
+    if AllWatchesContains(chat_id):
+        removeFromAllWatches(chat_id)
         if sendmessage:
             bot.sendMessage(chat_id=chat_id, text='Watch for /' + watchedCommandName + ' ' + message + ' has been removed.')
     else:
