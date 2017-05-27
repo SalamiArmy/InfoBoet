@@ -4,7 +4,8 @@ import urllib
 
 
 def run(bot, chat_id, user, keyConfig, message, totalResults=1):
-    bot.sendMessage(chat_id=chat_id, text=get_cric_data(user), parse_mode='Markdown')
+    data = get_cric_data(user)
+    bot.sendMessage(chat_id=chat_id, text=data)
 
 
 def get_cric_data(user):

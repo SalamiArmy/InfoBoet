@@ -20,7 +20,7 @@ def run(bot, chat_id, user, keyConfig, message, totalResults=1):
     data = json.load(urllib.urlopen(realUrl))
     if 'items' in data:
         imagelink = data['items'][0]['link']
-        bot.sendMessage(chat_id=chat_id, text=requestText + ": " + imagelink)
+        bot.sendMessage(chat_id=chat_id, text=user + requestText + ": " + imagelink)
     else:
         if 'error' in data:
             bot.sendMessage(chat_id=chat_id, text='I\'m sorry ' + (user if not user == '' else 'Dave') +
