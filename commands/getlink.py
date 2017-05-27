@@ -21,15 +21,15 @@ def run(bot, chat_id, user, keyConfig, message, total_requested_results=1):
     if 'items' in data:
         total_sent = 0
         total_actual_results = data['searchInformation']['totalResults']
-        while total_sent < total_requested_results and total_sent < total_actual_results:
+        if total_actual_results < total_requested_results:
+            total_results_to_send = total_actual_results
+            bot.sendMessage(chat_id=chat_id, text='I\'m sorry ' + (user if not user == '' else 'Dave') +
+                                                  ', I\'m afraid I can only find ' + str(total_actual_results) +
+                                                  ' links for ' + string.capwords(requestText.encode('utf-8')) + '.')
+        else:
+            total_results_to_send = total_requested_results
+        while total_sent < total_results_to_send:
             imagelink = data['items'][0]['link']
-            if total_actual_results < total_requested_results:
-                total_results_to_send = total_actual_results
-                bot.sendMessage(chat_id=chat_id, text='I\'m sorry ' + (user if not user == '' else 'Dave') +
-                                                      ', I\'m afraid I can only find ' + str(total_actual_results) +
-                                                      ' links for ' + string.capwords(requestText.encode('utf-8')) + '.')
-            else:
-                total_results_to_send = total_requested_results
             bot.sendMessage(chat_id=chat_id, text=user + requestText +
                                                   (' ' + str(total_sent + 1) + ' of ' + str(total_results_to_send) if int(total_results_to_send) > 1 else '') +
                                                   ': ' + imagelink)
