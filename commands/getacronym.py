@@ -32,9 +32,10 @@ def acronym_results_parser(code):
 def acronym_results_printer(request, list):
     AllGameDetailsFormatted= '*' + str(request) + '* could mean:'
     for item in list:
-        if (str(item) != 'None'):
+        encodedItem = item.encode('utf-8')
+        if (encodedItem != 'None'):
             AllGameDetailsFormatted += '\n'
-            stripped = re.sub('\[military]$|\\(insurance\)$|\[transportation]$|\[computer]$|\\(technology\)$|\[medical]$|\[automotive]$|\[abbreviation]$|\[slang]$|', '', str(item))
+            stripped = re.sub('\[military]$|\\(insurance\)$|\[transportation]$|\[computer]$|\\(technology\)$|\[medical]$|\[automotive]$|\[abbreviation]$|\[slang]$|', '', encodedItem)
             for char in stripped:
                 if char.isupper():
                     AllGameDetailsFormatted += '*' + char + '*'

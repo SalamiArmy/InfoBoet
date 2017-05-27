@@ -8,7 +8,7 @@ import commands.getacronym as getacronym
 
 class TestGetGame(unittest.TestCase):
     def test_getgame(self):
-        requestText = 'min'
+        requestText = 'abd'
 
         keyConfig = ConfigParser.ConfigParser()
         keyConfig.read(["keys.ini", "..\keys.ini"])

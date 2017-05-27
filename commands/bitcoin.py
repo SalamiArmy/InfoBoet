@@ -16,9 +16,13 @@ def get_bitcoin_prices():
     bcurl = 'https://api.coindesk.com/v1/bpi/currentprice/ZAR.json'
     data = json.load(urllib.urlopen(bcurl))
     bcurl2 = 'https://api.coindesk.com/v1/bpi/currentprice.json'
-    data2 = json.load(urllib.urlopen(bcurl2))
-    updateTime = data['time']['updated']
-    priceUS = data['bpi']['USD']['rate']
-    priceZA = data['bpi']['ZAR']['rate']
-    priceGB = data2['bpi']['GBP']['rate']
-    return priceGB, priceUS, priceZA, updateTime
+    rawJSON = urllib.urlopen(bcurl2)
+    try:
+        data2 = json.load(rawJSON)
+        updateTime = data['time']['updated']
+        priceUS = data['bpi']['USD']['rate']
+        priceZA = data['bpi']['ZAR']['rate']
+        priceGB = data2['bpi']['GBP']['rate']
+        return priceGB, priceUS, priceZA, updateTime
+    except ValueError:
+        print('Value error: ' + rawJSON.read)
