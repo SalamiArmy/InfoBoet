@@ -9,7 +9,7 @@ import telegram
 from commands import retry_on_telegram_error
 
 
-def run(bot, chat_id, user, keyConfig, message, totalResults=1):
+def run(bot, chat_id, user, keyConfig, message, total_requested_results=1):
     requestText = message.replace(bot.name, "").strip()
     googurl = 'https://www.googleapis.com/customsearch/v1'
     args = {'cx': keyConfig.get('Google', 'GCSE_SE_ID'),
@@ -19,8 +19,21 @@ def run(bot, chat_id, user, keyConfig, message, totalResults=1):
     realUrl = googurl + '?' + urllib.urlencode(args)
     data = json.load(urllib.urlopen(realUrl))
     if 'items' in data:
-        imagelink = data['items'][0]['link']
-        bot.sendMessage(chat_id=chat_id, text=user + requestText + ": " + imagelink)
+        total_sent = 0
+        total_actual_results = data['searchInformation']['totalResults']
+        while total_sent < total_requested_results and total_sent < total_actual_results:
+            imagelink = data['items'][0]['link']
+            if total_actual_results < total_requested_results:
+                total_results_to_send = total_actual_results
+                bot.sendMessage(chat_id=chat_id, text='I\'m sorry ' + (user if not user == '' else 'Dave') +
+                                                      ', I\'m afraid I can only find ' + str(total_actual_results) +
+                                                      ' links for ' + string.capwords(requestText.encode('utf-8')) + '.')
+            else:
+                total_results_to_send = total_requested_results
+            bot.sendMessage(chat_id=chat_id, text=user + requestText +
+                                                  (' ' + str(total_sent + 1) + ' of ' + str(total_results_to_send) if int(total_results_to_send) > 1 else '') +
+                                                  ': ' + imagelink)
+            total_sent += 1
     else:
         if 'error' in data:
             bot.sendMessage(chat_id=chat_id, text='I\'m sorry ' + (user if not user == '' else 'Dave') +
