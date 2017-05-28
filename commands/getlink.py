@@ -20,7 +20,7 @@ def run(bot, chat_id, user, keyConfig, message, total_requested_results=1):
     data = json.load(urllib.urlopen(realUrl))
     if 'items' in data:
         total_sent = 0
-        total_actual_results = data['searchInformation']['totalResults']
+        total_actual_results = int(data['searchInformation']['totalResults'])
         if total_actual_results < total_requested_results:
             total_results_to_send = total_actual_results
             bot.sendMessage(chat_id=chat_id, text='I\'m sorry ' + (user if not user == '' else 'Dave') +
