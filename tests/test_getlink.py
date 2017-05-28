@@ -7,7 +7,7 @@ import commands.getlink as getlink
 
 class TestGet(unittest.TestCase):
     def test_get(self):
-        requestText = 'missing Russian rpg'
+        requestText = 'the cancun typhoon'
 
         keyConfig = ConfigParser.ConfigParser()
         keyConfig.read(["keys.ini", "..\keys.ini"])

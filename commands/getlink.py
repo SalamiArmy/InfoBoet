@@ -30,7 +30,7 @@ def run(bot, chat_id, user, keyConfig, message, total_requested_results=1):
             total_results_to_send = total_requested_results
         while total_sent < total_results_to_send:
             imagelink = data['items'][total_sent]['link']
-            bot.sendMessage(chat_id=chat_id, text=user + requestText +
+            bot.sendMessage(chat_id=chat_id, text=user + ', ' + requestText +
                                                   (' ' + str(total_sent + 1) + ' of ' + str(total_results_to_send) if int(total_results_to_send) > 1 else '') +
                                                   ': ' + imagelink)
             total_sent += 1
