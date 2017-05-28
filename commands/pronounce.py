@@ -10,7 +10,7 @@ def run(bot, chat_id, user, keyConfig='', requestText='', totalResults=1):
     if rawAudioSourceTag:
         bot.sendMessage(chat_id=chat_id, text='http:' + rawAudioSourceTag['src'])
     else:
-        if error:
+        if error and error.text:
             bot.sendMessage(chat_id=chat_id, text='Es tut mir Leid ' + (user if not user == '' else 'Dave') +
                                                   ', ' + error.text)
         else:
