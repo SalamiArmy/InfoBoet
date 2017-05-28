@@ -19,7 +19,7 @@ def run(bot, chat_id, user, keyConfig='', requestText='', totalResults=1):
                                                   requestText.encode('utf-8') + '.')
 
 
-def search_pronounciations(requestText, titleCase=True):
+def search_pronounciations(requestText):
     error, rawAudioSourceTag = search_impl(requestText)
     if rawAudioSourceTag:
         return rawAudioSourceTag, error
@@ -36,5 +36,5 @@ def search_impl(requestText):
     soup = BeautifulSoup(rawMarkup, 'html.parser')
     rawAudioSourceTag = soup.find('source', attrs={'type': 'audio/mpeg'})
     error = soup.find('p', attrs={'class': 'bg-danger'})
-    return error, rawAudioSourceTag
+    return rawAudioSourceTag, error
 
