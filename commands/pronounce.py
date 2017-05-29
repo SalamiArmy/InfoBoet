@@ -6,26 +6,26 @@ from bs4 import BeautifulSoup
 
 
 def run(bot, chat_id, user, keyConfig='', requestText='', totalResults=1):
-    rawAudioSourceTag, error = search_pronounciations(requestText)
+    rawAudioSourceTag, error, full_url = search_pronounciations(requestText)
     if rawAudioSourceTag:
         bot.sendMessage(chat_id=chat_id, text='http:' + rawAudioSourceTag['src'])
     else:
         if error and error.text:
             bot.sendMessage(chat_id=chat_id, text='Es tut mir Leid ' + (user if not user == '' else 'Dave') +
-                                                  ', ' + error.text)
+                                                  ', ' + error.text + '\n' + full_url)
         else:
             bot.sendMessage(chat_id=chat_id, text='Es tut mir Leid ' + (user if not user == '' else 'Dave') + \
                                                   ', Ich habe angst, dass ich keine aussprache von finden kann ' + \
-                                                  requestText.encode('utf-8') + '.')
+                                                  requestText.encode('utf-8') + '.\n' + full_url)
 
 
 def search_pronounciations(requestText):
-    error, rawAudioSourceTag = search_impl(requestText)
+    error, rawAudioSourceTag, full_url = search_impl(requestText)
     if rawAudioSourceTag:
         return rawAudioSourceTag, error
     else:
-        rawAudioSourceTag, error = search_impl(requestText.title())
-        return rawAudioSourceTag, error
+        rawAudioSourceTag, error, full_url = search_impl(requestText.title())
+        return rawAudioSourceTag, error, full_url
 
 
 def search_impl(requestText):
@@ -36,5 +36,5 @@ def search_impl(requestText):
     soup = BeautifulSoup(rawMarkup, 'html.parser')
     rawAudioSourceTag = soup.find('source', attrs={'type': 'audio/mpeg'})
     error = soup.find('p', attrs={'class': 'bg-danger'})
-    return rawAudioSourceTag, error
+    return rawAudioSourceTag, error, full_url
 
