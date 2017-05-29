@@ -20,7 +20,7 @@ def run(bot, chat_id, user, keyConfig='', requestText='', totalResults=1):
 
 
 def search_pronounciations(requestText):
-    error, rawAudioSourceTag, full_url = search_impl(requestText)
+    rawAudioSourceTag, error, full_url = search_impl(requestText)
     if rawAudioSourceTag and 'src' in rawAudioSourceTag:
         return rawAudioSourceTag, error, full_url
     else:
