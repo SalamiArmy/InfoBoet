@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 
 def run(bot, chat_id, user, keyConfig='', requestText='', totalResults=1):
     rawAudioSourceTag, error, full_url = search_pronounciations(requestText)
-    if rawAudioSourceTag:
+    if rawAudioSourceTag and 'src' in rawAudioSourceTag:
         bot.sendMessage(chat_id=chat_id, text='http:' + rawAudioSourceTag['src'])
     else:
         if error and error.text:
@@ -21,7 +21,7 @@ def run(bot, chat_id, user, keyConfig='', requestText='', totalResults=1):
 
 def search_pronounciations(requestText):
     error, rawAudioSourceTag, full_url = search_impl(requestText)
-    if rawAudioSourceTag:
+    if rawAudioSourceTag and 'src' in rawAudioSourceTag:
         return rawAudioSourceTag, error, full_url
     else:
         rawAudioSourceTag, error, full_url = search_impl(requestText.title())
