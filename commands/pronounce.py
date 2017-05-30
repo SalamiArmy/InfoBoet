@@ -24,8 +24,7 @@ def search_pronounciations(requestText):
     if rawAudioSourceTag:
         return rawAudioSourceTag, error, full_url
     else:
-        rawAudioSourceTag, error, full_url = search_impl(requestText.title())
-        return rawAudioSourceTag, error, full_url
+        return search_impl(requestText.title())
 
 
 def search_impl(requestText):
