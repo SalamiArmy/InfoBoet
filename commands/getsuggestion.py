@@ -16,8 +16,10 @@ def run(bot, chat_id, user, keyConfig, message, totalResults=1):
     data = json.load(urllib2.urlopen(req))
 
     if 'suggestionGroups' in data and len(data['suggestionGroups']) >= 1 and 'searchSuggestions' in data['suggestionGroups'][0] and len(data['suggestionGroups'][0]['searchSuggestions']) >= 1 and 'displayText' in data['suggestionGroups'][0]['searchSuggestions'][0] and data['suggestionGroups'][0]['searchSuggestions'][0]['displayText'] != requestText:
-        displayText = data['suggestionGroups'][0]['searchSuggestions'][0]['displayText']
-        bot.sendMessage(chat_id=chat_id, text=(user + ': ' if not user == '' else '') + displayText)
+        returnText = ""
+        for searchSuggestion in data['suggestionGroups'][0]['searchSuggestions']:
+            returnText += searchSuggestion['displayText'] + "\n"
+        bot.sendMessage(chat_id=chat_id, text=(user + ': ' if not user == '' else '') + returnText)
     else:
         bot.sendMessage(chat_id=chat_id, text='I\'m sorry ' + (user if not user == '' else 'Dave') +
                                               ', I\'m afraid I can\'t find a suggestion for ' +
