@@ -8,7 +8,6 @@ import commands.getgif as getgif
 from google.appengine.ext import ndb
 from google.appengine.ext import testbed
 
-
 class TestGet(unittest.TestCase):
     def setUp(self):
         # First, create an instance of the Testbed class.
