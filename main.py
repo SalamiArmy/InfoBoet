@@ -1,15 +1,18 @@
 import ConfigParser
+import httplib
 import importlib
 import json
+import logging
+import unittest
+import urllib
 import sys
 
 import urllib2
 import telegram
 
-import logging
-import urllib
-
+# standard app engine imports
 from google.appengine.api import urlfetch
+from google.appengine.ext import ndb
 
 import webapp2
 
@@ -133,13 +136,11 @@ class TriggerCricWatch(webapp2.RequestHandler):
             for chat_id in watches_split:
                 watchcric.run(bot, keyConfig, chat_id, 'Watcher')
 
-import mirror_handler
 app = webapp2.WSGIApplication([
     ('/me', MeHandler),
     ('/updates', GetUpdatesHandler),
     ('/set_webhook', SetWebhookHandler),
     ('/webhook', WebhookHandler),
     ('/watchmc', TriggerMCWatch),
-    ('/watchcric', TriggerCricWatch),
-    (r"/([^/]+).*", mirror_handler.MirrorHandler)
+    ('/watchcric', TriggerCricWatch)
 ], debug=True)
