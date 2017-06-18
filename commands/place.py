@@ -11,7 +11,7 @@ def run(bot, chat_id, user, keyConfig, message, totalResults=1):
 
     mapsUrl = 'https://maps.googleapis.com/maps/api/place/textsearch/json?key=' + \
               keyConfig.get('Google', 'GCSE_APP_ID') + '&location=-30,30&radius=50000&query='
-    realUrl = mapsUrl + requestText.encode('utf-8')
+    realUrl = mapsUrl + requestText
     data = json.load(urllib.urlopen(realUrl))
     if len(data['results']) >= 1:
         latNum = data['results'][0]['geometry']['location']['lat']
@@ -23,4 +23,4 @@ def run(bot, chat_id, user, keyConfig, message, totalResults=1):
         bot.sendMessage(chat_id=chat_id,
                         text='I\'m sorry ' + (user if not user == '' else 'Dave') +
                              ', I\'m afraid I can\'t quite place ' +
-                             requestText.encode('utf-8') + '.')
+                             requestText + '.')

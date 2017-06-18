@@ -1,3 +1,4 @@
+# coding=utf-8
 import ConfigParser
 import unittest
 import telegram
@@ -7,7 +8,7 @@ import commands.place as place
 
 class TestPlace(unittest.TestCase):
     def test_place(self):
-        requestText = 'Hillcrest'
+        requestText = 'Tannhäuser'
 
         keyConfig = ConfigParser.ConfigParser()
         keyConfig.read(["keys.ini", "..\keys.ini"])
