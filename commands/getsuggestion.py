@@ -3,10 +3,8 @@ import json
 import urllib
 import urllib2
 
-
 def run(bot, chat_id, user, keyConfig, message, totalResults=1):
     requestText = message.replace(bot.name, '').strip()
-
     url = 'https://api.cognitive.microsoft.com/bing/v5.0/suggestions/'
     values = {'q': requestText}
 
