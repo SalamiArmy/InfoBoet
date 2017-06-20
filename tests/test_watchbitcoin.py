@@ -41,4 +41,4 @@ class TestWatchBitcoin(unittest.TestCase):
         bot = telegram.Bot(keyConfig.get('Telegram', 'TELE_BOT_ID'))
         chatId = keyConfig.get('BotAdministration', 'TESTING_PRIVATE_CHAT_ID')
 
-        watchbitcoin.run(bot, chatId, 'SalamiArmy', keyConfig)
+        watchbitcoin.run(bot, chatId, 'SalamiArmy', keyConfig, '')
