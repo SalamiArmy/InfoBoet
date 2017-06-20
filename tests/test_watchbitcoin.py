@@ -24,9 +24,7 @@ class TestWatchBitcoin(unittest.TestCase):
         # using ndb.get_context().set_cache_policy(False)
         ndb.get_context().clear_cache()
 
-    def test_watchbitcoin(self):
-        requestText = '10000'
-
+    def test_watchbitcoin_with_threshold(self):
         keyConfig = ConfigParser.ConfigParser()
         keyConfig.read(["keys.ini", "..\keys.ini"])
         bot = telegram.Bot(keyConfig.get('Telegram', 'TELE_BOT_ID'))
@@ -36,3 +34,11 @@ class TestWatchBitcoin(unittest.TestCase):
         watchbitcoin.run(bot, chatId, 'SalamiArmy', keyConfig, '-100')
         watchbitcoin.unwatch(bot, chatId, '15000')
         watchbitcoin.run(bot, chatId, 'SalamiArmy', keyConfig, '10000')
+
+    def test_watchbitcoin_without_threshold(self):
+        keyConfig = ConfigParser.ConfigParser()
+        keyConfig.read(["keys.ini", "..\keys.ini"])
+        bot = telegram.Bot(keyConfig.get('Telegram', 'TELE_BOT_ID'))
+        chatId = keyConfig.get('BotAdministration', 'TESTING_PRIVATE_CHAT_ID')
+
+        watchbitcoin.run(bot, chatId, 'SalamiArmy', keyConfig)
