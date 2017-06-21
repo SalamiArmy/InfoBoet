@@ -18,6 +18,7 @@ class TestWatchBitcoin(unittest.TestCase):
         self.testbed.init_datastore_v3_stub()
         self.testbed.init_memcache_stub()
         self.testbed.init_user_stub()
+        self.testbed.init_urlfetch_stub()
         # Clear ndb's in-context cache between tests.
         # This prevents data from leaking between tests.
         # Alternatively, you could disable caching by
@@ -30,7 +31,7 @@ class TestWatchBitcoin(unittest.TestCase):
         bot = telegram.Bot(keyConfig.get('Telegram', 'TELE_BOT_ID'))
         chatId = keyConfig.get('BotAdministration', 'TESTING_PRIVATE_CHAT_ID')
 
-        watchbitcoin.run(bot, chatId, 'SalamiArmy', keyConfig, '15000')
+        watchbitcoin.run(bot, chatId, 'SalamiArmy', keyConfig, 40000)
         watchbitcoin.run(bot, chatId, 'SalamiArmy', keyConfig, '-100')
         watchbitcoin.unwatch(bot, chatId, '15000')
         watchbitcoin.run(bot, chatId, 'SalamiArmy', keyConfig, '10000')
