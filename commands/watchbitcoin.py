@@ -19,7 +19,7 @@ class BitcoinWatchValue(ndb.Model):
 
 def setWatchValue(chat_id, request_text, NewValue):
     es = BitcoinWatchValue.get_or_insert(watchedCommandName + ':' + str(chat_id))
-    es.currentValue = NewValue + (':' + request_text if request_text != '' else '')
+    es.currentValue = NewValue + (':' + str(request_text) if str(request_text) != '' else '')
     es.put()
 
 
@@ -59,60 +59,66 @@ def removeFromAllWatches(watch):
 
 
 def run(bot, chat_id, user, keyConfig, message, totalResults=1):
-    priceGB, priceUS, new_price, updateTime = bitcoin.get_bitcoin_prices()
-    if new_price:
-        OldValue = getWatchValue(chat_id)
-        float_ready_new_price = new_price.replace(',', '')
-        new_price_float = float(float_ready_new_price)
-        OldValue, old_price_float = parse_old_price_float(OldValue, bot, chat_id, message)
-        price_diff = new_price_float - old_price_float
-        setWatchValue(chat_id, message, new_price)
-        formatted_price = 'The Current Price of 1 Bitcoin:\n\n' + priceUS + ' USD\n' + priceGB + ' GBP\n' + new_price + ' ZAR' + '\n\nTime Updated: ' + updateTime
-        if OldValue == '' and message == '' and user != 'Watcher':
-            bot.sendMessage(chat_id=chat_id,
-                            text='Now watching /' + watchedCommandName + ' ' + message + '\n' + formatted_price)
-        elif OldValue == '' and (message[:1] == '+' or message[:1] == '-') and user != 'Watcher':
-            bot.sendMessage(chat_id=chat_id,
-                            text='Now watching /' + watchedCommandName + ' changes by ' + message + '\n' + formatted_price)
-        elif OldValue == '' and message[:1] != '+' and message[:1] != '-' and user != 'Watcher':
-            bot.sendMessage(chat_id=chat_id,
-                            text='Now watching /' + watchedCommandName + ' drops below threshold of ' + message + '\n' + formatted_price)
-        elif old_price_float != new_price_float and message == '' and user != 'Watcher':
-            if OldValue != '':
+    requestText = str(message).replace(bot.name, '')
+    if requestText:
+        priceGB, priceUS, new_price, updateTime = bitcoin.get_bitcoin_prices()
+        if new_price:
+            OldValue = getWatchValue(chat_id)
+            float_ready_new_price = new_price.replace(',', '')
+            new_price_float = float(float_ready_new_price)
+            OldValue, old_price_float = parse_old_price_float(OldValue, bot, chat_id, requestText)
+            price_diff = new_price_float - old_price_float
+            setWatchValue(chat_id, requestText, new_price)
+            formatted_price = 'The Current Price of 1 Bitcoin:\n\n' + priceUS + ' USD\n' + priceGB + ' GBP\n' + new_price + ' ZAR' + '\n\nTime Updated: ' + updateTime
+            if OldValue == '' and requestText == '' and user != 'Watcher':
                 bot.sendMessage(chat_id=chat_id,
-                                text='Watch for /' + watchedCommandName + ' ' + message + ' has changed by ' + str(price_diff) + ' ZAR:\n' + formatted_price)
-        elif old_price_float != new_price_float and message == '':
+                                text='Now watching /' + watchedCommandName + ' ' + requestText + '\n' + formatted_price)
+            elif OldValue == '' and (requestText[:1] == '+' or requestText[:1] == '-') and user != 'Watcher':
                 bot.sendMessage(chat_id=chat_id,
-                                text='Watched /' + watchedCommandName + ' ' + message + ' changed by ' + str(price_diff) + ' ZAR:\n' + formatted_price)
-        elif price_diff > float(message) and message[:1] == '+':
-            bot.sendMessage(chat_id=chat_id,
-                            text='Watch for /' + watchedCommandName + ' has jumped by ' + str(price_diff) +
-                                 ' ZAR. Which is higher than the tolerance of ' + message +':\n' + formatted_price)
-        elif price_diff < float(message) and message[:1] == '-':
-            bot.sendMessage(chat_id=chat_id,
-                            text='Watch for /' + watchedCommandName + ' has dropped by ' + str(price_diff) +
-                                 ' ZAR. Which is lower than the tolerance of ' + message +':\n' + formatted_price)
-        elif new_price_float < float(message) and (message[:1] != '+' and message[:1] != '-'):
-            bot.sendMessage(chat_id=chat_id,
-                            text='Watch for /' + watchedCommandName + ' has dropped below ' + message +' ZAR:\n' + formatted_price)
+                                text='Now watching /' + watchedCommandName + ' changes by ' + requestText + '\n' + formatted_price)
+            elif OldValue == '' and requestText[:1] != '+' and requestText[:1] != '-' and user != 'Watcher':
+                bot.sendMessage(chat_id=chat_id,
+                                text='Now watching /' + watchedCommandName + ' drops below threshold of ' + requestText + '\n' + formatted_price)
+            elif old_price_float != new_price_float and requestText == '' and user != 'Watcher':
+                if OldValue != '':
+                    bot.sendMessage(chat_id=chat_id,
+                                    text='Watch for /' + watchedCommandName + ' ' + requestText + ' has changed by ' + str(price_diff) + ' ZAR:\n' + formatted_price)
+            elif old_price_float != new_price_float and requestText == '':
+                    bot.sendMessage(chat_id=chat_id,
+                                    text='Watched /' + watchedCommandName + ' ' + requestText + ' changed by ' + str(price_diff) + ' ZAR:\n' + formatted_price)
+            elif price_diff > float(requestText) and requestText[:1] == '+':
+                bot.sendMessage(chat_id=chat_id,
+                                text='Watch for /' + watchedCommandName + ' has jumped by ' + str(price_diff) +
+                                     ' ZAR. Which is higher than the tolerance of ' + requestText + ':\n' + formatted_price)
+            elif price_diff < float(requestText) and requestText[:1] == '-':
+                bot.sendMessage(chat_id=chat_id,
+                                text='Watch for /' + watchedCommandName + ' has dropped by ' + str(price_diff) +
+                                     ' ZAR. Which is lower than the tolerance of ' + requestText + ':\n' + formatted_price)
+            elif new_price_float < float(requestText) and (requestText[:1] != '+' and requestText[:1] != '-'):
+                bot.sendMessage(chat_id=chat_id,
+                                text='Watch for /' + watchedCommandName + ' has dropped below ' + requestText + ' ZAR:\n' + formatted_price)
+            else:
+                if user != 'Watcher':
+                    if requestText == '':
+                        bot.sendMessage(chat_id=chat_id,
+                                        text='Watch for /' + watchedCommandName + ' has not changed.\n' + formatted_price)
+                    elif requestText[:1] == '+' or requestText[:1] == '-':
+                        bot.sendMessage(chat_id=chat_id,
+                                        text='Watch for /' + watchedCommandName + ' has changed by ' + str(price_diff) +
+                                             ' ZAR. Which is not ' + ('higher' if requestText[:1] == '+' else 'lower') + ' than the tolerance of ' + requestText + ':\n' + formatted_price)
+                    elif requestText[:1] != '+' and requestText[:1] != '-':
+                        bot.sendMessage(chat_id=chat_id,
+                                        text='Watch for /' + watchedCommandName + ' has not dropped below ' + requestText + ' ZAR:\n' + formatted_price)
+            if not AllWatchesContains(chat_id):
+                addToAllWatches(chat_id)
         else:
-            if user != 'Watcher':
-                if message == '':
-                    bot.sendMessage(chat_id=chat_id,
-                                    text='Watch for /' + watchedCommandName + ' has not changed.\n' + formatted_price)
-                elif message[:1] == '+' or message[:1] == '-':
-                    bot.sendMessage(chat_id=chat_id,
-                                    text='Watch for /' + watchedCommandName + ' has changed by ' + str(price_diff) +
-                                         ' ZAR. Which is not ' + ('higher' if message[:1] == '+' else 'lower') + ' than the tolerance of ' + message +':\n' + formatted_price)
-                elif message[:1] != '+' and message[:1] != '-':
-                    bot.sendMessage(chat_id=chat_id,
-                                    text='Watch for /' + watchedCommandName + ' has not dropped below ' + message +' ZAR:\n' + formatted_price)
-        if not AllWatchesContains(chat_id):
-            addToAllWatches(chat_id)
+            bot.sendMessage(chat_id=chat_id, text='I\'m sorry ' + (user if not user == '' else 'Dave') +
+                                                  ', I\'m afraid I can\'t watch ' +
+                                                  'because I did not find any results from /bitcoin')
     else:
         bot.sendMessage(chat_id=chat_id, text='I\'m sorry ' + (user if not user == '' else 'Dave') +
                                               ', I\'m afraid I can\'t watch ' +
-                                              'because I did not find any results from /bitcoin')
+                                              'because you need to provide a threshold. E.g.: /watchbitcoin 30000')
 
 
 def parse_old_price_float(OldValue, bot, chat_id, message):
