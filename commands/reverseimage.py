@@ -35,27 +35,33 @@ def vision_web_entities(image_link, key_config):
         headers={'Content-type': 'application/json'})
     data = json.loads(raw_data.content)
     if 'error' not in data:
-        if 'error' not in data['responses'][0]:
+        if 'error' not in data['responses'][0] and 'webDetection' in data['responses'][0]:
+            webDetection = data['responses'][0]['webDetection']
             strWebEntities = ''
-            for entity in data['responses'][0]['webDetection']['webEntities']:
-                strWebEntities += entity['description'] + ', '
+            if ('webEntities' in webDetection):
+                for entity in webDetection['webEntities']:
+                    strWebEntities += entity['description'] + ', '
             strFullMatchingImages = ''
-            for image in data['responses'][0]['webDetection']['fullMatchingImages']:
-                strFullMatchingImages += image['url'] + ', '
+            if ('fullMatchingImages' in webDetection):
+                for image in webDetection['fullMatchingImages']:
+                    strFullMatchingImages += image['url'] + ', '
             strPartialMatchingImages = ''
-            for image in data['responses'][0]['webDetection']['partialMatchingImages']:
-                strPartialMatchingImages += image['url'] + ', '
+            if ('partialMatchingImages' in webDetection):
+                for image in webDetection['partialMatchingImages']:
+                    strPartialMatchingImages += image['url'] + ', '
             strPagesWithMatchingImages = ''
-            for image in data['responses'][0]['webDetection']['pagesWithMatchingImages']:
-                strPagesWithMatchingImages += image['url'] + ', '
+            if ('pagesWithMatchingImages' in webDetection):
+                for image in webDetection['pagesWithMatchingImages']:
+                    strPagesWithMatchingImages += image['url'] + ', '
             strVisuallySimilarImages = ''
-            for image in data['responses'][0]['webDetection']['visuallySimilarImages']:
-                strVisuallySimilarImages += image['url'] + ', '
+            if ('visuallySimilarImages' in webDetection):
+                for image in webDetection['visuallySimilarImages']:
+                    strVisuallySimilarImages += image['url'] + ', '
             return strWebEntities.rstrip(', ') + '\n' + \
-                   'Full Matching Images: ' + strFullMatchingImages.rstrip(', ') + '\n' + \
-                   'Partial Matching Images: ' + strPartialMatchingImages.rstrip(', ') + '\n' + \
-                   'Pages With Matching Images: ' + strPagesWithMatchingImages.rstrip(', ') + '\n' + \
-                   'Visually Similar Images: ' + strVisuallySimilarImages.rstrip(', ')
+                   ('Full Matching Images: ' + strFullMatchingImages.rstrip(', ') + '\n' if strFullMatchingImages != '' else '') + \
+                   ('Partial Matching Images: ' + strPartialMatchingImages.rstrip(', ') + '\n' if strPartialMatchingImages != '' else '') + \
+                    ('Pages With Matching Images: ' + strPagesWithMatchingImages.rstrip(', ') + '\n' if strPagesWithMatchingImages != '' else '') + \
+                     ('Visually Similar Images: ' + strVisuallySimilarImages.rstrip(', ') if strVisuallySimilarImages != '' else '')
         else:
             return data['responses'][0]['error']['message']
     else:
