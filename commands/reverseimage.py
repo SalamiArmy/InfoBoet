@@ -8,6 +8,7 @@ def run(bot, chat_id, user, keyConfig, message, totalResults=1):
     bot.sendMessage(chat_id=chat_id, text=user +', I see ' + vision_web_entities(requestText, keyConfig))
 
 def vision_web_entities(image_link, key_config):
+    global strFullMatchingImages, strPartialMatchingImages, strPagesWithMatchingImages, strVisuallySimilarImages
     strPayload = str({
             "requests":
                 [
@@ -41,27 +42,31 @@ def vision_web_entities(image_link, key_config):
             if ('webEntities' in webDetection):
                 for entity in webDetection['webEntities']:
                     strWebEntities += entity['description'] + ', '
-            strFullMatchingImages = ''
             if ('fullMatchingImages' in webDetection):
+                strFullMatchingImages = 'Full Matching Images: '
                 for image in webDetection['fullMatchingImages']:
                     strFullMatchingImages += image['url'] + ', '
-            strPartialMatchingImages = ''
+                strVisuallySimilarImages = strVisuallySimilarImages.rstrip(', ') + '\n'
             if ('partialMatchingImages' in webDetection):
+                strPartialMatchingImages = 'Partial Matching Images: '
                 for image in webDetection['partialMatchingImages']:
                     strPartialMatchingImages += image['url'] + ', '
-            strPagesWithMatchingImages = ''
+                strVisuallySimilarImages = strVisuallySimilarImages.rstrip(', ') + '\n'
             if ('pagesWithMatchingImages' in webDetection):
+                strPagesWithMatchingImages = 'Pages With Matching Images: '
                 for image in webDetection['pagesWithMatchingImages']:
                     strPagesWithMatchingImages += image['url'] + ', '
-            strVisuallySimilarImages = ''
+                strVisuallySimilarImages = strVisuallySimilarImages.rstrip(', ') + '\n'
             if ('visuallySimilarImages' in webDetection):
+                strVisuallySimilarImages = 'Visually Similar Images: '
                 for image in webDetection['visuallySimilarImages']:
                     strVisuallySimilarImages += image['url'] + ', '
+                strVisuallySimilarImages = strVisuallySimilarImages.rstrip(', ')
             return strWebEntities.rstrip(', ') + '\n' + \
-                   ('Full Matching Images: ' + strFullMatchingImages.rstrip(', ') + '\n' if strFullMatchingImages != '' else '') + \
-                   ('Partial Matching Images: ' + strPartialMatchingImages.rstrip(', ') + '\n' if strPartialMatchingImages != '' else '') + \
-                    ('Pages With Matching Images: ' + strPagesWithMatchingImages.rstrip(', ') + '\n' if strPagesWithMatchingImages != '' else '') + \
-                     ('Visually Similar Images: ' + strVisuallySimilarImages.rstrip(', ') if strVisuallySimilarImages != '' else '')
+                   strFullMatchingImages + \
+                   strPartialMatchingImages + \
+                   strPagesWithMatchingImages + \
+                   strVisuallySimilarImages
         else:
             return data['responses'][0]['error']['message']
     else:
