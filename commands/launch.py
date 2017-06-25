@@ -106,6 +106,5 @@ def formatted_launch_message(blast, keyConfig):
                           b5['location']['pads'][0]['name'] + \
                           ('](' + b5['location']['pads'][0]['mapURL'] + ')' if b5['location']['pads'][0][
                                                                                    'mapURL'] != '' and b5['location']['pads'][0]['mapURL'] != None else '') + \
-                          ('\nWatch live at ' + b5['vidURL'] if 'vidURL' in b5 and b5['vidURL'] != '' and b5['vidURL'] != None else '') + \
-                          '\n(All times are UTC)'
+                          ('\nWatch live at ' + b5['vidURL'] if 'vidURL' in b5 and b5['vidURL'] != '' and b5['vidURL'] != None else '')
     return formattedLaunchInfo
