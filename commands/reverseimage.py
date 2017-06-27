@@ -46,17 +46,17 @@ def vision_web_entities(image_link, key_config):
                 strFullMatchingImages = 'Full Matching Images: '
                 for image in webDetection['fullMatchingImages']:
                     strFullMatchingImages += image['url'] + ', '
-                strVisuallySimilarImages = strVisuallySimilarImages.rstrip(', ') + '\n'
+                strFullMatchingImages = strFullMatchingImages.rstrip(', ') + '\n'
             if ('partialMatchingImages' in webDetection):
                 strPartialMatchingImages = 'Partial Matching Images: '
                 for image in webDetection['partialMatchingImages']:
                     strPartialMatchingImages += image['url'] + ', '
-                strVisuallySimilarImages = strVisuallySimilarImages.rstrip(', ') + '\n'
+                strPartialMatchingImages = strPartialMatchingImages.rstrip(', ') + '\n'
             if ('pagesWithMatchingImages' in webDetection):
                 strPagesWithMatchingImages = 'Pages With Matching Images: '
                 for image in webDetection['pagesWithMatchingImages']:
                     strPagesWithMatchingImages += image['url'] + ', '
-                strVisuallySimilarImages = strVisuallySimilarImages.rstrip(', ') + '\n'
+                strPagesWithMatchingImages = strPagesWithMatchingImages.rstrip(', ') + '\n'
             if ('visuallySimilarImages' in webDetection):
                 strVisuallySimilarImages = 'Visually Similar Images: '
                 for image in webDetection['visuallySimilarImages']:
