@@ -8,6 +8,7 @@ def run(bot, chat_id, user, keyConfig, message, totalResults=1):
     bot.sendMessage(chat_id=chat_id, text=user +', I see ' + vision_web_entities(requestText, keyConfig))
 
 def vision_web_entities(image_link, key_config):
+    global strFullMatchingImages, strPartialMatchingImages, strPagesWithMatchingImages, strVisuallySimilarImages
     strPayload = str({
             "requests":
                 [
@@ -35,27 +36,37 @@ def vision_web_entities(image_link, key_config):
         headers={'Content-type': 'application/json'})
     data = json.loads(raw_data.content)
     if 'error' not in data:
-        if 'error' not in data['responses'][0]:
+        if 'error' not in data['responses'][0] and 'webDetection' in data['responses'][0]:
+            webDetection = data['responses'][0]['webDetection']
             strWebEntities = ''
-            for entity in data['responses'][0]['webDetection']['webEntities']:
-                strWebEntities += entity['description'] + ', '
-            strFullMatchingImages = ''
-            for image in data['responses'][0]['webDetection']['fullMatchingImages']:
-                strFullMatchingImages += image['url'] + ', '
-            strPartialMatchingImages = ''
-            for image in data['responses'][0]['webDetection']['partialMatchingImages']:
-                strPartialMatchingImages += image['url'] + ', '
-            strPagesWithMatchingImages = ''
-            for image in data['responses'][0]['webDetection']['pagesWithMatchingImages']:
-                strPagesWithMatchingImages += image['url'] + ', '
-            strVisuallySimilarImages = ''
-            for image in data['responses'][0]['webDetection']['visuallySimilarImages']:
-                strVisuallySimilarImages += image['url'] + ', '
+            if ('webEntities' in webDetection):
+                for entity in webDetection['webEntities']:
+                    strWebEntities += entity['description'] + ', '
+            if ('fullMatchingImages' in webDetection):
+                strFullMatchingImages = 'Full Matching Images: '
+                for image in webDetection['fullMatchingImages']:
+                    strFullMatchingImages += image['url'] + ', '
+                strVisuallySimilarImages = strVisuallySimilarImages.rstrip(', ') + '\n'
+            if ('partialMatchingImages' in webDetection):
+                strPartialMatchingImages = 'Partial Matching Images: '
+                for image in webDetection['partialMatchingImages']:
+                    strPartialMatchingImages += image['url'] + ', '
+                strVisuallySimilarImages = strVisuallySimilarImages.rstrip(', ') + '\n'
+            if ('pagesWithMatchingImages' in webDetection):
+                strPagesWithMatchingImages = 'Pages With Matching Images: '
+                for image in webDetection['pagesWithMatchingImages']:
+                    strPagesWithMatchingImages += image['url'] + ', '
+                strVisuallySimilarImages = strVisuallySimilarImages.rstrip(', ') + '\n'
+            if ('visuallySimilarImages' in webDetection):
+                strVisuallySimilarImages = 'Visually Similar Images: '
+                for image in webDetection['visuallySimilarImages']:
+                    strVisuallySimilarImages += image['url'] + ', '
+                strVisuallySimilarImages = strVisuallySimilarImages.rstrip(', ')
             return strWebEntities.rstrip(', ') + '\n' + \
-                   'Full Matching Images: ' + strFullMatchingImages.rstrip(', ') + '\n' + \
-                   'Partial Matching Images: ' + strPartialMatchingImages.rstrip(', ') + '\n' + \
-                   'Pages With Matching Images: ' + strPagesWithMatchingImages.rstrip(', ') + '\n' + \
-                   'Visually Similar Images: ' + strVisuallySimilarImages.rstrip(', ')
+                   strFullMatchingImages + \
+                   strPartialMatchingImages + \
+                   strPagesWithMatchingImages + \
+                   strVisuallySimilarImages
         else:
             return data['responses'][0]['error']['message']
     else:

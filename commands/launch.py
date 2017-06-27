@@ -76,36 +76,35 @@ def formatted_launch_message(blast, keyConfig):
     blast5LocalString = str(blast5UtcTime.astimezone(local_zone))
     blast5LocalTime = datetime.datetime.strptime(blast5LocalString, '%Y-%m-%d %H:%M:%S' +
                                                  timezone_string + ':00')
-    formattedLaunchInfo = 'Upcoming Rocket Launches:' + timezone_string + '\n\n' + \
+    formattedLaunchInfo = 'Upcoming Rocket Launches: (all times UTC' + timezone_string + ')\n\n' + \
                           str(blast1LocalTime) + '\n*' + b1['name'] + \
-                          '*\nLaunching from ' + ('[' if b1['location']['pads'][0]['mapURL'] != '' else '') + \
+                          '*\nLaunching from ' + ('[' if b1['location']['pads'][0]['mapURL'] != '' and b1['location']['pads'][0]['mapURL'] != None else '') + \
                           b1['location']['pads'][0]['name'] + \
                           ('](' + b1['location']['pads'][0]['mapURL'] + ')' if b1['location']['pads'][0][
-                                                                                   'mapURL'] != '' else '') + \
+                                                                                   'mapURL'] != '' and b1['location']['pads'][0]['mapURL'] != None else '') + \
                           ('\nWatch live at ' + b1['vidURL'] if 'vidURL' in b1 and b1['vidURL'] != '' and b1['vidURL'] != None else '') + \
                           '\n\n' + str(blast2LocalTime) + '\n*' + b2['name'] + \
-                          '*\nLaunching from ' + ('[' if b2['location']['pads'][0]['mapURL'] != '' else '') + \
+                          '*\nLaunching from ' + ('[' if b2['location']['pads'][0]['mapURL'] != '' and b2['location']['pads'][0]['mapURL'] != None else '') + \
                           b2['location']['pads'][0]['name'] + \
                           ('](' + b2['location']['pads'][0]['mapURL'] + ')' if b2['location']['pads'][0][
-                                                                                   'mapURL'] != '' else '') + \
+                                                                                   'mapURL'] != '' and b2['location']['pads'][0]['mapURL'] != None else '') + \
                           ('\nWatch live at ' + b2['vidURL'] if 'vidURL' in b2 and b2['vidURL'] != '' and b2['vidURL'] != None else '') + \
                           '\n\n' + str(blast3LocalTime) + '\n*' + b3['name'] + \
-                          '*\nLaunching from ' + ('[' if b3['location']['pads'][0]['mapURL'] != '' else '') + \
+                          '*\nLaunching from ' + ('[' if b3['location']['pads'][0]['mapURL'] != '' and b3['location']['pads'][0]['mapURL'] != None else '') + \
                           b3['location']['pads'][0]['name'] + \
                           ('](' + b3['location']['pads'][0]['mapURL'] + ')' if b3['location']['pads'][0][
-                                                                                   'mapURL'] != '' else '') + \
+                                                                                   'mapURL'] != '' and b3['location']['pads'][0]['mapURL'] != None else '') + \
                           ('\nWatch live at ' + b3['vidURL'] if 'vidURL' in b3 and b3['vidURL'] != '' and b3['vidURL'] != None else '') + \
                           '\n\n' + str(blast4LocalTime) + '\n*' + b4['name'] + \
-                          '*\nLaunching from ' + ('[' if b4['location']['pads'][0]['mapURL'] != '' else '') + \
+                          '*\nLaunching from ' + ('[' if b4['location']['pads'][0]['mapURL'] != '' and b4['location']['pads'][0]['mapURL'] != None else '') + \
                           b4['location']['pads'][0]['name'] + \
                           ('](' + b4['location']['pads'][0]['mapURL'] + ')' if b4['location']['pads'][0][
-                                                                                   'mapURL'] != '' else '') + \
+                                                                                   'mapURL'] != '' and b4['location']['pads'][0]['mapURL'] != None else '') + \
                           ('\nWatch live at ' + b4['vidURL'] if 'vidURL' in b4 and b4['vidURL'] != '' and b4['vidURL'] != None else '') + \
                           '\n\n' + str(blast5LocalTime) + '\n*' + b5['name'] + \
-                          '*\nLaunching from ' + ('[' if b5['location']['pads'][0]['mapURL'] != '' else '') + \
+                          '*\nLaunching from ' + ('[' if b5['location']['pads'][0]['mapURL'] != '' and b5['location']['pads'][0]['mapURL'] != None else '') + \
                           b5['location']['pads'][0]['name'] + \
                           ('](' + b5['location']['pads'][0]['mapURL'] + ')' if b5['location']['pads'][0][
-                                                                                   'mapURL'] != '' else '') + \
-                          ('\nWatch live at ' + b5['vidURL'] if 'vidURL' in b5 and b5['vidURL'] != '' and b5['vidURL'] != None else '') + \
-                          '\n(All times are UTC)'
+                                                                                   'mapURL'] != '' and b5['location']['pads'][0]['mapURL'] != None else '') + \
+                          ('\nWatch live at ' + b5['vidURL'] if 'vidURL' in b5 and b5['vidURL'] != '' and b5['vidURL'] != None else '')
     return formattedLaunchInfo
