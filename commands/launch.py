@@ -46,36 +46,31 @@ def formatted_launch_message(blast, keyConfig):
         blast1UtcTime = blast1UtcTime + datetime.timedelta(days=1)
     blast1UtcTime = blast1UtcTime.replace(tzinfo=utc_zone)
     blast1LocalString = str(blast1UtcTime.astimezone(local_zone))
-    blast1LocalTime = datetime.datetime.strptime(blast1LocalString, '%Y-%m-%d %H:%M:%S' +
-                                                 timezone_string + ':00')
+    blast1LocalTime = datetime.datetime.strptime(blast1LocalString, '%Y-%m-%d %H:%M:%S' + timezone_string + ':00')
     blast2UtcTime = datetime.datetime.strptime(b2['net'], '%B %d, %Y %H:%M:%S %Z')
     if blast2UtcTime.hour >= '22' or blast2UtcTime.hour == 0:
         blast2UtcTime = blast2UtcTime + datetime.timedelta(days=1)
     blast2UtcTime = blast2UtcTime.replace(tzinfo=utc_zone)
     blast2LocalString = str(blast2UtcTime.astimezone(local_zone))
-    blast2LocalTime = datetime.datetime.strptime(blast2LocalString, '%Y-%m-%d %H:%M:%S' +
-                                                 timezone_string + ':00')
+    blast2LocalTime = datetime.datetime.strptime(blast2LocalString, '%Y-%m-%d %H:%M:%S' + timezone_string + ':00')
     blast3UtcTime = datetime.datetime.strptime(b3['net'], '%B %d, %Y %H:%M:%S %Z')
     if blast3UtcTime.hour >= '22' or blast3UtcTime.hour == 0:
         blast3UtcTime = blast3UtcTime + datetime.timedelta(days=1)
     blast3UtcTime = blast3UtcTime.replace(tzinfo=utc_zone)
     blast3LocalString = str(blast3UtcTime.astimezone(local_zone))
-    blast3LocalTime = datetime.datetime.strptime(blast3LocalString, '%Y-%m-%d %H:%M:%S' +
-                                                 timezone_string + ':00')
+    blast3LocalTime = datetime.datetime.strptime(blast3LocalString, '%Y-%m-%d %H:%M:%S' + timezone_string + ':00')
     blast4UtcTime = datetime.datetime.strptime(b4['net'], '%B %d, %Y %H:%M:%S %Z')
     if blast4UtcTime.hour >= '22' or blast4UtcTime.hour == 0:
         blast4UtcTime = blast4UtcTime + datetime.timedelta(days=1)
     blast4UtcTime = blast4UtcTime.replace(tzinfo=utc_zone)
     blast4LocalString = str(blast4UtcTime.astimezone(local_zone))
-    blast4LocalTime = datetime.datetime.strptime(blast4LocalString, '%Y-%m-%d %H:%M:%S' +
-                                                 timezone_string + ':00')
+    blast4LocalTime = datetime.datetime.strptime(blast4LocalString, '%Y-%m-%d %H:%M:%S' + timezone_string + ':00')
     blast5UtcTime = datetime.datetime.strptime(b5['net'], '%B %d, %Y %H:%M:%S %Z')
     if blast5UtcTime.hour >= '22' or blast5UtcTime.hour == 0:
         blast5UtcTime = blast5UtcTime + datetime.timedelta(days=1)
     blast5UtcTime = blast5UtcTime.replace(tzinfo=utc_zone)
     blast5LocalString = str(blast5UtcTime.astimezone(local_zone))
-    blast5LocalTime = datetime.datetime.strptime(blast5LocalString, '%Y-%m-%d %H:%M:%S' +
-                                                 timezone_string + ':00')
+    blast5LocalTime = datetime.datetime.strptime(blast5LocalString, '%Y-%m-%d %H:%M:%S' + timezone_string + ':00')
     formattedLaunchInfo = 'Upcoming Rocket Launches: (all times UTC' + timezone_string + ')\n\n' + \
                           str(blast1LocalTime) + '\n*' + b1['name'] + \
                           '*\nLaunching from ' + ('[' if b1['location']['pads'][0]['mapURL'] != '' and b1['location']['pads'][0]['mapURL'] != None else '') + \
