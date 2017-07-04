@@ -25,7 +25,7 @@ class TestReverseImage(unittest.TestCase):
         ndb.get_context().clear_cache()
 
     def test_reverseimage(self):
-        requestText = 'https://yt3.ggpht.com/-Eb_d-yP9WoQ/AAAAAAAAAAI/AAAAAAAAAAA/DUul9ABs6Lw/s900-c-k-no-mo-rj-c0xffffff/photo.jpg'
+        requestText = 'https://scotbeat.files.wordpress.com/2017/03/fit14-stopes-68.jpg'
 
         keyConfig = ConfigParser.ConfigParser()
         keyConfig.read(["keys.ini", "..\keys.ini"])

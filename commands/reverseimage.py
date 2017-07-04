@@ -39,6 +39,10 @@ def vision_web_entities(image_link, key_config):
         if 'error' not in data['responses'][0] and 'webDetection' in data['responses'][0]:
             webDetection = data['responses'][0]['webDetection']
             strWebEntities = ''
+            strFullMatchingImages = ''
+            strPartialMatchingImages = ''
+            strPagesWithMatchingImages = ''
+            strVisuallySimilarImages = ''
             if ('webEntities' in webDetection):
                 for entity in webDetection['webEntities']:
                     strWebEntities += entity['description'] + ', '
