@@ -4,7 +4,7 @@ import urllib
 
 
 def run(bot, chat_id, user, keyConfig, message, totalResults=1):
-    requestText = message.replace(bot.name, "").strip()
+    requestText = urllib.quote(message.replace(bot.name, "").strip())
 
     translateUrl = 'https://www.googleapis.com/language/translate/v2?key=' + \
                    keyConfig.get('Google', 'GCSE_APP_ID') + '&target=en&q='
@@ -22,8 +22,8 @@ def run(bot, chat_id, user, keyConfig, message, totalResults=1):
         else:
             detectedLanguageSemanticName = ''
         bot.sendMessage(chat_id=chat_id, text=(user + ': ' if not user == '' else '') + \
-                                              "Detected language: " + detectedLanguageSemanticName + \
-                                              "\nMeaning: " + translation
+                                              'Detected language: ' + detectedLanguageSemanticName + \
+                                              '\nMeaning: ' + translation
                         .replace('&#39;', '\'')
                         .replace('&quot;', '"') + '.')
         return True
