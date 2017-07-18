@@ -1,3 +1,4 @@
+# coding=utf-8
 import ConfigParser
 import unittest
 import telegram
@@ -7,7 +8,7 @@ import commands.translate as translate
 
 class TestTorrent(unittest.TestCase):
     def test_translate(self):
-        requestText = 'trippy wirbel'
+        requestText = '驴打'
 
         keyConfig = ConfigParser.ConfigParser()
         keyConfig.read(["keys.ini", "..\keys.ini"])
