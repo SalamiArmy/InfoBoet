@@ -29,8 +29,9 @@ DYNMAP_PORT: {Your Minecraft Server DynMap Port here}
 [MusixMatch]
 APP_ID: {Your MusixMatch App ID here}
 
-[Merriam-Webster]
-API_KEY: {Your Merriam-Webster App ID here}
+[OxfordDictionaries]
+ID: {Your Oxford Dictionaries App ID here}
+KEY: {Your Oxford Dictionaries App KEY here}
 
 [OpenWeatherMap]
 API_KEY: (Your OpenWeatherMap Api Key from openweathermap.org here}

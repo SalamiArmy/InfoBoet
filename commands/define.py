@@ -12,22 +12,29 @@ def run(bot, chat_id, user, keyConfig, message, totalResults=1):
 
 def get_define_data(keyConfig, user, requestText):
     formatted_entry = ''
-    spellingUrl = 'https://api.cognitive.microsoft.com/bing/v5.0/spellcheck'
-    values = {'text': requestText}
+    spellingUrl = 'https://od-api.oxforddictionaries.com/api/v1/search/en'
+    values = {'q': requestText.lower(), 'prefix':'false'}
     data = urllib.urlencode(values)
     req = urllib2.Request(spellingUrl + '?' + data)
-    req.add_header('Ocp-Apim-Subscription-Key', keyConfig.get('Bing', 'SpellCheckApiKey'))
+    req.add_header('app_id', keyConfig.get('OxfordDictionaries', 'ID'))
+    req.add_header('app_key', keyConfig.get('OxfordDictionaries', 'KEY'))
     spellingData = json.load(urllib2.urlopen(req))
-    if 'flaggedTokens' in spellingData and len(spellingData['flaggedTokens']) > 0:
-        formatted_entry += 'Did you mean '
-        for token in spellingData['flaggedTokens']:
-            for suggestion in token['suggestions']:
-                formatted_entry += suggestion['suggestion'] + ', '
-        formatted_entry = formatted_entry.rstrip(', ') + '?\n'
-    definition = PyDictionary.googlemeaning(requestText)
-    if definition:
-        formatted_entry += (user if not user == '' else 'Dave') + ', ' + definition.replace(' :', ':')
-        return formatted_entry
+    if 'results' in spellingData and len(spellingData['results']) > 0:
+        formatted_entry = spellingData['results'][0]['word']
+
+        definitionUrl = 'https://od-api.oxforddictionaries.com:443/api/v1/entries/en/'
+        req = urllib2.Request(definitionUrl + formatted_entry.lower())
+        req.add_header('app_id', keyConfig.get('OxfordDictionaries', 'ID'))
+        req.add_header('app_key', keyConfig.get('OxfordDictionaries', 'KEY'))
+        data = json.load(urllib2.urlopen(req))
+    if data:
+        pronounce = ''
+        definition = ''
+        if 'results' in data and len(data['results']) > 0 and 'lexicalEntries' in data['results'][0] and len(data['results'][0]['lexicalEntries']) > 0 and 'pronunciations' in data['results'][0]['lexicalEntries'][0] and len(data['results'][0]['lexicalEntries'][0]['pronunciations']) > 0 and 'audioFile' in data['results'][0]['lexicalEntries'][0]['pronunciations'][0]:
+            pronounce = data['results'][0]['lexicalEntries'][0]['pronunciations'][0]['audioFile']
+        if 'results' in data and len(data['results']) > 0 and 'lexicalEntries' in data['results'][0] and len(data['results'][0]['lexicalEntries']) > 0 and 'entries' in data['results'][0]['lexicalEntries'][0] and len(data['results'][0]['lexicalEntries'][0]['entries']) > 0 and 'senses' in data['results'][0]['lexicalEntries'][0]['entries'][0] and len(data['results'][0]['lexicalEntries'][0]['entries'][0]['senses']) > 0 and 'definitions' in data['results'][0]['lexicalEntries'][0]['entries'][0]['senses'] and len(data['results'][0]['lexicalEntries'][0]['entries'][0]['senses'][0]['definitions']) > 0:
+            definition = data['results'][0]['lexicalEntries'][0]['senses'][0]['definitions'][0]
+        return (user if not user == '' else 'Dave') + ', ' + definition + '\n' + pronounce
     else:
         return 'I\'m sorry ' + (user if not user == '' else 'Dave') +\
                ', I\'m afraid I can\'t find any definitions for the word ' + requestText + '.\n' + formatted_entry
