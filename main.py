@@ -85,9 +85,9 @@ class WebhookHandler(webapp2.RequestHandler):
         urlfetch.set_default_fetch_deadline(60)
         command = self.request.get('command')
         message = self.request.get('message')
-        if command == 'getxxx':
-            from commands import getxxx
-            args, data, results_this_page, total_results = getxxx.search_gcse_for_xxx(keyConfig, message)
+        if command == 'define':
+            from commands import define
+            data = define.get_define_data(keyConfig, 'Admin', message)
             return data
         else:
             return 'unknown command'
