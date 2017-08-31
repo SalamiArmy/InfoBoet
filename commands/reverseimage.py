@@ -45,26 +45,31 @@ def vision_web_entities(image_link, key_config):
             strVisuallySimilarImages = ''
             if ('webEntities' in webDetection):
                 for entity in webDetection['webEntities']:
-                    strWebEntities += entity['description'] + ', '
+                    if 'description' in entity:
+                        strWebEntities += entity['description'] + ', '
             if ('fullMatchingImages' in webDetection):
                 strFullMatchingImages = 'Full Matching Images: '
                 for image in webDetection['fullMatchingImages']:
-                    strFullMatchingImages += image['url'] + ', '
+                    if 'url' in image:
+                        strFullMatchingImages += image['url'] + ', '
                 strFullMatchingImages = strFullMatchingImages.rstrip(', ') + '\n'
             if ('partialMatchingImages' in webDetection):
                 strPartialMatchingImages = 'Partial Matching Images: '
                 for image in webDetection['partialMatchingImages']:
-                    strPartialMatchingImages += image['url'] + ', '
+                    if 'url' in image:
+                        strPartialMatchingImages += image['url'] + ', '
                 strPartialMatchingImages = strPartialMatchingImages.rstrip(', ') + '\n'
             if ('pagesWithMatchingImages' in webDetection):
                 strPagesWithMatchingImages = 'Pages With Matching Images: '
                 for image in webDetection['pagesWithMatchingImages']:
-                    strPagesWithMatchingImages += image['url'] + ', '
+                    if 'url' in image:
+                        strPagesWithMatchingImages += image['url'] + ', '
                 strPagesWithMatchingImages = strPagesWithMatchingImages.rstrip(', ') + '\n'
             if ('visuallySimilarImages' in webDetection):
                 strVisuallySimilarImages = 'Visually Similar Images: '
                 for image in webDetection['visuallySimilarImages']:
-                    strVisuallySimilarImages += image['url'] + ', '
+                    if 'url' in image:
+                        strVisuallySimilarImages += image['url'] + ', '
                 strVisuallySimilarImages = strVisuallySimilarImages.rstrip(', ')
             return strWebEntities.rstrip(', ') + '\n' + \
                    strFullMatchingImages + \
