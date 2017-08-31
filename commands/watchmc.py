@@ -74,7 +74,8 @@ def run(bot, chat_id, user, keyConfig, message='', totalResults=1):
         if not AllWatchesContains(chat_id):
             addToAllWatches(chat_id)
     else:
-        bot.sendMessage(chat_id=chat_id, text=mc_server_not_found_message)
+        if not user == 'Watcher':
+            bot.sendMessage(chat_id=chat_id, text=mc_server_not_found_message)
 
 
 def unwatch(bot, chat_id, message):

@@ -118,29 +118,10 @@ class WebhookHandler(webapp2.RequestHandler):
             except:
                 print("Unexpected error sending error response:",  str(sys.exc_info()[0]) + str(sys.exc_info()[1]))
 
-from commands import watchmc
-class TriggerMCWatch(webapp2.RequestHandler):
-    def get(self):
-        AllWatches = watchmc.getAllWatches()
-        watches_split = AllWatches.split(',')
-        if len(watches_split) >= 1:
-            for chat_id in watches_split:
-                watchmc.run(bot, chat_id, 'Watcher', keyConfig)
-
-from commands import watchcric
-class TriggerCricWatch(webapp2.RequestHandler):
-    def get(self):
-        AllWatches = watchcric.getAllWatches()
-        watches_split = AllWatches.split(',')
-        if len(watches_split) >= 1:
-            for chat_id in watches_split:
-                watchcric.run(bot, keyConfig, chat_id, 'Watcher')
 
 app = webapp2.WSGIApplication([
     ('/me', MeHandler),
     ('/updates', GetUpdatesHandler),
     ('/set_webhook', SetWebhookHandler),
-    ('/webhook', WebhookHandler),
-    ('/watchmc', TriggerMCWatch),
-    ('/watchcric', TriggerCricWatch)
+    ('/webhook', WebhookHandler)
 ], debug=True)
