@@ -101,6 +101,7 @@ class WebhookHandler(webapp2.RequestHandler):
             if len(re.findall('^[a-z]+\d+$', commandName)) > 0:
                 totalResults = re.findall('\d+$', commandName)[0]
                 commandName = re.findall('^[a-z]+', commandName)[0]
+            print('importing commands.' + commandName)
             mod = importlib.import_module('commands.' + commandName)
             mod.run(bot, chat_id, fr_username, keyConfig, split[1] if len(split) > 1 else '', totalResults)
         except ImportError:
