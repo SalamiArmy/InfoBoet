@@ -3,9 +3,6 @@ import json
 import urllib
 import urllib2
 
-import xmltodict
-from PyDictionary import PyDictionary
-
 def run(bot, chat_id, user, keyConfig, message, totalResults=1):
     requestText = message.replace(bot.name, "").strip()
     bot.sendMessage(chat_id=chat_id, text=get_define_data(keyConfig, user, requestText))
