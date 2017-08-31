@@ -32,8 +32,8 @@ def get_define_data(keyConfig, user, requestText):
         definition = ''
         if 'results' in data and len(data['results']) > 0 and 'lexicalEntries' in data['results'][0] and len(data['results'][0]['lexicalEntries']) > 0 and 'pronunciations' in data['results'][0]['lexicalEntries'][0] and len(data['results'][0]['lexicalEntries'][0]['pronunciations']) > 0 and 'audioFile' in data['results'][0]['lexicalEntries'][0]['pronunciations'][0]:
             pronounce = data['results'][0]['lexicalEntries'][0]['pronunciations'][0]['audioFile']
-        if 'results' in data and len(data['results']) > 0 and 'lexicalEntries' in data['results'][0] and len(data['results'][0]['lexicalEntries']) > 0 and 'entries' in data['results'][0]['lexicalEntries'][0] and len(data['results'][0]['lexicalEntries'][0]['entries']) > 0 and 'senses' in data['results'][0]['lexicalEntries'][0]['entries'][0] and len(data['results'][0]['lexicalEntries'][0]['entries'][0]['senses']) > 0 and 'definitions' in data['results'][0]['lexicalEntries'][0]['entries'][0]['senses'] and len(data['results'][0]['lexicalEntries'][0]['entries'][0]['senses'][0]['definitions']) > 0:
-            definition = data['results'][0]['lexicalEntries'][0]['senses'][0]['definitions'][0]
+        if 'results' in data and len(data['results']) > 0 and 'lexicalEntries' in data['results'][0] and len(data['results'][0]['lexicalEntries']) > 0 and 'entries' in data['results'][0]['lexicalEntries'][0] and len(data['results'][0]['lexicalEntries'][0]['entries']) > 0 and 'senses' in data['results'][0]['lexicalEntries'][0]['entries'][0] and len(data['results'][0]['lexicalEntries'][0]['entries'][0]['senses']) > 0 and 'definitions' in data['results'][0]['lexicalEntries'][0]['entries'][0]['senses'][0] and len(data['results'][0]['lexicalEntries'][0]['entries'][0]['senses'][0]['definitions']) > 0:
+            definition = data['results'][0]['lexicalEntries'][0]['entries'][0]['senses'][0]['definitions'][0]
         return (user if not user == '' else 'Dave') + ', ' + definition + '\n' + pronounce
     else:
         return 'I\'m sorry ' + (user if not user == '' else 'Dave') +\
