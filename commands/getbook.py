@@ -1,11 +1,10 @@
 # coding=utf-8
-import json
 import urllib
 from bs4 import BeautifulSoup
 
 from google.appengine.ext import ndb
 
-CommandName = 'get'
+CommandName = 'getbook'
 
 class SeenBooks(ndb.Model):
     # key name: get:str(chat_id)
