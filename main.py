@@ -1,10 +1,8 @@
 # coding=utf-8
 import ConfigParser
-import httplib
 import importlib
 import json
 import logging
-import unittest
 import urllib
 import sys
 
@@ -13,7 +11,6 @@ import telegram
 
 # standard app engine imports
 from google.appengine.api import urlfetch
-from google.appengine.ext import ndb
 
 import webapp2
 
@@ -60,13 +57,13 @@ class WebhookHandler(webapp2.RequestHandler):
 
         if 'message' in body or 'edited_message' in body:
             message = body['message'] if 'message' in body else body['edited_message']
-            text = message.get('text')
+            text = message['text'].encode('utf-8')
             fr = message.get('from')
-            user = fr['username'] \
+            user = fr['username'].encode('utf-8') \
                 if 'username' in fr \
-                else fr['first_name'] + ' ' + fr['last_name'] \
+                else fr['first_name'].encode('utf-8') + ' ' + fr['last_name'].encode('utf-8') \
                 if 'first_name' in fr and 'last_name' in fr \
-                else fr['first_name'] if 'first_name' in fr \
+                else fr['first_name'].encode('utf-8') if 'first_name' in fr \
                 else 'Dave'
             if 'edited_message' in body:
                 user += '(editted)'

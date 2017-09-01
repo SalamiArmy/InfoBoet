@@ -8,7 +8,7 @@ import commands.translate as translate
 
 class TestTorrent(unittest.TestCase):
     def test_translate_in_group_chat(self):
-        requestText = 'Deutsche Vermögensberatung'
+        requestText = 'Gesù Christi'
 
         keyConfig = ConfigParser.ConfigParser()
         keyConfig.read(["keys.ini", "..\keys.ini"])

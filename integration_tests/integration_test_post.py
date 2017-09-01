@@ -21,12 +21,12 @@ class TestPost(unittest.TestCase):
         # using ndb.get_context().set_cache_policy(False)
         ndb.get_context().clear_cache()
 
-    def integration_test_post(self):
+    def integration_test_translate_post(self):
         newRequestObject = main.WebhookHandler()
         class Object(object):
             pass
         newRequestObject.request = Object()
-        newRequestObject.request.body = '{"message": {"from": {"username": "SalamiArmy", "first_name": "Ashley", "last_name": "Lewis"}, "text": "/define tetragrammaton", "chat": {"id": -55348600, "type": "group"}}}'
+        newRequestObject.request.body = '{"message": {"from": {"username": "SalamiArmy", "first_name": "Ashley", "last_name": "Lewis"}, "text": "/translate Gesù Christi", "chat": {"id": -55348600, "type": "group"}}}'
         newRequestObject.response = Object()
         newRequestObject.response.write = lambda x: None
         newRequestObject.post()
