@@ -9,7 +9,7 @@ import commands.define as define
 
 class TestDefine(unittest.TestCase):
     def test_define(self):
-        requestText = 'safe'
+        requestText = 'coon'
 
         keyConfig = ConfigParser.ConfigParser()
         keyConfig.read(["keys.ini", "..\keys.ini"])
