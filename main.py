@@ -49,6 +49,7 @@ class SetWebhookHandler(webapp2.RequestHandler):
 
 class WebhookHandler(webapp2.RequestHandler):
     def post(self):
+        global text
         urlfetch.set_default_fetch_deadline(120)
         body = json.loads(self.request.body)
         logging.info('request body:')
@@ -57,7 +58,8 @@ class WebhookHandler(webapp2.RequestHandler):
 
         if 'message' in body or 'edited_message' in body:
             message = body['message'] if 'message' in body else body['edited_message']
-            text = message['text'].encode('utf-8')
+            if 'text' in message:
+                text = message['text'].encode('utf-8')
             fr = message.get('from')
             user = fr['username'].encode('utf-8') \
                 if 'username' in fr \
