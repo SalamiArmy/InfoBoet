@@ -32,6 +32,6 @@ def get_define_data(keyConfig, user, requestText):
             definition = data['results'][0]['lexicalEntries'][0]['entries'][0]['senses'][0]['definitions'][0]
             if 'results' in data and len(data['results']) > 0 and 'lexicalEntries' in data['results'][0] and len(data['results'][0]['lexicalEntries']) > 0 and 'pronunciations' in data['results'][0]['lexicalEntries'][0] and len(data['results'][0]['lexicalEntries'][0]['pronunciations']) > 0 and 'audioFile' in data['results'][0]['lexicalEntries'][0]['pronunciations'][0]:
                 pronounce = data['results'][0]['lexicalEntries'][0]['pronunciations'][0]['audioFile']
-            return (user if not user == '' else 'Dave') + ', ' + requestText + ': ' + definition + ('\n' + pronounce if not pronounce == '' else '')
+            return (user if not user == '' else 'Dave') + ', ' + formatted_entry + ': ' + definition + ('\n' + pronounce if not pronounce == '' else '')
     return 'I\'m sorry ' + (user if not user == '' else 'Dave') +\
            ', I\'m afraid I can\'t find any definitions for the word ' + requestText
