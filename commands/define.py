@@ -23,7 +23,10 @@ def get_define_data(keyConfig, user, requestText):
         req = urllib2.Request(definitionUrl + formatted_entry.lower())
         req.add_header('app_id', keyConfig.get('OxfordDictionaries', 'ID'))
         req.add_header('app_key', keyConfig.get('OxfordDictionaries', 'KEY'))
-        data = json.load(urllib2.urlopen(req))
+        try:
+            data = json.load(urllib2.urlopen(req))
+        except urllib2.HTTPError:
+            print('HTTP Error: ' + definitionUrl + formatted_entry.lower())
         if data and 'results' in data and len(data['results']) > 0 and 'lexicalEntries' in data['results'][0] and len(data['results'][0]['lexicalEntries']) > 0 and 'entries' in data['results'][0]['lexicalEntries'][0] and len(data['results'][0]['lexicalEntries'][0]['entries']) > 0 and 'senses' in data['results'][0]['lexicalEntries'][0]['entries'][0] and len(data['results'][0]['lexicalEntries'][0]['entries'][0]['senses']) > 0 and 'definitions' in data['results'][0]['lexicalEntries'][0]['entries'][0]['senses'][0] and len(data['results'][0]['lexicalEntries'][0]['entries'][0]['senses'][0]['definitions']) > 0:
             pronounce = ''
             definition = data['results'][0]['lexicalEntries'][0]['entries'][0]['senses'][0]['definitions'][0]
