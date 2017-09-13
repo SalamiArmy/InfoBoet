@@ -27,9 +27,10 @@ def run(bot, chat_id, user, keyConfig, message, totalResults=1):
             bot.sendPhoto(chat_id=chat_id,
                           photo=image_original)
         bot.sendMessage(chat_id=chat_id,
-                        text=(user if not user == '' else 'Dave') + ', ' + data[0]['show']['name'] + ': ' + formattedShowSummary)
+                        text=(user if not user == '' else 'Dave') + ', ' + data[0]['show']['name'] + ': ' +
+                             formattedShowSummary)
         return True
     else:
-        bot.sendMessage(chat_id=chat_id, text='I\'m sorry ' + (user if not user == '' else 'Dave') + \
-                                              ', I\'m afraid I cannot find the TV show ' + \
+        bot.sendMessage(chat_id=chat_id, text='I\'m sorry ' + (user if not user == '' else 'Dave') +
+                                              ', I\'m afraid I cannot find the TV show ' + 
                                               requestText.title())

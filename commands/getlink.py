@@ -7,28 +7,28 @@ from google.appengine.ext import ndb
 
 class SeenUrls(ndb.Model):
     # key name: get:str(chat_id)
-    allPreviousSeenBooks = ndb.StringProperty(indexed=False, default='')
+    allPreviousSeenUrls = ndb.StringProperty(indexed=False, default='')
 
 
 # ================================
 
 def setPreviouslySeenUrlsValue(chat_id, NewValue):
     es = SeenUrls.get_or_insert(str(chat_id))
-    es.allPreviousSeenBooks = NewValue.encode('utf-8')
+    es.allPreviousSeenUrls = NewValue.encode('utf-8')
     es.put()
 
 def addPreviouslySeenUrlsValue(chat_id, NewValue):
     es = SeenUrls.get_or_insert(str(chat_id))
-    if es.allPreviousSeenBooks == '':
-        es.allPreviousSeenBooks = NewValue.encode('utf-8').replace(',', '')
+    if es.allPreviousSeenUrls == '':
+        es.allPreviousSeenUrls = NewValue.encode('utf-8').replace(',', '')
     else:
-        es.allPreviousSeenBooks += ',' + NewValue.encode('utf-8').replace(',', '')
+        es.allPreviousSeenUrls += ',' + NewValue.encode('utf-8').replace(',', '')
     es.put()
 
 def getPreviouslySeenUrlsValue(chat_id):
     es = SeenUrls.get_or_insert(str(chat_id))
     if es:
-        return es.allPreviousSeenBooks.encode('utf-8')
+        return es.allPreviousSeenUrls.encode('utf-8')
     return ''
 
 def wasPreviouslySeenUrl(chat_id, url):
