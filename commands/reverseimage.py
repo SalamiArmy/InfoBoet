@@ -5,29 +5,33 @@ from google.appengine.api import urlfetch
 
 def run(bot, chat_id, user, keyConfig, message, totalResults=1):
     requestText = message.replace(bot.name, "").strip()
+    print 'request url: ' + requestText
     bot.sendMessage(chat_id=chat_id, text=user +', I see ' + vision_web_entities(requestText, keyConfig))
 
 def vision_web_entities(image_link, key_config):
     global strFullMatchingImages, strPartialMatchingImages, strPagesWithMatchingImages, strVisuallySimilarImages
     strPayload = str({
-            "requests":
-                [
-                    {
-                        "features":
-                            [
-                                {
-                                    "type": "WEB_DETECTION"
-                                }
-                            ],
-                        "image":
+        "requests":
+            [
+                {
+                    "features":
+                        [
                             {
-                                "source":
-                                    {
-                                        "imageUri": str(image_link)
-                                    }
+                                "type": "WEB_DETECTION"
+                            },
+                            {
+                                "type": "LABEL_DETECTION"
                             }
-                    }
-                ]
+                        ],
+                    "image":
+                        {
+                            "source":
+                                {
+                                    "imageUri": str(image_link)
+                                }
+                        }
+                }
+            ]
         })
     raw_data = urlfetch.fetch(
         url='https://vision.googleapis.com/v1/images:annotate?key=' + key_config.get('Google', 'GCSE_APP_ID'),
@@ -43,9 +47,13 @@ def vision_web_entities(image_link, key_config):
             strPartialMatchingImages = ''
             strPagesWithMatchingImages = ''
             strVisuallySimilarImages = ''
+            if 'labelAnnotations' in webDetection['responses'][0]:
+                for entity in webDetection['responses'][0]['labelAnnotations']:
+                    if 'description' in entity:
+                        strWebEntities += entity['description'] + ', '
             if ('webEntities' in webDetection):
                 for entity in webDetection['webEntities']:
-                    if 'description' in entity:
+                    if 'description' in entity and entity['description'] + ', ' not in strWebEntities:
                         strWebEntities += entity['description'] + ', '
             if ('fullMatchingImages' in webDetection):
                 strFullMatchingImages = 'Full Matching Images: '

@@ -32,3 +32,13 @@ class TestGetLink(unittest.TestCase):
 
         getlink.run(bot, chatId, 'SalamiArmy', keyConfig, requestText, 2)
         getlink.run(bot, chatId, 'SalamiArmy', keyConfig, requestText, 2)
+
+    def test_getlink_group(self):
+        requestText = 'ibm watson text to speech'
+
+        keyConfig = ConfigParser.ConfigParser()
+        keyConfig.read(["keys.ini", "..\keys.ini"])
+        bot = telegram.Bot(keyConfig.get('Telegram', 'TELE_BOT_ID'))
+        chatId = keyConfig.get('BotAdministration', 'TESTING_GROUP_CHAT_ID')
+
+        getlink.run(bot, chatId, 'SalamiArmy', keyConfig, requestText)
