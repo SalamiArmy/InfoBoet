@@ -49,3 +49,7 @@ secret: {Your GoodReads API secret}
 
 [OMDB]
 KEY: {Your OMDB API key}
+
+[IBM]
+username: {Your IBM BlueMix username}
+password: {Your IBM BlueMix password}

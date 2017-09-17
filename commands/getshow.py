@@ -3,7 +3,9 @@ import json
 import re
 import urllib
 
+import requests
 import telegram
+import say
 
 
 def run(bot, chat_id, user, keyConfig, message, totalResults=1):
@@ -29,6 +31,12 @@ def run(bot, chat_id, user, keyConfig, message, totalResults=1):
         bot.sendMessage(chat_id=chat_id,
                         text=(user if not user == '' else 'Dave') + ', ' + data[0]['show']['name'] + ': ' +
                              formattedShowSummary)
+        data = say.get_voice(requestText, keyConfig, 'en-US_LisaVoice')
+        if data:
+            requests.post('https://api.telegram.org/bot' + keyConfig.get('Telegram', 'TELE_BOT_ID') +
+                          '/sendVoice?chat_id='+str(chat_id),
+                          files={'voice': ('no but what I\'M saying is.ogg', data, 'audio/ogg', {'Expires': '0'})})
+            sent = True
         return True
     else:
         bot.sendMessage(chat_id=chat_id, text='I\'m sorry ' + (user if not user == '' else 'Dave') +
