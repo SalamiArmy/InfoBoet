@@ -1,4 +1,7 @@
 # coding=utf-8
+import sys
+reload(sys)
+sys.setdefaultencoding('utf8')
 import json
 import re
 import urllib
@@ -9,14 +12,13 @@ import say
 
 
 def run(bot, chat_id, user, keyConfig, message, totalResults=1):
-    requestText = message.replace(bot.name, "").strip()
-
+    requestText = str(message).replace(bot.name, "").strip()
 
     showsUrl = 'http://api.tvmaze.com/search/shows?q='
     data = json.load(urllib.urlopen(showsUrl + requestText))
     if len(data) >= 1:
         formattedShowSummary = re.sub(r'<[^>]*?>', '',
-                                      data[0]['show']['summary']
+                                      str(data[0]['show']['summary'])
                                        .replace('<span class="searchmatch">', '*')
                                        .replace('</span>', '*')
                                        .replace('&quot;', '\"')
