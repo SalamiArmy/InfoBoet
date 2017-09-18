@@ -51,8 +51,8 @@ def parse_show_details(data):
                       str(data['type']) + ' ' + \
                       ', '.join(data['genres'])
     fullShowDetails += '\nPremiere: ' + data['premiered']
-    showSchedule = ', '.join(['{0}s'.format(day) for day in data['days']]) + \
-                   (' at ' + data['time'] if data['time'] != '' else '')
+    showSchedule = ', '.join(['{0}s'.format(day) for day in data['status'][0]['schedule']['days']]) + \
+                   (' at ' + data['status'][0]['schedule']['time'] if data['status'][0]['schedule']['time'] != '' else '')
     fullShowDetails += '\nRuntime: ' + str(data['runtime']) + ' mins' + \
                        (' ' + showSchedule if showSchedule != '' else '')
     fullShowDetails += '\n' + data['officialSite']
