@@ -25,14 +25,14 @@ def run(bot, chat_id, user, keyConfig, message, totalResults=1):
                                        .replace('[', '')
                                        .replace(']', '')
                                        .replace('\\', ''))
+        fullShowDetails = parse_show_details(data[0]['show'])
         if 'image' in data[0]['show'] and data[0]['show']['image'] is not None:
             bot.sendChatAction(chat_id=chat_id, action=telegram.ChatAction.UPLOAD_PHOTO)
             image_original = data[0]['show']['image']['original'].encode('utf-8')
             bot.sendPhoto(chat_id=chat_id,
                           photo=image_original)
         bot.sendMessage(chat_id=chat_id,
-                        text=(user if not user == '' else 'Dave') + ', ' + data[0]['show']['name'] + ': ' +
-                             formattedShowSummary)
+                        text=(user if not user == '' else 'Dave') + ', ' + fullShowDetails)
         data = say.get_voice(formattedShowSummary, keyConfig, 'en-US_LisaVoice')
         if data:
             requests.post('https://api.telegram.org/bot' + keyConfig.get('Telegram', 'TELE_BOT_ID') +
@@ -43,3 +43,22 @@ def run(bot, chat_id, user, keyConfig, message, totalResults=1):
         bot.sendMessage(chat_id=chat_id, text='I\'m sorry ' + (user if not user == '' else 'Dave') +
                                               ', I\'m afraid I cannot find the TV show ' + 
                                               requestText.title())
+
+
+def parse_show_details(data):
+    fullShowDetails = str(data['name']) + ': ' + ('An' if data['status'][0] == 'I' else 'A') + ' ' + \
+                      str(data['status']) + ' ' + \
+                      str(data['type']) + ' ' + \
+                      ', '.join(data['genres'])
+    fullShowDetails += '\nPremiere: ' + data['premiered']
+    showSchedule = parse_schedule(data['schedule'])
+    fullShowDetails += '\nRuntime: ' + str(data['runtime']) + ' mins' + \
+                       (' ' + showSchedule if showSchedule != '' else '')
+    fullShowDetails += '\n' + data['officialSite']
+    return fullShowDetails
+
+
+def parse_schedule(data):
+    showSchedule = ', '.join(['{0}s'.format(day) for day in data['days']]) + \
+                   (' at ' + data['time'] if data['time'] != '' else '')
+    return showSchedule

@@ -30,6 +30,16 @@ class TestGetShow(unittest.TestCase):
         keyConfig = ConfigParser.ConfigParser()
         keyConfig.read(["keys.ini", "..\keys.ini"])
         bot = telegram.Bot(keyConfig.get('Telegram', 'TELE_BOT_ID'))
+        chatId = keyConfig.get('BotAdministration', 'TESTING_PRIVATE_CHAT_ID')
+
+        getshow.run(bot, chatId, 'SalamiArmy', keyConfig, requestText)
+
+    def test_getshow_group(self):
+        requestText = 'godless'
+
+        keyConfig = ConfigParser.ConfigParser()
+        keyConfig.read(["keys.ini", "..\keys.ini"])
+        bot = telegram.Bot(keyConfig.get('Telegram', 'TELE_BOT_ID'))
         chatId = keyConfig.get('BotAdministration', 'TESTING_GROUP_CHAT_ID')
 
         getshow.run(bot, chatId, 'SalamiArmy', keyConfig, requestText)

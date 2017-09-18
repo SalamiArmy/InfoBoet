@@ -25,7 +25,7 @@ class TestReverseImage(unittest.TestCase):
         ndb.get_context().clear_cache()
 
     def test_reverseimage(self):
-        requestText = 'http://i.imgur.com/nAwjwhu.gif'
+        requestText = 'https://i.imgur.com/iM0PDtE.gif'
 
         keyConfig = ConfigParser.ConfigParser()
         keyConfig.read(["keys.ini", "..\keys.ini"])
@@ -46,4 +46,4 @@ class TestReverseImage(unittest.TestCase):
         #for admin group
         chatId = keyConfig.get('BotAdministration', 'TESTING_GROUP_CHAT_ID')
 
-        reverseimage.run(bot, chatId, 'Admin', keyConfig, requestText)
+        reverseimage.run(bot, chatId, 'SalamiArmy', keyConfig, requestText)
