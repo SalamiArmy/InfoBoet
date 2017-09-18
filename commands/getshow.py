@@ -33,12 +33,7 @@ def run(bot, chat_id, user, keyConfig, message, totalResults=1):
                           photo=image_original)
         bot.sendMessage(chat_id=chat_id,
                         text=(user if not user == '' else 'Dave') + ', ' + fullShowDetails)
-        data = say.get_voice(formattedShowSummary, keyConfig, 'en-US_LisaVoice')
-        if data:
-            requests.post('https://api.telegram.org/bot' + keyConfig.get('Telegram', 'TELE_BOT_ID') +
-                          '/sendVoice?chat_id='+str(chat_id),
-                          files={'voice': ('show_description.ogg', data, 'audio/ogg', {'Expires': '0'})})
-        return True
+        return say.send_text_as_voice(chat_id, keyConfig, formattedShowSummary, 'en-US_LisaVoice')
     else:
         bot.sendMessage(chat_id=chat_id, text='I\'m sorry ' + (user if not user == '' else 'Dave') +
                                               ', I\'m afraid I cannot find the TV show ' + 
@@ -46,7 +41,8 @@ def run(bot, chat_id, user, keyConfig, message, totalResults=1):
 
 
 def parse_show_details(data):
-    fullShowDetails = str(data['name']) + ': ' + ('An' if data['status'][0] == 'I' or data['status'][0] == 'E' else 'A') + ' ' + \
+    fullShowDetails = str(data['name']) + ': ' + \
+                      ('An' if data['status'][0] in ['A', 'E', 'I', 'O', 'U'] else 'A') + ' ' + \
                       str(data['status']) + ' ' + \
                       str(data['type']) + ' ' + \
                       ', '.join(data['genres'])

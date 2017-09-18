@@ -47,8 +47,8 @@ def vision_web_entities(image_link, key_config):
             strPartialMatchingImages = ''
             strPagesWithMatchingImages = ''
             strVisuallySimilarImages = ''
-            if 'labelAnnotations' in webDetection['responses'][0]:
-                for entity in webDetection['responses'][0]['labelAnnotations']:
+            if 'labelAnnotations' in data['responses'][0]:
+                for entity in data['responses'][0]['labelAnnotations']:
                     if 'description' in entity:
                         strWebEntities += entity['description'] + ', '
             if ('webEntities' in webDetection):

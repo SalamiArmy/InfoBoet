@@ -37,7 +37,7 @@ class TestReverseImage(unittest.TestCase):
         reverseimage.run(bot, chatId, 'Admin', keyConfig, requestText)
 
     def test_reverseimage_group(self):
-        requestText = 'http://i.imgur.com/nAwjwhu.gif'
+        requestText = 'https://s-media-cache-ak0.pinimg.com/originals/fd/40/85/fd408599ae5d5b533445ff8c9b46b735.gif'
 
         keyConfig = ConfigParser.ConfigParser()
         keyConfig.read(["keys.ini", "..\keys.ini"])
