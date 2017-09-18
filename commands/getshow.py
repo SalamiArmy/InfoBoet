@@ -46,19 +46,14 @@ def run(bot, chat_id, user, keyConfig, message, totalResults=1):
 
 
 def parse_show_details(data):
-    fullShowDetails = str(data['name']) + ': ' + ('An' if data['status'][0] == 'I' else 'A') + ' ' + \
+    fullShowDetails = str(data['name']) + ': ' + ('An' if data['status'][0] == 'I' or data['status'][0] == 'E' else 'A') + ' ' + \
                       str(data['status']) + ' ' + \
                       str(data['type']) + ' ' + \
                       ', '.join(data['genres'])
     fullShowDetails += '\nPremiere: ' + data['premiered']
-    showSchedule = parse_schedule(data['schedule'])
+    showSchedule = ', '.join(['{0}s'.format(day) for day in data['days']]) + \
+                   (' at ' + data['time'] if data['time'] != '' else '')
     fullShowDetails += '\nRuntime: ' + str(data['runtime']) + ' mins' + \
                        (' ' + showSchedule if showSchedule != '' else '')
     fullShowDetails += '\n' + data['officialSite']
     return fullShowDetails
-
-
-def parse_schedule(data):
-    showSchedule = ', '.join(['{0}s'.format(day) for day in data['days']]) + \
-                   (' at ' + data['time'] if data['time'] != '' else '')
-    return showSchedule
