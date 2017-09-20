@@ -45,7 +45,7 @@ class TestGetShow(unittest.TestCase):
         getshow.run(bot, chatId, 'Admin', keyConfig, requestText)
 
     def test_getshow_group(self):
-        requestText = u'Everybody Hates Chris'
+        requestText = u'errybody hates chris'
 
         keyConfig = ConfigParser.ConfigParser()
         keyConfig.read(["keys.ini", "..\keys.ini"])
