@@ -25,13 +25,12 @@ class TestReverseImage(unittest.TestCase):
         ndb.get_context().clear_cache()
 
     def test_reverseimage(self):
-        requestText = 'https://i.imgur.com/iM0PDtE.gif'
+        requestText = 'http://i.imgur.com/dRrbitg.gif'
 
         keyConfig = ConfigParser.ConfigParser()
         keyConfig.read(["keys.ini", "..\keys.ini"])
         bot = telegram.Bot(keyConfig.get('Telegram', 'TELE_BOT_ID'))
 
-        #for admin group
         chatId = keyConfig.get('BotAdministration', 'TESTING_PRIVATE_CHAT_ID')
 
         reverseimage.run(bot, chatId, 'Admin', keyConfig, requestText)

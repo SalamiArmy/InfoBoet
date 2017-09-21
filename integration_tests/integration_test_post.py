@@ -1,4 +1,5 @@
 # coding=utf-8
+import ConfigParser
 import unittest
 from google.appengine.ext import ndb
 from google.appengine.ext import testbed
@@ -27,7 +28,21 @@ class TestPost(unittest.TestCase):
         class Object(object):
             pass
         newRequestObject.request = Object()
-        newRequestObject.request.body = '{"message": {"from": {"username": "SalamiArmy", "first_name": "Ashley", "last_name": "Lewis"}, "text": "/getshow godless", "chat": {"id": -55348600, "type": "group"}}}'
+        keyConfig = ConfigParser.ConfigParser()
+        keyConfig.read(["keys.ini", "..\keys.ini"])
+        newRequestObject.request.body = '{"message": {"from": {"username": "SalamiArmy", "first_name": "Ashley", "last_name": "Lewis"}, "text": "/getshow godless", "chat": {"id": ' + keyConfig.get('BotAdministration', 'TESTING_PRIVATE_CHAT_ID') + ', "type": "group"}}}'
+        newRequestObject.response = Object()
+        newRequestObject.response.write = lambda x: None
+        newRequestObject.post()
+
+    def integration_test_reverseimage_post(self):
+        newRequestObject = main.WebhookHandler()
+        class Object(object):
+            pass
+        newRequestObject.request = Object()
+        keyConfig = ConfigParser.ConfigParser()
+        keyConfig.read(["keys.ini", "..\keys.ini"])
+        newRequestObject.request.body = '{"message": {"from": {"username": "SalamiArmy", "first_name": "Ashley", "last_name": "Lewis"}, "text": "/reverseimage http://i.imgur.com/dRrbitg.gif", "chat": {"id": ' + keyConfig.get('BotAdministration', 'TESTING_PRIVATE_CHAT_ID') + ', "type": "group"}}}'
         newRequestObject.response = Object()
         newRequestObject.response.write = lambda x: None
         newRequestObject.post()

@@ -92,7 +92,7 @@ class WebhookHandler(webapp2.RequestHandler):
             return 'unknown command'
 
     def TryExecuteExplicitCommand(self, chat_id, fr_username, text, chat_type):
-        split = text[1:].lower().split(' ', 1)
+        split = text[1:].split(' ', 1)
         try:
             commandName = split[0].lower().replace(bot.name.lower(), '')
             totalResults = 1
