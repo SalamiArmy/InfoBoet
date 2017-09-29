@@ -9,7 +9,7 @@ import re
 def run(bot, chat_id, user, keyConfig, message, totalResults=1):
     requestText = message.replace(bot.name, '').strip().upper()
 
-    code = urllib.urlopen('http://www.acronymsearch.com/index.php?acronym=' + requestText).read()
+    code = urllib.urlopen('http://www.abbreviations.com/' + requestText).read()
     resultsList = acronym_results_parser(code)
     if resultsList:
         searchResults = acronym_results_printer(requestText, resultsList)
@@ -25,7 +25,7 @@ def run(bot, chat_id, user, keyConfig, message, totalResults=1):
 def acronym_results_parser(code):
     soup = BeautifulSoup(code, 'html.parser')
     resultList = []
-    for resultRow in soup.findAll('td', attrs={'width':'100%'}):
+    for resultRow in soup.findAll('p', attrs={'class':'desc'}):
         resultList.append(resultRow.string)
     return resultList
 
@@ -35,8 +35,7 @@ def acronym_results_printer(request, list):
         encodedItem = item.encode('utf-8')
         if (encodedItem != 'None'):
             AllGameDetailsFormatted += '\n'
-            stripped = re.sub('\[military]$|\\(insurance\)$|\[transportation]$|\[computer]$|\\(technology\)$|\[medical]$|\[automotive]$|\[abbreviation]$|\[slang]$|', '', encodedItem)
-            for char in stripped:
+            for char in encodedItem.replace('Definition', ''):
                 if char.isupper():
                     AllGameDetailsFormatted += '*' + char + '*'
                 else:
