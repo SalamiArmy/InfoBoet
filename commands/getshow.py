@@ -51,5 +51,6 @@ def parse_show_details(data):
                    (' at ' + data['schedule']['time'] if data['schedule']['time'] != '' else '')
     fullShowDetails += '\nRuntime: ' + str(data['runtime']) + ' mins' + \
                        (' ' + showSchedule if showSchedule != '' else '')
-    fullShowDetails += '\n' + data['officialSite']
+    if 'officialSite' in data and data['officialSite'] is not None:
+        fullShowDetails += '\n' + data['officialSite']
     return fullShowDetails

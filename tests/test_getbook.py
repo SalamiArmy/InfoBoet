@@ -25,10 +25,19 @@ class TestGetBook(unittest.TestCase):
         ndb.get_context().clear_cache()
 
     def test_getbook(self):
-        requestText = u'sweet jesu'
+        requestText = u'stranger in a strange land'
         keyConfig = ConfigParser.ConfigParser()
         keyConfig.read(["keys.ini", "..\keys.ini"])
         bot = telegram.Bot(keyConfig.get('Telegram', 'TELE_BOT_ID'))
         chatId = keyConfig.get('BotAdministration', 'TESTING_PRIVATE_CHAT_ID')
+
+        getbook.run(bot, chatId, 'Admin', keyConfig, requestText)
+
+    def test_getbook_group(self):
+        requestText = u'when balls do touch'
+        keyConfig = ConfigParser.ConfigParser()
+        keyConfig.read(["keys.ini", "..\keys.ini"])
+        bot = telegram.Bot(keyConfig.get('Telegram', 'TELE_BOT_ID'))
+        chatId = keyConfig.get('BotAdministration', 'TESTING_ALT_GROUP_CHAT_ID')
 
         getbook.run(bot, chatId, 'Admin', keyConfig, requestText)

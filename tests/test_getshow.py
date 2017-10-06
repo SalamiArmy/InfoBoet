@@ -25,7 +25,7 @@ class TestGetShow(unittest.TestCase):
         ndb.get_context().clear_cache()
 
     def test_getshow(self):
-        requestText = 'godless'
+        requestText = u'godless'
 
         keyConfig = ConfigParser.ConfigParser()
         keyConfig.read(["keys.ini", "..\keys.ini"])
@@ -35,7 +35,7 @@ class TestGetShow(unittest.TestCase):
         getshow.run(bot, chatId, 'Admin', keyConfig, requestText)
 
     def test_getshow(self):
-        requestText = 'Critical Role'
+        requestText = u'Critical Role'
 
         keyConfig = ConfigParser.ConfigParser()
         keyConfig.read(["keys.ini", "..\keys.ini"])
@@ -45,7 +45,7 @@ class TestGetShow(unittest.TestCase):
         getshow.run(bot, chatId, 'Admin', keyConfig, requestText)
 
     def test_getshow_group(self):
-        requestText = 'godless'
+        requestText = u'errybody hates chris'
 
         keyConfig = ConfigParser.ConfigParser()
         keyConfig.read(["keys.ini", "..\keys.ini"])
