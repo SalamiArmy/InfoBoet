@@ -21,7 +21,7 @@ def run(bot, chat_id, user, keyConfig, message, totalResults=1):
 
 
 def get_launch_data(formattedLaunchInfo, keyConfig):
-    rocketUrl = 'https://launchlibrary.net/1.1/launch/next/5'
+    rocketUrl = 'https://launchlibrary.net/1.2.1/launch/next/5'
     rocketUrlRequest = urllib2.Request(rocketUrl, headers={'User-Agent': "Magic Browser"})
     rocketData = json.load(urllib2.urlopen(rocketUrlRequest))
     has_results = 'launches' in rocketData
