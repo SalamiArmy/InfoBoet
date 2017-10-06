@@ -13,7 +13,7 @@ def run(bot, chat_id, user, keyConfig, message, totalResults=1):
     resultsList = acronym_results_parser(code)
     if resultsList:
         searchResults = acronym_results_printer(requestText, resultsList)
-        bot.sendMessage(chat_id=chat_id, text=user + ', ' + searchResults,
+        bot.sendMessage(chat_id=chat_id, text=user + ', ' + searchResults.replace('***', ''),
                         disable_web_page_preview=True, parse_mode='Markdown')
         return True
     else:
