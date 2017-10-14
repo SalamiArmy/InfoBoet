@@ -1,5 +1,6 @@
 # coding=utf-8
-from commands.watchiss import unwatch
+import main
+watchiss = main.load_code_as_module('watchiss')
 
 def run(bot, chat_id, user, keyConfig, message, totalResults=1):
-    unwatch(bot, chat_id, message, True)
+    watchiss.unwatch(bot, chat_id, message, True)

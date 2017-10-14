@@ -7,6 +7,9 @@ from commands.getsound import get_tracks
 
 watchedCommandName = 'getsound'
 
+import main
+getsound = main.load_code_as_module(watchedCommandName)
+
 
 class WatchValue(ndb.Model):
     # key name: str(chat_id)

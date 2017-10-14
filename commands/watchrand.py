@@ -7,6 +7,9 @@ from commands.rand import get_exchange_data
 
 watchedCommandName = 'rand'
 
+import main
+rand = main.load_code_as_module(watchedCommandName)
+
 
 class WatchValue(ndb.Model):
     # key name: str(chat_id)

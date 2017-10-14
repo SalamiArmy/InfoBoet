@@ -5,6 +5,9 @@ from commands.mc import get_mc_data
 
 watchedCommandName = 'mc'
 
+import main
+mc = main.load_code_as_module(watchedCommandName)
+
 
 class MCWatchValue(ndb.Model):
     # key name: str(chat_id)

@@ -1,7 +1,8 @@
 # coding=utf-8
-from commands.watchrand import unwatch
+import main
+watchrand = main.load_code_as_module('watchrand')
 
 def run(bot, chat_id, user, keyConfig, message, totalResults=1):
-    unwatch(bot, chat_id, message)
+    watchrand.unwatch(bot, chat_id, message)
 
 

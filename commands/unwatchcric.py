@@ -1,7 +1,8 @@
 # coding=utf-8
-from commands.watchcric import unwatch
+import main
+watchcric = main.load_code_as_module('watchbitcoin')
 
 def run(bot, chat_id, user, keyConfig, message, totalResults=1):
-    unwatch(bot, chat_id, message)
+    watchcric.unwatch(bot, chat_id, message)
 
 
