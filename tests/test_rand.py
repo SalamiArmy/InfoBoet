@@ -1,7 +1,5 @@
 import ConfigParser
-import sys
 import unittest
-import telegram
 
 import telegram
 
@@ -14,5 +12,13 @@ class TestRand(unittest.TestCase):
         keyConfig.read(["keys.ini", "..\keys.ini"])
         bot = telegram.Bot(keyConfig.get('Telegram', 'TELE_BOT_ID'))
         chatId = keyConfig.get('BotAdministration', 'TESTING_PRIVATE_CHAT_ID')
+
+        rand.run(bot, chatId, 'Admin', keyConfig, '')
+
+    def test_rand_group(self):
+        keyConfig = ConfigParser.ConfigParser()
+        keyConfig.read(["keys.ini", "..\keys.ini"])
+        bot = telegram.Bot(keyConfig.get('Telegram', 'TELE_BOT_ID'))
+        chatId = keyConfig.get('BotAdministration', 'TESTING_GROUP_CHAT_ID')
 
         rand.run(bot, chatId, 'Admin', keyConfig, '')
