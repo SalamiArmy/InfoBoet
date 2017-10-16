@@ -44,7 +44,7 @@ def wasPreviouslySeenUrl(chat_id, url):
 def run(bot, chat_id, user, keyConfig, message, total_requested_results=1):
     requestText = message.replace(bot.name, "").strip()
     googurl = 'https://www.googleapis.com/customsearch/v1'
-    args = {'cx': keyConfig.get('Google', 'GCSE_SE_ID'),
+    args = {'cx': keyConfig.get('Google', 'GCSE_OTHER_SE_ID'),
             'key': keyConfig.get('Google', 'GCSE_APP_ID'),
             'safe': "off",
             'q': requestText}
