@@ -1,11 +1,11 @@
 # coding=utf-8
 from google.appengine.ext import ndb
 
-import main
-from commands import define
-
 watchedCommandName = 'define'
 
+
+import main
+define = main.load_code_as_module(watchedCommandName)
 
 class WatchValue(ndb.Model):
     # key name: str(chat_id)

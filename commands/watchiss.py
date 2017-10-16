@@ -1,15 +1,12 @@
 # coding=utf-8
-import string
 import uuid
 
-import telegram
 from google.appengine.ext import ndb
-
-import main
-from commands import iss
 
 watchedCommandName = 'iss'
 
+import main
+iss = main.load_code_as_module(watchedCommandName)
 
 class WatchValue(ndb.Model):
     # key name: str(chat_id)

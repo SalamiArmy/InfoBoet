@@ -1,7 +1,8 @@
 # coding=utf-8
-from commands.watchdefine import unwatch
+import main
+watchdefine = main.load_code_as_module('watchdefine')
 
 def run(bot, chat_id, user, keyConfig, message, totalResults=1):
-    unwatch(bot, chat_id, message)
+    watchdefine.unwatch(bot, chat_id, message)
 
 

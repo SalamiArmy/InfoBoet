@@ -4,7 +4,7 @@ import string
 from google.appengine.ext import ndb
 
 import main
-from commands import bitcoin
+bitcoin = main.load_code_as_module('bitcoin')
 
 watchedCommandName = 'bitcoin'
 

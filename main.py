@@ -7,12 +7,16 @@ import urllib
 import sys
 
 import urllib2
+
+import imp
 import telegram
 
 # standard app engine imports
 from google.appengine.api import urlfetch
 
 import webapp2
+
+from commands import add
 
 BASE_URL = 'https://api.telegram.org/bot'
 
@@ -100,7 +104,7 @@ class WebhookHandler(webapp2.RequestHandler):
             if len(re.findall('^[a-z]+\d+$', commandName)) > 0:
                 totalResults = re.findall('\d+$', commandName)[0]
                 commandName = re.findall('^[a-z]+', commandName)[0]
-            if commandName != 'say':
+            if commandName != 'say' and commandName != 'add':
                 mod = importlib.import_module('commands.' + commandName)
                 mod.run(bot, chat_id, fr_username, keyConfig, split[1] if len(split) > 1 else '', totalResults)
         except ImportError:
@@ -117,6 +121,25 @@ class WebhookHandler(webapp2.RequestHandler):
                                      str(sys.exc_info()[0]) + '\n' + str(sys.exc_info()[1]))
             except:
                 print("Unexpected error sending error response:",  str(sys.exc_info()[0]) + str(sys.exc_info()[1]))
+
+def load_code_as_module(module_name):
+    get_value_from_data_store = add.CommandsValue.get_by_id(module_name)
+    if get_value_from_data_store:
+        command_code = str(get_value_from_data_store.codeValue)
+        if command_code != '':
+            module = imp.new_module(module_name)
+            try:
+                exec command_code in module.__dict__
+            except ImportError:
+                print module_name + '\n' + \
+                      'imports between commands must be replaced with command = main.load_code_as_module(command) ' + \
+                      'for Scenic Oxygen to be able to resolve them' + \
+                      str(sys.exc_info()[0]) + '\n' + \
+                      str(sys.exc_info()[1]) + '\n' + \
+                      command_code
+                return None
+            return module
+    return None
 
 
 app = webapp2.WSGIApplication([
