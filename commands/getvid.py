@@ -20,4 +20,4 @@ def run(bot, chat_id, user, keyConfig, message, totalResults=1):
                                                   ', I\'m afraid I can\'t do that.\n(Video not found)')
     else:
         bot.sendMessage(chat_id=chat_id, text='I\'m sorry ' + (user if not user == '' else 'Dave') +
-                                              ', ' + data['error'])
+                                              ', ' + data['error']['message'])
