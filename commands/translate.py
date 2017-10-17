@@ -36,4 +36,5 @@ def run(bot, chat_id, user, keyConfig, message, totalResults=1):
                                                   ', I\'m afraid I can\'t find any translations for ' + \
                                                   requestText.encode('utf-8') + '.')
     else:
-        bot.sendMessage(chat_id=chat_id, text=json.dumps(data))
+        if 'error' in data and 'message' in data['error']:
+            bot.sendMessage(chat_id=chat_id, text=data['error']['message'])
