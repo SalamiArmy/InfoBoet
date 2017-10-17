@@ -14,7 +14,7 @@ def run(bot, chat_id, user, keyConfig, message, totalResults=1):
     for voice in voices:
         data = get_voice(requestText, keyConfig, voice)
         if data:
-            requests.post('https://api.telegram.org/bot' + keyConfig.get('Telegram', 'TELE_BOT_ID') +
+            requests.post('https://api.telegram.org/bot' + keyConfig.get('BotIDs', 'TELEGRAM_BOT_ID') +
                           '/sendVoice?chat_id='+str(chat_id),
                           files={'voice': ('no but what I\'M saying is.ogg', data, 'audio/ogg', {'Expires': '0'})})
             sent = True

@@ -1,5 +1,5 @@
-[Telegram]
-TELE_BOT_ID: {Your Telegram Bot ID here}
+[BotIDs]
+TELEGRAM_BOT_ID: {Your Telegram Bot ID here}
 
 [BotAdministration]
 TESTING_GROUP_CHAT_ID: {ID of Telegram Group to Test Sending and Receiving Messages}
