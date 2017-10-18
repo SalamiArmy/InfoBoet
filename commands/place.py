@@ -22,6 +22,6 @@ def run(bot, chat_id, user, keyConfig, message, totalResults=1):
     else:
         logging.info('Place content:')
         logging.info(data)
-        if 'error' in data and 'message' in data['error']:
+        if 'error_message' in data:
             bot.sendMessage(chat_id=chat_id, text='I\'m sorry ' + (user if not user == '' else 'Dave') +
-                                                  ', ' + data['error']['message'])
+                                                  ', ' + data['error_message'])
