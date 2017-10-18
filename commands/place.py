@@ -13,14 +13,13 @@ def run(bot, chat_id, user, keyConfig, message, totalResults=1):
               keyConfig.get('Google', 'GCSE_APP_ID') + '&location=-30,30&radius=50000&query='
     realUrl = mapsUrl + requestText
     data = json.load(urllib.urlopen(realUrl))
-    if len(data['results']) >= 1:
+    if 'results' in data and len(data['results']) > 0:
         latNum = data['results'][0]['geometry']['location']['lat']
         lngNum = data['results'][0]['geometry']['location']['lng']
         bot.sendChatAction(chat_id=chat_id, action=telegram.ChatAction.FIND_LOCATION)
         bot.sendLocation(chat_id=chat_id, latitude=latNum, longitude=lngNum)
         return True
     else:
-        bot.sendMessage(chat_id=chat_id,
-                        text='I\'m sorry ' + (user if not user == '' else 'Dave') +
-                             ', I\'m afraid I can\'t quite place ' +
-                             requestText + '.')
+        if 'error' in data and 'message' in data['error']:
+            bot.sendMessage(chat_id=chat_id, text='I\'m sorry ' + (user if not user == '' else 'Dave') +
+                                                  ', ' + data['error']['message'])
