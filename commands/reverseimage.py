@@ -1,5 +1,8 @@
 # coding=utf-8
 import json
+import urllib
+
+import io
 from google.appengine.api import urlfetch
 
 
@@ -33,6 +36,8 @@ def vision_web_entities(image_link, key_config):
                 }
             ]
         })
+    #fd = urllib.urlopen(str(image_link))
+    #image_file = io.BytesIO(fd.read())
     raw_data = urlfetch.fetch(
         url='https://vision.googleapis.com/v1/images:annotate?key=' + key_config.get('Google', 'GCSE_APP_ID'),
         payload=strPayload,

@@ -15,3 +15,13 @@ class TestGetVid(unittest.TestCase):
         chatId = keyConfig.get('BotAdministration', 'TESTING_PRIVATE_CHAT_ID')
 
         getvid.run(bot, chatId, 'Admin', keyConfig, requestText)
+
+    def test_getvid_group(self):
+        requestText = 'hippie sabotage - high enough'
+
+        keyConfig = ConfigParser.ConfigParser()
+        keyConfig.read(["keys.ini", "..\keys.ini"])
+        bot = telegram.Bot(keyConfig.get('Telegram', 'TELE_BOT_ID'))
+        chatId = keyConfig.get('BotAdministration', 'TESTING_GROUP_CHAT_ID')
+
+        getvid.run(bot, chatId, 'Admin', keyConfig, requestText)
