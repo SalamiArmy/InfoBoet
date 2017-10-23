@@ -34,7 +34,7 @@ class TestGetLink(unittest.TestCase):
         getlink.run(bot, chatId, 'SalamiArmy', keyConfig, requestText, 2)
 
     def test_getlink_group(self):
-        requestText = 'wikihow to brew shit'
+        requestText = 'big oven api'
 
         keyConfig = ConfigParser.ConfigParser()
         keyConfig.read(["keys.ini", "..\keys.ini"])
