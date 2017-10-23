@@ -23,6 +23,7 @@ BASE_URL = 'https://api.telegram.org/bot'
 # Read keys.ini file at program start (don't forget to put your keys in there!)
 keyConfig = ConfigParser.ConfigParser()
 keyConfig.read(["keys.ini", "..\keys.ini"])
+keyConfig.read(["bot_keys.ini", "..\\bot_keys.ini"])
 
 bot = telegram.Bot(keyConfig.get('BotIDs', 'TELEGRAM_BOT_ID'))
 

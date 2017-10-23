@@ -5,10 +5,9 @@ sys.setdefaultencoding('utf8')
 import json
 import re
 import urllib
-
-import requests
 import telegram
-import say
+import main
+say = main.load_code_as_module('say')
 
 
 def run(bot, chat_id, user, keyConfig, message, totalResults=1):

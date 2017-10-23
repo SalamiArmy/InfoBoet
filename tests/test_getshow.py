@@ -1,8 +1,8 @@
 import ConfigParser
 import unittest
 import telegram
+from commands import add
 
-import commands.getshow as getshow
 from google.appengine.ext import ndb
 from google.appengine.ext import testbed
 
@@ -32,24 +32,19 @@ class TestGetShow(unittest.TestCase):
         bot = telegram.Bot(keyConfig.get('Telegram', 'TELE_BOT_ID'))
         chatId = keyConfig.get('BotAdministration', 'TESTING_PRIVATE_CHAT_ID')
 
-        getshow.run(bot, chatId, 'Admin', keyConfig, requestText)
-
-    def test_getshow(self):
-        requestText = u'Critical Role'
-
-        keyConfig = ConfigParser.ConfigParser()
-        keyConfig.read(["keys.ini", "..\keys.ini"])
-        bot = telegram.Bot(keyConfig.get('Telegram', 'TELE_BOT_ID'))
-        chatId = keyConfig.get('BotAdministration', 'TESTING_PRIVATE_CHAT_ID')
-
+        import commands.getshow as getshow
         getshow.run(bot, chatId, 'Admin', keyConfig, requestText)
 
     def test_getshow_group(self):
-        requestText = u'errybody hates chris'
+        requestText = u'Mike & Molly'
 
         keyConfig = ConfigParser.ConfigParser()
         keyConfig.read(["keys.ini", "..\keys.ini"])
-        bot = telegram.Bot(keyConfig.get('Telegram', 'TELE_BOT_ID'))
-        chatId = keyConfig.get('BotAdministration', 'TESTING_GROUP_CHAT_ID')
+        keyConfig.read(["bot_keys.ini", "..\\bot_keys.ini"])
+        bot = telegram.Bot(keyConfig.get('BotIDs', 'TELEGRAM_BOT_ID'))
+        chatId = keyConfig.get('BotAdministration', 'TESTING_TELEGRAM_GROUP_CHAT_ID')
 
+        add.setCommandCode('say', open('../commands/say.py').read())
+
+        import commands.getshow as getshow
         getshow.run(bot, chatId, 'SalamiArmy', keyConfig, requestText)
