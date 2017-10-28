@@ -5,7 +5,7 @@ import urllib
 
 
 def run(bot, chat_id, user, keyConfig, message, totalResults=1):
-    requestText = urllib.quote(message.replace(bot.name, '').strip())
+    requestText = urllib.quote(str(message).replace(bot.name, '').strip())
 
     translateUrl = 'https://www.googleapis.com/language/translate/v2?key=' + \
                    keyConfig.get('Google', 'GCSE_APP_ID') + '&target=en&q='
