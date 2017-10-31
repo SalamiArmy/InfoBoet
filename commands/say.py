@@ -1,4 +1,5 @@
 import base64
+import json
 import urllib
 import requests
 
@@ -10,8 +11,7 @@ def run(bot, chat_id, user, keyConfig, message, totalResults=1):
         voice = 'en-US_AllisonVoice'
     else:
         voice = 'en-US_LisaVoice'
-    sent = False
-    if not send_text_as_voice(chat_id, keyConfig, requestText, sent, voice):
+    if not send_text_as_voice(chat_id, keyConfig, requestText, voice):
         bot.sendMessage(chat_id=str(chat_id), text='I\'m sorry ' + (user if not user == '' else 'Dave') +
                                                   ', I\'m afraid I can\'t say that.')
 
@@ -19,10 +19,13 @@ def run(bot, chat_id, user, keyConfig, message, totalResults=1):
 def send_text_as_voice(chat_id, keyConfig, requestText, voice):
     data = get_voice(requestText, keyConfig, voice)
     if data:
-        requests.post('https://api.telegram.org/bot' + keyConfig.get('BotIDs', 'TELEGRAM_BOT_ID') +
-                      '/sendVoice?chat_id=' + str(chat_id),
-                      files={'voice': ('no but what I\'M saying is.ogg', data, 'audio/ogg', {'Expires': '0'})})
-        return True
+        if 'error' not in data:
+            requests.post('https://api.telegram.org/bot' + keyConfig.get('BotIDs', 'TELEGRAM_BOT_ID') +
+                          '/sendVoice?chat_id=' + str(chat_id),
+                          files={'voice': ('no but what I\'M saying is.ogg', data, 'audio/ogg', {'Expires': '0'})})
+            return True
+        else:
+            print json.loads(data)['description']
     return False
 
 
