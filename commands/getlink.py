@@ -26,7 +26,6 @@ def addPreviouslySeenUrlsValue(url, chat_id):
     es.put()
 
 def getwhoseSeensValue(image_link):
-    logging.info(image_link)
     es = WhoseSeenUrls.get_or_insert(image_link)
     if es:
         return str(es.whoseSeen)
@@ -68,7 +67,7 @@ def run(bot, chat_id, user, keyConfig, message, total_requested_results=1):
                                                       (' ' + str(total_sent + 1) + ' of ' + str(total_results_to_send) if int(total_results_to_send) > 1 else '') +
                                                       ': ' + link)
                 total_sent += 1
-                addPreviouslySeenUrlsValue(chat_id, link)
+                addPreviouslySeenUrlsValue(link, chat_id)
     else:
         if 'error' in data:
             bot.sendMessage(chat_id=chat_id, text='I\'m sorry ' + (user if not user == '' else 'Dave') +
