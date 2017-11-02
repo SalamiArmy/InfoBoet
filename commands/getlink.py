@@ -65,7 +65,7 @@ def Google_Custom_Search(args):
 def Send_Links(bot, chat_id, user, requestText, args, keyConfig, total_number_to_send=1):
     data, total_results, results_this_page = Google_Custom_Search(args)
     if 'items' in data and total_results > 0:
-        total_offset, total_results, total_sent = search_results_walker(args, bot, chat_id, user, data, total_number_to_send,
+        total_offset, total_results, total_sent = search_results_walker(args, bot, chat_id, data, total_number_to_send,
                                                                         user + ', ' + requestText, results_this_page,
                                                                         total_results, keyConfig)
         if len(total_sent) < int(total_number_to_send):
@@ -93,7 +93,7 @@ def Send_Links(bot, chat_id, user, requestText, args, keyConfig, total_number_to
             bot.sendMessage(chat_id=chat_id, text=errorMsg)
             return [errorMsg]
 
-def search_results_walker(args, bot, chat_id, user, data, number, requestText, results_this_page, total_results, keyConfig,
+def search_results_walker(args, bot, chat_id, data, number, requestText, results_this_page, total_results, keyConfig,
                           total_offset=0, total_sent=[]):
     offset_this_page = 0
     while len(total_sent) < int(number) and int(offset_this_page) < int(results_this_page):
@@ -102,7 +102,7 @@ def search_results_walker(args, bot, chat_id, user, data, number, requestText, r
         total_offset = int(total_offset) + 1
         if not wasPreviouslySeenImage(link, chat_id):
             if number == 1:
-                bot.sendMessage(chat_id=chat_id, text=user + ', ' + requestText +
+                bot.sendMessage(chat_id=chat_id, text=requestText +
                                                       (' ' + len(total_sent + 1) + ' of ' + str(number) if int(number) > 1 else '') +
                                                       ': ' + link)
                 total_sent.append(link)
