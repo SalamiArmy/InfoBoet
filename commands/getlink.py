@@ -1,9 +1,9 @@
 # coding=utf-8
 import json
-import logging
 import string
 import urllib
 from google.appengine.ext import ndb
+from google.appengine.api import urlfetch
 
 class WhoseSeenUrls(ndb.Model):
     # key name: get:str(chat_id)
@@ -42,38 +42,78 @@ def wasPreviouslySeenImage(image_link, chat_id):
     return False
 
 def run(bot, chat_id, user, keyConfig, message, total_requested_results=1):
-    requestText = message.replace(bot.name, "").strip()
-    googurl = 'https://www.googleapis.com/customsearch/v1'
+    requestText = str(message).replace(bot.name, "").strip()
     args = {'cx': keyConfig.get('Google', 'GCSE_OTHER_SE_ID'),
             'key': keyConfig.get('Google', 'GCSE_APP_ID'),
             'safe': "off",
             'q': requestText}
+    return Send_Links(bot, chat_id, user, requestText, args, keyConfig, total_requested_results)
+
+def Google_Custom_Search(args):
+    googurl = 'https://www.googleapis.com/customsearch/v1'
     realUrl = googurl + '?' + urllib.urlencode(args)
-    data = json.load(urllib.urlopen(realUrl))
-    if 'items' in data:
-        total_sent = 0
-        total_actual_results = int(data['searchInformation']['totalResults'])
-        if int(total_actual_results) < int(total_requested_results):
-            total_results_to_send = int(total_actual_results)
-            bot.sendMessage(chat_id=chat_id, text='I\'m sorry ' + (user if not user == '' else 'Dave') +
-                                                  ', I\'m afraid I can only find ' + str(total_actual_results) +
-                                                  ' links for ' + string.capwords(requestText.encode('utf-8')) + '.')
-        else:
-            total_results_to_send = int(total_requested_results)
-        while total_sent < total_results_to_send:
-            link = data['items'][total_sent]['link']
-            if not wasPreviouslySeenImage(link, chat_id):
-                bot.sendMessage(chat_id=chat_id, text=user + ', ' + requestText +
-                                                      (' ' + str(total_sent + 1) + ' of ' + str(total_results_to_send) if int(total_results_to_send) > 1 else '') +
-                                                      ': ' + link)
-                total_sent += 1
+    data = json.loads(urlfetch.fetch(realUrl).content)
+    total_results = 0
+    results_this_page = 0
+    if 'searchInformation' in data and 'totalResults' in data['searchInformation']:
+        total_results = data['searchInformation']['totalResults']
+    if 'queries' in data and 'request' in data['queries'] and len(data['queries']['request']) > 0 and 'count' in \
+            data['queries']['request'][0]:
+        results_this_page = data['queries']['request'][0]['count']
+    return data, total_results, results_this_page
+
+def Send_Links(bot, chat_id, user, requestText, args, keyConfig, total_number_to_send=1):
+    data, total_results, results_this_page = Google_Custom_Search(args)
+    if 'items' in data and total_results > 0:
+        total_offset, total_results, total_sent = search_results_walker(args, bot, chat_id, user, data, total_number_to_send,
+                                                                        user + ', ' + requestText, results_this_page,
+                                                                        total_results, keyConfig)
+        if len(total_sent) < int(total_number_to_send):
+            if int(total_number_to_send) > 1:
+                bot.sendMessage(chat_id=chat_id, text='I\'m sorry ' + (user if not user == '' else 'Dave') +
+                                                      ', I\'m afraid I can\'t find any more images for ' +
+                                                      string.capwords(requestText.encode('utf-8') + '.' +
+                                                                      ' I could only find ' + str(
+                                                          len(total_sent)) + ' out of ' + str(total_number_to_send)))
+            else:
+                bot.sendMessage(chat_id=chat_id, text='I\'m sorry ' + (user if not user == '' else 'Dave') +
+                                                      ', I\'m afraid I can\'t find any images for ' +
+                                                      string.capwords(requestText.encode('utf-8')))
+        return total_sent
     else:
         if 'error' in data:
-            bot.sendMessage(chat_id=chat_id, text='I\'m sorry ' + (user if not user == '' else 'Dave') +
-                                                  ' I got ' + data['error']['message'] + '.')
+            errorMsg = 'I\'m sorry ' + (user if not user == '' else 'Dave') +\
+                       data['error']['message']
+            bot.sendMessage(chat_id=chat_id, text=errorMsg)
+            return [errorMsg]
         else:
-            bot.sendMessage(chat_id=chat_id, text='I\'m sorry ' + (user if not user == '' else 'Dave') +
-                                                  ', I\'m afraid I can\'t find any links for ' +
-                                                  string.capwords(requestText.encode('utf-8')))
+            errorMsg = 'I\'m sorry ' + (user if not user == '' else 'Dave') + \
+                       ', I\'m afraid I can\'t find any images for ' + \
+                       string.capwords(requestText.encode('utf-8'))
+            bot.sendMessage(chat_id=chat_id, text=errorMsg)
+            return [errorMsg]
 
-
+def search_results_walker(args, bot, chat_id, user, data, number, requestText, results_this_page, total_results, keyConfig,
+                          total_offset=0, total_sent=[]):
+    offset_this_page = 0
+    while len(total_sent) < int(number) and int(offset_this_page) < int(results_this_page):
+        link = str(data['items'][offset_this_page]['link'])
+        offset_this_page += 1
+        total_offset = int(total_offset) + 1
+        if not wasPreviouslySeenImage(link, chat_id):
+            if number == 1:
+                bot.sendMessage(chat_id=chat_id, text=user + ', ' + requestText +
+                                                      (' ' + len(total_sent + 1) + ' of ' + str(number) if int(number) > 1 else '') +
+                                                      ': ' + link)
+                total_sent.append(link)
+            else:
+                message = requestText + ': ' + \
+                          (str(len(total_sent) + 1) + ' of ' + str(number) + '\n' if int(number) > 1 else '') + link
+                bot.sendMessage(chat_id, message)
+                total_sent.append(link)
+    if len(total_sent) < int(number) and int(total_offset) < int(total_results):
+        args['start'] = total_offset + 1
+        data, total_results, results_this_page = Google_Custom_Search(args)
+        return search_results_walker(args, bot, chat_id, data, number, requestText, results_this_page, total_results, keyConfig,
+                                     total_offset, total_sent)
+    return total_offset, total_results, total_sent
