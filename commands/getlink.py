@@ -1,5 +1,6 @@
 # coding=utf-8
 import json
+import logging
 import string
 import urllib
 from google.appengine.ext import ndb
@@ -25,7 +26,7 @@ def addPreviouslySeenUrlsValue(url, chat_id):
     es.put()
 
 def getwhoseSeensValue(image_link):
-    print image_link
+    logging.info(image_link)
     es = WhoseSeenUrls.get_or_insert(image_link)
     if es:
         return str(es.whoseSeen)
