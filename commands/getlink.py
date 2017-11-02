@@ -67,7 +67,6 @@ def run(bot, chat_id, user, keyConfig, message, total_requested_results=1):
                                                       (' ' + str(total_sent + 1) + ' of ' + str(total_results_to_send) if int(total_results_to_send) > 1 else '') +
                                                       ': ' + link)
                 total_sent += 1
-                addPreviouslySeenUrlsValue(link, chat_id)
     else:
         if 'error' in data:
             bot.sendMessage(chat_id=chat_id, text='I\'m sorry ' + (user if not user == '' else 'Dave') +
