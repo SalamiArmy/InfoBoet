@@ -4,41 +4,40 @@ import string
 import urllib
 from google.appengine.ext import ndb
 
-
-class SeenUrls(ndb.Model):
+class WhoseSeenUrls(ndb.Model):
     # key name: get:str(chat_id)
-    allPreviousSeenUrls = ndb.StringProperty(indexed=False, default='')
+    whoseSeen = ndb.StringProperty(indexed=False, default='')
 
 
 # ================================
 
 def setPreviouslySeenUrlsValue(chat_id, NewValue):
-    es = SeenUrls.get_or_insert(str(chat_id))
-    es.allPreviousSeenUrls = NewValue.encode('utf-8')
+    es = WhoseSeenUrls.get_or_insert(str(chat_id))
+    es.whoseSeen = str(NewValue)
     es.put()
 
-def addPreviouslySeenUrlsValue(chat_id, NewValue):
-    es = SeenUrls.get_or_insert(str(chat_id))
-    if es.allPreviousSeenUrls == '':
-        es.allPreviousSeenUrls = NewValue.encode('utf-8').replace(',', '')
+def addPreviouslySeenUrlsValue(url, chat_id):
+    es = WhoseSeenUrls.get_or_insert(url)
+    if es.whoseSeen == '':
+        es.whoseSeen = str(chat_id)
     else:
-        es.allPreviousSeenUrls += ',' + NewValue.encode('utf-8').replace(',', '')
+        es.whoseSeen += ',' + str(chat_id)
     es.put()
 
-def getPreviouslySeenUrlsValue(chat_id):
-    es = SeenUrls.get_or_insert(str(chat_id))
+def getwhoseSeensValue(image_link):
+    es = WhoseSeenUrls.get_or_insert(image_link)
     if es:
-        return es.allPreviousSeenUrls.encode('utf-8')
+        return str(es.whoseSeen)
     return ''
 
-def wasPreviouslySeenUrl(chat_id, url):
-    url = url.replace(',', '')
-    allPreviousLinks = getPreviouslySeenUrlsValue(chat_id)
-    if ',' + url + ',' in allPreviousLinks or \
-            allPreviousLinks.startswith(url + ',') or  \
-            allPreviousLinks.endswith(',' + url) or  \
-            allPreviousLinks == url:
+def wasPreviouslySeenImage(image_link, chat_id):
+    all_whove_seen_url = getwhoseSeensValue(image_link)
+    if ',' + str(chat_id) + ',' in all_whove_seen_url or \
+            all_whove_seen_url.startswith(str(chat_id) + ',') or \
+            all_whove_seen_url.endswith(',' + str(chat_id)) or \
+                    all_whove_seen_url == str(chat_id):
         return True
+    addPreviouslySeenUrlsValue(image_link, chat_id)
     return False
 
 def run(bot, chat_id, user, keyConfig, message, total_requested_results=1):
@@ -62,7 +61,7 @@ def run(bot, chat_id, user, keyConfig, message, total_requested_results=1):
             total_results_to_send = int(total_requested_results)
         while total_sent < total_results_to_send:
             link = data['items'][total_sent]['link']
-            if not wasPreviouslySeenUrl(chat_id, link):
+            if not wasPreviouslySeenImage(link, chat_id):
                 bot.sendMessage(chat_id=chat_id, text=user + ', ' + requestText +
                                                       (' ' + str(total_sent + 1) + ' of ' + str(total_results_to_send) if int(total_results_to_send) > 1 else '') +
                                                       ': ' + link)
