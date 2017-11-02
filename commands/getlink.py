@@ -11,8 +11,8 @@ class WhoseSeenUrls(ndb.Model):
 
 # ================================
 
-def setPreviouslySeenUrlsValue(chat_id, NewValue):
-    es = WhoseSeenUrls.get_or_insert(str(chat_id))
+def setPreviouslySeenUrlsValue(url, NewValue):
+    es = WhoseSeenUrls.get_or_insert(str(url))
     es.whoseSeen = str(NewValue)
     es.put()
 
@@ -25,6 +25,7 @@ def addPreviouslySeenUrlsValue(url, chat_id):
     es.put()
 
 def getwhoseSeensValue(image_link):
+    print image_link
     es = WhoseSeenUrls.get_or_insert(image_link)
     if es:
         return str(es.whoseSeen)
