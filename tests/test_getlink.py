@@ -16,6 +16,7 @@ class TestGetLink(unittest.TestCase):
         self.testbed.init_datastore_v3_stub()
         self.testbed.init_memcache_stub()
         self.testbed.init_user_stub()
+        self.testbed.init_urlfetch_stub()
         # Clear ndb's in-context cache between tests.
         # This prevents data from leaking between tests.
         # Alternatively, you could disable caching by
@@ -27,11 +28,10 @@ class TestGetLink(unittest.TestCase):
 
         keyConfig = ConfigParser.ConfigParser()
         keyConfig.read(["keys.ini", "..\keys.ini"])
-        bot = telegram.Bot(keyConfig.get('Telegram', 'TELE_BOT_ID'))
+        bot = telegram.Bot(keyConfig.get('BotIDs', 'TELEGRAM_BOT_ID'))
         chatId = keyConfig.get('BotAdministration', 'TESTING_PRIVATE_CHAT_ID')
 
-        getlink.run(bot, chatId, 'SalamiArmy', keyConfig, requestText, 2)
-        getlink.run(bot, chatId, 'SalamiArmy', keyConfig, requestText, 2)
+        getlink.run(bot, chatId, 'SalamiArmy', keyConfig, requestText, 1)
 
     def test_getlink_group(self):
         requestText = 'big oven api'
