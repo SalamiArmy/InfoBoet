@@ -40,7 +40,7 @@ class TestGetAnswer(unittest.TestCase):
         getanswer.run(bot, chatId, 'Admin', keyConfig, requestText)
 
     def test_getanswer_group(self):
-        requestText = 'If you have a shit in the toilet. And you drop your phone in. Do you flush first before fetching it?'
+        requestText = 'what\'s in the Cuphead cups?'
 
         keyConfig = ConfigParser.ConfigParser()
         keyConfig.read(["keys.ini", "..\keys.ini"])

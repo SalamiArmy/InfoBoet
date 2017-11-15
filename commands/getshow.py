@@ -32,11 +32,13 @@ def run(bot, chat_id, user, keyConfig, message, totalResults=1):
                           photo=image_original)
         bot.sendMessage(chat_id=chat_id,
                         text=(user if not user == '' else 'Dave') + ', ' + fullShowDetails)
-        return say.send_text_as_voice(chat_id, keyConfig, formattedShowSummary, 'en-US_LisaVoice')
+        say.send_text_as_voice(chat_id, keyConfig, formattedShowSummary, 'en-US_LisaVoice')
+        return formattedShowSummary
     else:
-        bot.sendMessage(chat_id=chat_id, text='I\'m sorry ' + (user if not user == '' else 'Dave') +
-                                              ', I\'m afraid I cannot find the TV show ' + 
-                                              requestText.title())
+        result = 'I\'m sorry ' + (
+        user if not user == '' else 'Dave') + ', I\'m afraid I cannot find the TV show ' + requestText.title()
+        bot.sendMessage(chat_id=chat_id, text=result)
+        return result
 
 
 def parse_show_details(data):
