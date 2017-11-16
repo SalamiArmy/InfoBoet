@@ -55,6 +55,7 @@ def run(bot, chat_id, user, keyConfig, message, totalResults=1):
     bookTitles, ratings, total_ratings, bookIDs, bookDescriptions = book_results_parser(raw_xml_data, keyConfig)
 
     offset = 0
+    result = ''
     while int(offset) < int(totalResults) and offset < len(bookTitles):
         bookTitle = bookTitles[offset]
         if not wasPreviouslySeenBook(chat_id, bookTitle):
@@ -70,12 +71,14 @@ def run(bot, chat_id, user, keyConfig, message, totalResults=1):
             bot.sendMessage(chat_id=chat_id, text=formatted_book_data,
                             parse_mode='Markdown')
             addPreviouslySeenBooksValue(chat_id, bookTitle)
+            result = formatted_book_data
         offset += 1
     if len(bookTitles) <= 0 or offset < totalResults:
-        bot.sendMessage(chat_id=chat_id, text='I\'m sorry ' + (user if not user == '' else 'Dave') +
-                                              ', I\'m afraid I can\'t find any books' +
-                                              (' that you haven\'t already seen' if len(bookTitles) > 0 and offset > 0 else '') +
-                                              ' for ' + requestText.encode('utf-8') + '.')
+        result = 'I\'m sorry ' + (user if not user == '' else 'Dave') + ', I\'m afraid I can\'t find any books' + (
+        ' that you haven\'t already seen' if len(bookTitles) > 0 and offset > 0 else '') + ' for ' + str(requestText) \
+                 + '.'
+        bot.sendMessage(chat_id=chat_id, text=result)
+    return result
 
 def FormatDesc(Desc):
     return Desc.replace('<br />', '\n')\
