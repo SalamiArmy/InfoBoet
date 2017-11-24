@@ -8,9 +8,6 @@ sys.setdefaultencoding('utf8')
 import json
 import re
 import urllib
-import main
-say = main.load_code_as_module('say')
-
 
 def run(user, message, chat_id='', totalResults=1):
     requestText = str(message).strip()
@@ -48,7 +45,8 @@ def parse_show_details(data):
                       str(data['status']) + ' ' + \
                       str(data['type']) + ' ' + \
                       ', '.join(data['genres'])
-    fullShowDetails += '\nPremiere: ' + data['premiered']
+    if data['premiered'] != None:
+        fullShowDetails += '\nPremiere: ' + data['premiered']
     showSchedule = ', '.join(['{0}s'.format(day) for day in data['schedule']['days']]) + \
                    (' at ' + data['schedule']['time'] if data['schedule']['time'] != '' else '')
     fullShowDetails += '\nRuntime: ' + str(data['runtime']) + ' mins' + \

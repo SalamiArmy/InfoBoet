@@ -23,9 +23,7 @@ from google.appengine.api import urlfetch
 import webapp2
 
 from commands import start
-from commands import login
 from commands import add
-from commands import remove
 
 # Read keys.ini file at program start (don't forget to put your bot keys in there!)
 keyConfig = ConfigParser.ConfigParser()
@@ -192,10 +190,6 @@ class TelegramWebhookHandler(webapp2.RequestHandler):
 
         if commandName == 'add':
             return add.run(telegramBot, chat_id, fr_username, keyConfig, request_text)
-        elif commandName == 'remove':
-            return remove.run(telegramBot, chat_id, fr_username, keyConfig, request_text)
-        elif commandName == 'login':
-            return login.run(telegramBot, chat_id, fr_username, keyConfig)
         elif commandName == 'start':
             return start.run(telegramBot, chat_id, fr_username, keyConfig)
         elif commandName == 'getanswer':

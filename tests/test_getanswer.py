@@ -36,7 +36,8 @@ class TestGetAnswer(unittest.TestCase):
         bot = telegram.Bot(keyConfig.get('BotIDs', 'TELEGRAM_BOT_ID'))
         chatId = keyConfig.get('BotAdministration', 'TESTING_TELEGRAM_PRIVATE_CHAT_ID')
 
-        import commands.getanswer as getanswer
+        add.setCommandCode('getanswer', open('../commands/getanswer.py').read())
+        getanswer = main.load_code_as_module('getanswer')
         bot.sendMessage(chat_id=chatId, text=getanswer.run('Admin', requestText))
 
     def test_getanswer_group(self):
@@ -50,5 +51,4 @@ class TestGetAnswer(unittest.TestCase):
 
         add.setCommandCode('getanswer', open('../commands/getanswer.py').read())
         getanswer = main.load_code_as_module('getanswer')
-
-        getanswer.run(bot, chatId, 'Admin', keyConfig, requestText)
+        bot.sendMessage(chat_id=chatId, text=getanswer.run('Admin', requestText))

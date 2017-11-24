@@ -2,6 +2,7 @@ import ConfigParser
 import unittest
 import telegram
 from commands import add
+import main
 
 from google.appengine.ext import ndb
 from google.appengine.ext import testbed
@@ -25,15 +26,17 @@ class TestGetShow(unittest.TestCase):
         ndb.get_context().clear_cache()
 
     def test_getshow(self):
-        requestText = u'godless'
+        requestText = u'pussy'
 
         keyConfig = ConfigParser.ConfigParser()
         keyConfig.read(["keys.ini", "..\keys.ini"])
-        bot = telegram.Bot(keyConfig.get('Telegram', 'TELE_BOT_ID'))
-        chatId = keyConfig.get('BotAdministration', 'TESTING_PRIVATE_CHAT_ID')
+        keyConfig.read(["bot_keys.ini", "..\\bot_keys.ini"])
+        bot = telegram.Bot(keyConfig.get('BotIDs', 'TELEGRAM_BOT_ID'))
+        chatId = keyConfig.get('BotAdministration', 'TESTING_TELEGRAM_PRIVATE_CHAT_ID')
 
-        import commands.getshow as getshow
-        getshow.run(bot, chatId, 'Admin', keyConfig, requestText)
+        add.setCommandCode('getshow', open('../commands/getshow.py').read())
+        getshow = main.load_code_as_module('getshow')
+        getshow.run('Admin', requestText, chatId)
 
     def test_getshow_group(self):
         requestText = u'Mike & Molly'
@@ -44,7 +47,6 @@ class TestGetShow(unittest.TestCase):
         bot = telegram.Bot(keyConfig.get('BotIDs', 'TELEGRAM_BOT_ID'))
         chatId = keyConfig.get('BotAdministration', 'TESTING_TELEGRAM_GROUP_CHAT_ID')
 
-        add.setCommandCode('say', open('../commands/say.py').read())
-
-        import commands.getshow as getshow
+        add.setCommandCode('getshow', open('../commands/getshow.py').read())
+        getshow = main.load_code_as_module('getshow')
         getshow.run(bot, chatId, 'SalamiArmy', keyConfig, requestText)
