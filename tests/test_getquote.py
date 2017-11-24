@@ -11,10 +11,11 @@ class TestGetQuote(unittest.TestCase):
 
         keyConfig = ConfigParser.ConfigParser()
         keyConfig.read(["keys.ini", "..\keys.ini"])
-        bot = telegram.Bot(keyConfig.get('Telegram', 'TELE_BOT_ID'))
-        chatId = keyConfig.get('BotAdministration', 'TESTING_PRIVATE_CHAT_ID')
+        keyConfig.read(["bot_keys.ini", "..\\bot_keys.ini"])
+        bot = telegram.Bot(keyConfig.get('BotIDs', 'TELEGRAM_BOT_ID'))
+        chatId = keyConfig.get('BotAdministration', 'TESTING_TELEGRAM_PRIVATE_CHAT_ID')
 
-        getquote.run(bot, chatId, 'Admin', keyConfig, requestText)
+        bot.sendMessage(chat_id=chatId, text=getquote.run('Admin', requestText, chatId))
 
     def test_getquote_group(self):
         requestText = 'cook pu'
@@ -24,4 +25,4 @@ class TestGetQuote(unittest.TestCase):
         bot = telegram.Bot(keyConfig.get('Telegram', 'TELE_BOT_ID'))
         chatId = keyConfig.get('BotAdministration', 'TESTING_GROUP_CHAT_ID')
 
-        getquote.run(bot, chatId, 'SalamiArmy', keyConfig, requestText)
+        bot.sendMessage(chat_id=chatId, text=getquote.run('SalamiArmy', requestText, chatId))

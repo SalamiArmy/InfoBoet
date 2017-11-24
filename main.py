@@ -156,7 +156,7 @@ class TelegramWebhookHandler(webapp2.RequestHandler):
                       'urban',
                       'getlyrics',
                       'getquote',
-                      'translate'
+                      'translate',
                       'getlink']
 
     def TryAnswerAQuestion(self, chat_id, fr_username, text):
