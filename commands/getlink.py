@@ -1,4 +1,5 @@
 # coding=utf-8
+import ConfigParser
 import json
 import string
 import urllib
@@ -41,13 +42,16 @@ def wasPreviouslySeenImage(image_link, chat_id):
     addPreviouslySeenUrlsValue(image_link, chat_id)
     return False
 
-def run(bot, chat_id, user, keyConfig, message, total_requested_results=1):
-    requestText = str(message).replace(bot.name, "").strip()
+def run(user, message, chat_id='', total_requested_results=1):
+    requestText = str(message).strip()
+    keyConfig = ConfigParser.ConfigParser()
+    keyConfig.read(["keys.ini", "..\keys.ini"])
+
     args = {'cx': keyConfig.get('Google', 'GCSE_OTHER_SE_ID'),
             'key': keyConfig.get('Google', 'GCSE_APP_ID'),
             'safe': "off",
             'q': requestText}
-    return Send_Links(bot, chat_id, user, requestText, args, keyConfig, total_requested_results)
+    return Send_Links(chat_id, user, requestText, args, keyConfig, total_requested_results)
 
 def Google_Custom_Search(args):
     googurl = 'https://www.googleapis.com/customsearch/v1'
@@ -62,39 +66,37 @@ def Google_Custom_Search(args):
         results_this_page = data['queries']['request'][0]['count']
     return data, total_results, results_this_page
 
-def Send_Links(bot, chat_id, user, requestText, args, keyConfig, total_number_to_send=1):
+def Send_Links(chat_id, user, requestText, args, keyConfig, total_number_to_send=1):
     data, total_results, results_this_page = Google_Custom_Search(args)
     if 'items' in data and total_results > 0:
-        total_offset, total_results, total_sent = search_results_walker(args, bot, chat_id, data, total_number_to_send,
+        total_offset, total_results, total_sent = search_results_walker(args, chat_id, data, total_number_to_send,
                                                                         user + ', ' + requestText, results_this_page,
                                                                         total_results, keyConfig)
-        if len(total_sent) < int(total_number_to_send):
+        if len(total_sent.split('\n')) < int(total_number_to_send):
             if int(total_number_to_send) > 1:
-                bot.sendMessage(chat_id=chat_id, text='I\'m sorry ' + (user if not user == '' else 'Dave') +
-                                                      ', I\'m afraid I can\'t find any more images for ' +
+                return 'I\'m sorry ' + (user if not user == '' else 'Dave') +\
+                                                      ', I\'m afraid I can\'t find any more images for ' +\
                                                       string.capwords(requestText.encode('utf-8') + '.' +
                                                                       ' I could only find ' + str(
-                                                          len(total_sent)) + ' out of ' + str(total_number_to_send)))
+                                                          len(total_sent.split('\n'))) + ' out of ' + str(total_number_to_send))
             else:
-                bot.sendMessage(chat_id=chat_id, text='I\'m sorry ' + (user if not user == '' else 'Dave') +
-                                                      ', I\'m afraid I can\'t find any images for ' +
-                                                      string.capwords(requestText.encode('utf-8')))
+                return 'I\'m sorry ' + (user if not user == '' else 'Dave') +\
+                                                      ', I\'m afraid I can\'t find any images for ' +\
+                                                      string.capwords(requestText.encode('utf-8'))
         return total_sent
     else:
         if 'error' in data:
             errorMsg = 'I\'m sorry ' + (user if not user == '' else 'Dave') +\
                        data['error']['message']
-            bot.sendMessage(chat_id=chat_id, text=errorMsg)
-            return [errorMsg]
+            return errorMsg
         else:
             errorMsg = 'I\'m sorry ' + (user if not user == '' else 'Dave') + \
                        ', I\'m afraid I can\'t find any images for ' + \
                        string.capwords(requestText.encode('utf-8'))
-            bot.sendMessage(chat_id=chat_id, text=errorMsg)
-            return [errorMsg]
+            return errorMsg
 
-def search_results_walker(args, bot, chat_id, data, number, requestText, results_this_page, total_results, keyConfig,
-                          total_offset=0, total_sent=[]):
+def search_results_walker(args, chat_id, data, number, requestText, results_this_page, total_results, keyConfig,
+                          total_offset=0, total_sent=''):
     offset_this_page = 0
     while len(total_sent) < int(number) and int(offset_this_page) < int(results_this_page):
         link = str(data['items'][offset_this_page]['link'])
@@ -102,18 +104,16 @@ def search_results_walker(args, bot, chat_id, data, number, requestText, results
         total_offset = int(total_offset) + 1
         if not wasPreviouslySeenImage(link, chat_id):
             if number == 1:
-                bot.sendMessage(chat_id=chat_id, text=requestText +
-                                                      (' ' + len(total_sent + 1) + ' of ' + str(number) if int(number) > 1 else '') +
-                                                      ': ' + link)
-                total_sent.append(link)
+                message = requestText + (' ' + len(total_sent + 1) + ' of ' + str(number) if int(number) > 1 else '') +\
+                       ': ' + link
+                total_sent += ('\n' if total_sent == '' else '') + message
             else:
                 message = requestText + ': ' + \
                           (str(len(total_sent) + 1) + ' of ' + str(number) + '\n' if int(number) > 1 else '') + link
-                bot.sendMessage(chat_id, message)
-                total_sent.append(link)
+                total_sent += ('\n' if total_sent == '' else '') + message
     if len(total_sent) < int(number) and int(total_offset) < int(total_results):
         args['start'] = total_offset + 1
         data, total_results, results_this_page = Google_Custom_Search(args)
-        return search_results_walker(args, bot, chat_id, data, number, requestText, results_this_page, total_results, keyConfig,
+        return search_results_walker(args, chat_id, data, number, requestText, results_this_page, total_results, keyConfig,
                                      total_offset, total_sent)
     return total_offset, total_results, total_sent

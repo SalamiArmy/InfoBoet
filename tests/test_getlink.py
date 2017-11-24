@@ -28,10 +28,11 @@ class TestGetLink(unittest.TestCase):
 
         keyConfig = ConfigParser.ConfigParser()
         keyConfig.read(["keys.ini", "..\keys.ini"])
+        keyConfig.read(["bot_keys.ini", "..\\bot_keys.ini"])
         bot = telegram.Bot(keyConfig.get('BotIDs', 'TELEGRAM_BOT_ID'))
-        chatId = keyConfig.get('BotAdministration', 'TESTING_PRIVATE_CHAT_ID')
+        chatId = keyConfig.get('BotAdministration', 'TESTING_TELEGRAM_PRIVATE_CHAT_ID')
 
-        getlink.run(bot, chatId, 'SalamiArmy', keyConfig, requestText, 1)
+        bot.sendMessage(chat_id=chatId, text=getlink.run('SalamiArmy', requestText, chatId))
 
     def test_getlink_group(self):
         requestText = 'big oven api'
@@ -41,4 +42,4 @@ class TestGetLink(unittest.TestCase):
         bot = telegram.Bot(keyConfig.get('Telegram', 'TELE_BOT_ID'))
         chatId = keyConfig.get('BotAdministration', 'TESTING_GROUP_CHAT_ID')
 
-        getlink.run(bot, chatId, 'SalamiArmy', keyConfig, requestText)
+        bot.sendMessage(chat_id=chatId, text=getlink.run('SalamiArmy', requestText, chatId))

@@ -140,12 +140,12 @@ class TelegramWebhookHandler(webapp2.RequestHandler):
 
             if text.startswith('/'):
                 logging.info(self.TryExecuteExplicitCommand(chat_id, user, text, chat_type))
-                # elif text.endswith('?'):
-                #    result = self.TryAnswerAQuestion(chat_id, user, text)
-                #    if result_is_not_error(result):
-                #        telegramBot.sendMessage(chat_id=chat_id, text=result)
-                #    elif chat_type == 'private':
-                #        telegramBot.sendMessage(chat_id=chat_id, text='I\'m sorry ' + user + ', I don\'t know.')
+            if text.endswith('?'):
+                result = self.TryAnswerAQuestion(chat_id, user, text)
+                if result_is_not_error(result):
+                    telegramBot.sendMessage(chat_id=chat_id, text=result)
+                elif chat_type == 'private':
+                    telegramBot.sendMessage(chat_id=chat_id, text='I\'m sorry ' + user + ', I don\'t know.')
 
     commandCascade = ['getanswer',
                       'getbook',
