@@ -1,14 +1,16 @@
 # coding=utf-8
+import ConfigParser
 import json
 import urllib
 import urllib2
 
-def run(bot, chat_id, user, keyConfig, message, totalResults=1):
-    requestText = message.replace(bot.name, "").strip()
-    bot.sendMessage(chat_id=chat_id, text=get_define_data(keyConfig, user, requestText))
+def run(user, message, chat_id='', totalResults=1):
+    requestText = str(message).strip()
+    keyConfig = ConfigParser.ConfigParser()
+    keyConfig.read(["keys.ini", "..\keys.ini"])
+    return get_define_data(keyConfig, user, requestText)
 
 def get_define_data(keyConfig, user, requestText):
-    formatted_entry = ''
     spellingUrl = 'https://od-api.oxforddictionaries.com/api/v1/search/en'
     values = {'q': requestText.lower(), 'prefix':'false'}
     data = urllib.urlencode(values)
