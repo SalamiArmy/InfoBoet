@@ -12,10 +12,11 @@ class TestTorrent(unittest.TestCase):
 
         keyConfig = ConfigParser.ConfigParser()
         keyConfig.read(["keys.ini", "..\keys.ini"])
-        bot = telegram.Bot(keyConfig.get('Telegram', 'TELE_BOT_ID'))
-        chatId = keyConfig.get('BotAdministration', 'TESTING_GROUP_CHAT_ID')
+        keyConfig.read(["bot_keys.ini", "..\\bot_keys.ini"])
+        bot = telegram.Bot(keyConfig.get('BotIDs', 'TELEGRAM_BOT_ID'))
+        chatId = keyConfig.get('BotAdministration', 'TESTING_TELEGRAM_PRIVATE_CHAT_ID')
 
-        translate.run(bot, chatId, 'Admin', keyConfig, requestText)
+        bot.sendMessage(chat_id=chatId, text=translate.run('Admin', requestText, chatId))
 
     def test_translate_in_private_chat(self):
         requestText = 'Deutsche Vermögensberatung'
@@ -25,4 +26,4 @@ class TestTorrent(unittest.TestCase):
         bot = telegram.Bot(keyConfig.get('Telegram', 'TELE_BOT_ID'))
         chatId = keyConfig.get('BotAdministration', 'TESTING_PRIVATE_CHAT_ID')
 
-        translate.run(bot, chatId, 'Admin', keyConfig, requestText)
+        bot.sendMessage(chat_id=chatId, text=translate.run('Admin', requestText, chatId))
