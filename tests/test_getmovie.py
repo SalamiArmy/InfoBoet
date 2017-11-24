@@ -14,4 +14,4 @@ class TestGetMovie(unittest.TestCase):
         bot = telegram.Bot(keyConfig.get('Telegram', 'TELE_BOT_ID'))
         chatId = keyConfig.get('BotAdministration', 'TESTING_PRIVATE_CHAT_ID')
 
-        getmovie.run(bot, chatId, 'Admin', keyConfig, requestText)
+        bot.sendMessage(chat_id=chatId, text=getmovie.run('Admin', requestText, chatId))
