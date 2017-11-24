@@ -37,7 +37,7 @@ class TestGetAnswer(unittest.TestCase):
         chatId = keyConfig.get('BotAdministration', 'TESTING_TELEGRAM_PRIVATE_CHAT_ID')
 
         import commands.getanswer as getanswer
-        getanswer.run(bot, chatId, 'Admin', keyConfig, requestText)
+        bot.sendMessage(chat_id=chatId, text=getanswer.run('Admin', requestText))
 
     def test_getanswer_group(self):
         requestText = 'what\'s in the Cuphead cups?'

@@ -128,7 +128,10 @@ class TelegramWebhookHandler(webapp2.RequestHandler):
                 return
 
             if text.startswith('/'):
-                logging.info(self.TryExecuteExplicitCommand(chat_id, user, text, chat_type))
+                if text.lower.startswith('/getanswer'):
+                    telegramBot.sendMessage(chat_id=chat_id, text=self.TryExecuteExplicitCommand(chat_id, user, text, chat_type))
+                else:
+                    logging.info(self.TryExecuteExplicitCommand(chat_id, user, text, chat_type))
             elif text.endswith('?'):
                 result = self.TryAnswerAQuestion(chat_id, user, text)
                 if result_is_not_error(result):
