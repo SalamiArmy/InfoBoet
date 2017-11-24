@@ -1,3 +1,4 @@
+# coding=utf-8
 import ConfigParser
 import unittest
 import telegram
@@ -11,7 +12,8 @@ class TestGetLyrics(unittest.TestCase):
 
         keyConfig = ConfigParser.ConfigParser()
         keyConfig.read(["keys.ini", "..\keys.ini"])
-        bot = telegram.Bot(keyConfig.get('Telegram', 'TELE_BOT_ID'))
-        chatId = keyConfig.get('BotAdministration', 'TESTING_PRIVATE_CHAT_ID')
+        keyConfig.read(["bot_keys.ini", "..\\bot_keys.ini"])
+        bot = telegram.Bot(keyConfig.get('BotIDs', 'TESTING_TELEGRAM_BOT_ID'))
+        chatId = keyConfig.get('BotAdministration', 'TESTING_TELEGRAM_GROUP_CHAT_ID')
 
-        getlyrics.run(bot, chatId, 'Admin', keyConfig, requestText)
+        bot.sendMessage(chat_id=chatId, text=getlyrics.run('Admin', requestText, chatId))
