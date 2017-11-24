@@ -4,7 +4,7 @@ import ConfigParser
 import tungsten
 
 
-def run(user, message, totalResults=1):
+def run(user, message, chat_id='', totalResults=1):
     requestText = str(message).strip()
     keyConfig = ConfigParser.ConfigParser()
     keyConfig.read(["keys.ini", "..\keys.ini"])

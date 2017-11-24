@@ -1,4 +1,5 @@
 # coding=utf-8
+import ConfigParser
 import urllib
 from bs4 import BeautifulSoup
 
@@ -43,8 +44,11 @@ def wasPreviouslySeenBook(chat_id, book_title):
     return False
 
 
-def run(bot, chat_id, user, keyConfig, message, totalResults=1):
-    requestText = message.replace(bot.name, "").strip()
+def run(user, message, chat_id, totalResults=1):
+    requestText = str(message).strip()
+    keyConfig = ConfigParser.ConfigParser()
+    keyConfig.read(["keys.ini", "..\keys.ini"])
+
     args = {'key': keyConfig.get('GoodReads', 'KEY'),
             'search[field]': 'all',
             'safe': 'off',
@@ -68,8 +72,6 @@ def run(bot, chat_id, user, keyConfig, message, totalResults=1):
                                   ('_Rated ' + rating.encode('utf-8') + ' out of 5 by ' +
                                    total_rating + ' GoodReads users._\n' if rating.encode('utf-8') == '0' else '')\
                                   + bookData.replace('***', '') + '\n' + url
-            bot.sendMessage(chat_id=chat_id, text=formatted_book_data,
-                            parse_mode='Markdown')
             addPreviouslySeenBooksValue(chat_id, bookTitle)
             result = formatted_book_data
         offset += 1
@@ -77,7 +79,6 @@ def run(bot, chat_id, user, keyConfig, message, totalResults=1):
         result = 'I\'m sorry ' + (user if not user == '' else 'Dave') + ', I\'m afraid I can\'t find any books' + (
         ' that you haven\'t already seen' if len(bookTitles) > 0 and offset > 0 else '') + ' for ' + str(requestText) \
                  + '.'
-        bot.sendMessage(chat_id=chat_id, text=result)
     return result
 
 def FormatDesc(Desc):

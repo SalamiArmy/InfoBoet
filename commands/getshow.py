@@ -5,13 +5,12 @@ sys.setdefaultencoding('utf8')
 import json
 import re
 import urllib
-import telegram
 import main
 say = main.load_code_as_module('say')
 
 
-def run(bot, chat_id, user, keyConfig, message, totalResults=1):
-    requestText = str(message).replace(bot.name, "").strip()
+def run(user, message, chat_id='', totalResults=1):
+    requestText = str(message).strip()
 
     showsUrl = 'http://api.tvmaze.com/search/shows?q='
     data = json.load(urllib.urlopen(showsUrl + requestText))
@@ -25,19 +24,16 @@ def run(bot, chat_id, user, keyConfig, message, totalResults=1):
                                        .replace(']', '')
                                        .replace('\\', ''))
         fullShowDetails = parse_show_details(data[0]['show'])
+        image_original = ''
         if 'image' in data[0]['show'] and data[0]['show']['image'] is not None:
-            bot.sendChatAction(chat_id=chat_id, action=telegram.ChatAction.UPLOAD_PHOTO)
             image_original = data[0]['show']['image']['original'].encode('utf-8')
-            bot.sendPhoto(chat_id=chat_id,
-                          photo=image_original)
-        bot.sendMessage(chat_id=chat_id,
-                        text=(user if not user == '' else 'Dave') + ', ' + fullShowDetails)
-        say.send_text_as_voice(chat_id, keyConfig, formattedShowSummary, 'en-US_LisaVoice')
-        return formattedShowSummary
+        details = (user if not user == '' else 'Dave') + ', ' + fullShowDetails + '\n' + \
+                  formattedShowSummary + '\n' + image_original
+        return details
     else:
-        result = 'I\'m sorry ' + (
-        user if not user == '' else 'Dave') + ', I\'m afraid I cannot find the TV show ' + requestText.title()
-        bot.sendMessage(chat_id=chat_id, text=result)
+        result = 'I\'m sorry ' + (user if not user == '' else 'Dave') + \
+                 ', I\'m afraid I cannot find the TV show ' + \
+                 requestText.title()
         return result
 
 
