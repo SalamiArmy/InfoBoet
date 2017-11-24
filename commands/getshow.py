@@ -1,5 +1,8 @@
 # coding=utf-8
 import sys
+
+import logging
+
 reload(sys)
 sys.setdefaultencoding('utf8')
 import json
@@ -14,6 +17,8 @@ def run(user, message, chat_id='', totalResults=1):
 
     showsUrl = 'http://api.tvmaze.com/search/shows?q='
     data = json.load(urllib.urlopen(showsUrl + requestText))
+    logging.info('got show data:')
+    logging.info(data)
     if len(data) >= 1:
         formattedShowSummary = re.sub(r'<[^>]*?>', '',
                                       str(data[0]['show']['summary'])
