@@ -165,7 +165,7 @@ class TelegramWebhookHandler(webapp2.RequestHandler):
             mod = load_code_as_module(eachCommand)
             if mod:
                 getanswerResult = mod.run(telegramBot, chat_id, fr_username, keyConfig, text)
-            if result_is_not_error(getanswerResult):
+            if result_is_not_error(getanswerResult) and self.result_is_valid_markdown(getanswerResult):
                 return getanswerResult
             else:
                 logging.info('error result returned from:\n' + eachCommand +
@@ -214,11 +214,12 @@ class TelegramWebhookHandler(webapp2.RequestHandler):
                     telegramBot.sendMessage(chat_id=chat_id, text=errorMsg)
                     return errorMsg
 
+    def result_is_valid_markdown(self, result):
+        return result.count('*') % 2 == 0 and result.count('_') % 2 == 0
 
 def result_is_not_error(result):
     error_starts_with = 'I\'m sorry '
     return result != None and result != '' and result[:len(error_starts_with)] != error_starts_with
-
 
 class WebhookHandler(webapp2.RequestHandler):
     def get(self):
