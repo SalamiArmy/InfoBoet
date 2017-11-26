@@ -1,10 +1,13 @@
 # coding=utf-8
+import ConfigParser
 import json
 import urllib
 
 
-def run(user, message, chat_id='', totalResults=1):
+def run(user, message, chat_id='', total_requested_results=1):
     requestText = str(message).strip()
+    keyConfig = ConfigParser.ConfigParser()
+    keyConfig.read(["keys.ini", "..\keys.ini"])
 
     movieUrl = 'http://www.omdbapi.com/?apikey=' + keyConfig.get('OMDB', 'KEY') + '&plot=short&r=json&y=&t='
     realUrl = movieUrl + requestText.encode('utf-8')
