@@ -17,7 +17,7 @@ def run(user, message, chat_id='', totalResults=1):
     logging.info('response body:')
     logging.info(data)
     if 'data' in data and 'translations' in data['data']:
-        if len(data['data']['translations']) >= 1:
+        if len(data['data']['translations']) >= 1 and data['data']['translations'][0]['translatedText'] != requestText:
             translation = data['data']['translations'][0]['translatedText']
             detectedLanguage = data['data']['translations'][0]['detectedSourceLanguage']
             languagesList = json.load(urllib.urlopen(
