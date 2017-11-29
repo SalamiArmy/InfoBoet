@@ -6,6 +6,8 @@ import urllib
 from google.appengine.ext import ndb
 from google.appengine.api import urlfetch
 
+CommandName = 'getlink'
+
 class WhoseSeenUrls(ndb.Model):
     # key name: get:str(chat_id)
     whoseSeen = ndb.StringProperty(indexed=False, default='')
