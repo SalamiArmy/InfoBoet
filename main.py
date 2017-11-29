@@ -239,8 +239,6 @@ class WebhookHandler(webapp2.RequestHandler):
         self.response.write(response_text)
         if message[:3] == 'say':
             self.response.headers['Content-Type'] = 'audio/ogg'
-        login.setPin(chat_id, '')
-        login.setCount(chat_id, 0)
 
 
 class Login(webapp2.RequestHandler):
