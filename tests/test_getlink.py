@@ -34,6 +34,17 @@ class TestGetLink(unittest.TestCase):
 
         bot.sendMessage(chat_id=chatId, text=getlink.run('SalamiArmy', requestText, chatId))
 
+    def test_getlink_multi(self):
+        requestText = 'the cancun typhoon'
+
+        keyConfig = ConfigParser.ConfigParser()
+        keyConfig.read(["keys.ini", "..\keys.ini"])
+        keyConfig.read(["bot_keys.ini", "..\\bot_keys.ini"])
+        bot = telegram.Bot(keyConfig.get('BotIDs', 'TELEGRAM_BOT_ID'))
+        chatId = keyConfig.get('BotAdministration', 'TESTING_TELEGRAM_PRIVATE_CHAT_ID')
+
+        bot.sendMessage(chat_id=chatId, text=getlink.run('SalamiArmy', requestText, chatId, 2))
+
     def test_getlink_group(self):
         requestText = 'pussy wrecked by giant dildo'
 
