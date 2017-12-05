@@ -113,6 +113,7 @@ def search_results_walker(args, chat_id, data, number, requestText, results_this
                 message = requestText + ': ' + \
                           (str(len(total_sent.split('\n'))) + ' of ' + str(number) + '\n' if int(number) > 1 else '') + link
                 total_sent += ('\n' if total_sent != '' else '') + message
+    print 'i believe one page of /getlink results is done, total sent is ' + str(len(total_sent.split('\n'))/2)
     if (total_sent == '' or len(total_sent.split('\n'))/2 < int(number)) and int(total_offset) < int(total_results):
         args['start'] = total_offset + 1
         data, total_results, results_this_page = Google_Custom_Search(args)
