@@ -58,7 +58,7 @@ class TestTelegramWebhookHandlerPost(unittest.TestCase):
         newRequestObject.request = Object()
         keyConfig = ConfigParser.ConfigParser()
         keyConfig.read(["keys.ini", "..\keys.ini"])
-        newRequestObject.request.body = '{"message": {"from": {"username": "SalamiArmy", "first_name": "Ashley", "last_name": "Lewis"}, "text": "/getlink world of warcraft classic", "chat": {"id": ' + keyConfig.get('BotAdministration', 'TESTING_TELEGRAM_PRIVATE_CHAT_ID') + ', "type": "group"}}}'
+        newRequestObject.request.body = '{"message": {"from": {"username": "SalamiArmy", "first_name": "Ashley", "last_name": "Lewis"}, "text": "/getlink10 world of warcraft classic", "chat": {"id": ' + keyConfig.get('BotAdministration', 'TESTING_TELEGRAM_PRIVATE_CHAT_ID') + ', "type": "group"}}}'
         newRequestObject.response = Object()
         newRequestObject.response.write = lambda x: None
         newRequestObject.post()

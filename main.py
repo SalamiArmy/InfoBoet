@@ -184,7 +184,7 @@ class TelegramWebhookHandler(webapp2.RequestHandler):
 
         if commandName in self.commandCascade:
             info_command = load_code_as_module(commandName)
-            result = info_command.run(fr_username, request_text, chat_id)
+            result = info_command.run(fr_username, request_text, chat_id, totalResults)
             telegramBot.sendMessage(chat_id=chat_id, text=result, parse_mode='Markdown')
             return result
 
