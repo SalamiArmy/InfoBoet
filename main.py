@@ -30,19 +30,17 @@ keyConfig = ConfigParser.ConfigParser()
 keyConfig.read(["bot_keys.ini", "..\\bot_keys.ini"])
 keyConfig.read(["keys.ini", "..\keys.ini"])
 
-# Telegram Bot Info
+#Telegram Bot Info
 BASE_TELEGRAM_URL = 'https://api.telegram.org/bot'
 telegramBot = telegram.Bot(keyConfig.get('BotIDs', 'TELEGRAM_BOT_ID'))
 
 facebookBot = Messager(keyConfig.get('BotIDs', 'FACEBOOK_BOT_ID'))
-
 
 # ================================
 
 class AllWatchesValue(ndb.Model):
     # key name: AllWatches
     currentValue = ndb.StringProperty(indexed=False, default='')
-
 
 # ================================
 
@@ -51,22 +49,17 @@ def addToAllWatches(command, chat_id, request=''):
     es.currentValue += ',' + str(chat_id) + ':' + command + (':' + request.replace(',', '%2C') if request != '' else '')
     es.put()
 
-
 def AllWatchesContains(command, chat_id, request=''):
     es = AllWatchesValue.get_by_id('AllWatches')
     if es:
-        return (',' + str(chat_id) + ':' + command + (
-        ':' + request.replace(',', '%2C') if request != '' else '')) in str(es.currentValue) or \
-               (str(chat_id) + ':' + command + (
-               ':' + request.replace(',', '%2C') if request != '' else '') + ',') in str(es.currentValue)
+        return (',' + str(chat_id) + ':' + command + (':' + request.replace(',', '%2C') if request != '' else '')) in str(es.currentValue) or \
+               (str(chat_id) + ':' + command + (':' + request.replace(',', '%2C') if request != '' else '') + ',') in str(es.currentValue)
     return False
-
 
 def setAllWatchesValue(NewValue):
     es = AllWatchesValue.get_or_insert('AllWatches')
     es.currentValue = NewValue
     es.put()
-
 
 def getAllWatches():
     es = AllWatchesValue.get_by_id('AllWatches')
@@ -74,11 +67,8 @@ def getAllWatches():
         return es.currentValue
     return ''
 
-
 def removeFromAllWatches(watch):
-    setAllWatchesValue(
-        getAllWatches().replace(',' + watch.replace(',', '%2C'), '').replace(watch.replace(',', '%2C'), ''))
-
+    setAllWatchesValue(getAllWatches().replace(',' + watch.replace(',', '%2C'), '').replace(watch.replace(',', '%2C'), ''))
 
 # ================================
 
@@ -108,8 +98,7 @@ class TelegramWebhookHandler(webapp2.RequestHandler):
         url = self.request.get('url')
         if url:
             self.response.write(json.dumps(json.load(urllib2.urlopen(
-                BASE_TELEGRAM_URL + keyConfig.get('BotIDs', 'TELEGRAM_BOT_ID') + '/setWebhook',
-                urllib.urlencode({'url': url})))))
+                BASE_TELEGRAM_URL + keyConfig.get('BotIDs', 'TELEGRAM_BOT_ID') + '/setWebhook', urllib.urlencode({'url': url})))))
 
     def post(self):
         urlfetch.set_default_fetch_deadline(120)
@@ -134,18 +123,11 @@ class TelegramWebhookHandler(webapp2.RequestHandler):
             chat_id = chat['id']
             chat_type = chat['type']
 
-            if not text:
+            if text:
+                logging.info(self.get_response(chat_id, chat_type, text, user))
+            else:
                 logging.info('no text')
                 return
-
-            if text.startswith('/'):
-                logging.info(self.TryExecuteExplicitCommand(chat_id, user, text, chat_type))
-            if text.endswith('?'):
-                result = self.TryAnswerAQuestion(chat_id, user, text)
-                if result_is_not_error(result):
-                    telegramBot.sendMessage(chat_id=chat_id, text=result)
-                elif chat_type == 'private':
-                    telegramBot.sendMessage(chat_id=chat_id, text='I\'m sorry ' + user + ', I don\'t know.')
 
     commandCascade = ['getanswer',
                       'getbook',
@@ -159,19 +141,15 @@ class TelegramWebhookHandler(webapp2.RequestHandler):
                       'getquote',
                       'getlink']
 
-    def TryAnswerAQuestion(self, chat_id, fr_username, text):
-        for eachCommand in self.commandCascade:
-            getanswerResult = None
-            mod = load_code_as_module(eachCommand)
+    def TryAnswerAQuestion(self, chat_id, fr_username, text, chat_type):
+        if text.strip()[:3].lower() == 'how' and text.strip()[:8].lower() != 'how much':
+            mod = load_code_as_module('how')
             if mod:
-                getanswerResult = mod.run(telegramBot, chat_id, fr_username, keyConfig, text)
-            if result_is_not_error(getanswerResult) and self.result_is_valid_markdown(getanswerResult):
-                return getanswerResult
-            else:
-                logging.info('error result returned from:\n' + eachCommand +
-                             (' ' + text if text != None else '') + '\n' +
-                             (' ' + getanswerResult if getanswerResult != None else ''))
-        return None
+                getHowResult = str(mod.run(fr_username, text, chat_id))
+                if result_is_not_error(getHowResult):
+                    telegramBot.sendMessage(chat_id=chat_id, text=getHowResult)
+                    return getHowResult
+        return self.respond(chat_id, text, fr_username)
 
     def TryExecuteExplicitCommand(self, chat_id, fr_username, text, chat_type):
         split = text[1:].lower().split(' ', 1)
@@ -182,12 +160,15 @@ class TelegramWebhookHandler(webapp2.RequestHandler):
             totalResults = re.findall('\d+$', commandName)[0]
             commandName = re.findall('^[a-z]+', commandName)[0]
 
-        if commandName in self.commandCascade:
-            info_command = load_code_as_module(commandName)
-            result = info_command.run(fr_username, request_text, chat_id, totalResults)
-            telegramBot.sendMessage(chat_id=chat_id, text=result, parse_mode='Markdown')
-            return result
-
+        if commandName != 'how':
+            if any(commandName == cascade_commands for cascade_commands in self.commandCascade):
+                return self.respond(chat_id, request_text, commandName, fr_username, totalResults)
+        else:
+            mod = load_code_as_module('how')
+            if mod:
+                getHowResult = str(mod.run(fr_username, text, chat_id, totalResults))
+                telegramBot.sendMessage(chat_id=chat_id, text=getHowResult)
+                return getHowResult
         if commandName == 'add':
             return add.run(telegramBot, chat_id, fr_username, keyConfig, request_text)
         elif commandName == 'start':
@@ -205,17 +186,60 @@ class TelegramWebhookHandler(webapp2.RequestHandler):
         else:
             mod = load_code_as_module(commandName)
             if mod:
-                return mod.run(telegramBot, chat_id, fr_username, keyConfig, split[1] if len(split) > 1 else '',
-                               totalResults)
+                return mod.run(telegramBot, chat_id, fr_username, keyConfig, split[1] if len(split) > 1 else '', totalResults)
             else:
                 if chat_type == 'private':
-                    errorMsg = 'I\'m sorry ' + (fr_username if not fr_username == '' else 'Dave') + \
+                    errorMsg = 'I\'m sorry ' + (fr_username if not fr_username == '' else 'Dave') +\
                                ', I\'m afraid I do not recognize the ' + commandName + ' command.'
                     telegramBot.sendMessage(chat_id=chat_id, text=errorMsg)
                     return errorMsg
 
-    def result_is_valid_markdown(self, result):
-        return result.count('*') % 2 == 0 and result.count('_') % 2 == 0
+    def respond(self, chat_id, request_text, user, total_results):
+        for eachCommand in self.commandCascade:
+            mod = load_code_as_module(eachCommand)
+            if mod:
+                getanswerResult = str(mod.run(user, request_text, chat_id, total_results))
+                if result_is_not_error(getanswerResult):
+                    valid_markdown = self.clean_result_markdown(getanswerResult)
+                    telegramBot.sendMessage(chat_id=chat_id, text=valid_markdown, parse_mode='markdown')
+                    return valid_markdown
+
+    def respond(self, chat_id, request_text, command_name, user, total_results=1):
+        mod = load_code_as_module(command_name)
+        if mod:
+            result = mod.run(user, request_text, chat_id, total_results)
+            valid_markdown = self.clean_result_markdown(result)
+            telegramBot.sendMessage(chat_id=chat_id, text=valid_markdown, parse_mode='markdown')
+            return result
+        else:
+            return None
+
+    def get_response(self, chat_id, chat_type, text, user='Dave'):
+        if text.startswith('/') or any(text.strip().lower().startswith(command_name) for command_name in self.commandCascade):
+            return self.TryExecuteExplicitCommand(chat_id, user, text, chat_type)
+        elif text.endswith('?'):
+            return self.TryAnswerAQuestion(chat_id, user, text, chat_type)
+
+    def clean_result_markdown(self, result):
+        split_line_break = result.rsplit('\n', 1)
+        valid_markdown = str(re.sub(r'<[^>]*?>', '',
+                                    split_line_break[0]
+                                    .replace('<span class="searchmatch">', '*')
+                                    .replace('</span>', '*')
+                                    .replace('&quot;', '\"')
+                                    .replace('[', '')
+                                    .replace(']', '')))
+        if valid_markdown.count('*') % 2 != 0:
+            valid_markdown += '*'
+        if valid_markdown.count('_') % 2 != 0:
+            valid_markdown += '_'
+        if len(split_line_break) > 1:
+            post_line_break_escape_markdown = split_line_break[1]\
+                .replace('_', '\_')\
+                .replace('*', '\*')
+            valid_markdown += '\n' + post_line_break_escape_markdown
+        return valid_markdown
+
 
 def result_is_not_error(result):
     error_starts_with = 'I\'m sorry '
@@ -231,12 +255,7 @@ class WebhookHandler(webapp2.RequestHandler):
         self.run_web_command(chat_id, requestText, 1)
 
     def run_web_command(self, chat_id, message, total_results):
-        response_text = TelegramWebhookHandler().TryExecuteExplicitCommand(chat_id,
-                                                                           'Admins, Scenic Oxygen ' +
-                                                                           'has received a web request from ' + keyConfig.get(
-                                                                               'InternetShortcut', 'URL'), '/' +
-                                                                           message, 'private')
-        self.response.write(response_text)
+        self.response.write(TelegramWebhookHandler().get_response(chat_id, 'private', message))
         if message[:3] == 'say':
             self.response.headers['Content-Type'] = 'audio/ogg'
 
@@ -250,7 +269,6 @@ class Login(webapp2.RequestHandler):
         else:
             self.response.write(keyConfig.get('InternetShortcut', 'URL') + '/login?username=')
         return self.response
-
 
 class TriggerAllWatches(webapp2.RequestHandler):
     def get(self):
@@ -271,15 +289,13 @@ class TriggerAllWatches(webapp2.RequestHandler):
                     print('removing from all watches: ' + watch)
                     removeFromAllWatches(watch)
 
-
 class GithubWebhookHandler(webapp2.RequestHandler):
     def post(self):
         urlfetch.set_default_fetch_deadline(120)
         logging.info('request body:')
         logging.info(self.request.body)
         body = json.loads(self.request.body)
-        if 'repository' in body and 'owner' in body['repository'] and 'login' in body['repository'][
-            'owner'] and 'name' in body['repository']:
+        if 'repository' in body and 'owner' in body['repository'] and 'login' in body['repository']['owner'] and 'name' in body['repository']:
             repo_url = body['repository']['owner']['login'] + '/' + body['repository']['name']
             logging.info('Got repo_url as ' + repo_url)
             token = add.getTokenValue(repo_url)
@@ -289,19 +305,17 @@ class GithubWebhookHandler(webapp2.RequestHandler):
                     commitMsg = ''
                     for commit in body['commits']:
                         commitMsg += '\n' + commit['message']
-                    telegramBot.sendMessage(
-                        chat_id=keyConfig.get('BotAdministration', 'TESTING_TELEGRAM_GROUP_CHAT_ID'),
-                        text='Admins, The Scenic-Oxygen Github Webhook ' +
-                             'has performed update for:\n' + commitMsg + '\nSee ' + body['compare'],
-                        disable_web_page_preview=True)
+                    telegramBot.sendMessage(chat_id=keyConfig.get('BotAdministration', 'TESTING_TELEGRAM_GROUP_CHAT_ID'),
+                                            text='Admins, The Scenic-Oxygen Github Webhook ' +
+                                                 'has performed update for:\n' + commitMsg + '\nSee ' + body['compare'],
+                                            disable_web_page_preview=True)
                     self.response.write('Commands imported from ' + repo_url)
                 else:
-                    telegramBot.sendMessage(
-                        chat_id=keyConfig.get('BotAdministration', 'TESTING_TELEGRAM_GROUP_CHAT_ID'),
-                        text='Admins, The Scenic-Oxygen Github Webhook ' +
-                             'has failed to perform automatic update for ' + body['compare'] +
-                             '\n' + response,
-                        disable_web_page_preview=True)
+                    telegramBot.sendMessage(chat_id=keyConfig.get('BotAdministration', 'TESTING_TELEGRAM_GROUP_CHAT_ID'),
+                                            text='Admins, The Scenic-Oxygen Github Webhook ' +
+                                                 'has failed to perform automatic update for ' + body['compare'] +
+                                                 '\n' + response,
+                                            disable_web_page_preview=True)
                     self.response.write(response)
                     if response == 'Bad credentials':
                         raise endpoints.UnauthorizedException()
@@ -317,8 +331,7 @@ class GithubWebhookHandler(webapp2.RequestHandler):
     def update_commands(self, repo_url, token):
         github_contents_url = 'https://api.github.com/repos/' + repo_url + '/contents/commands'
         raw_data = urlfetch.fetch(url=github_contents_url,
-                                  headers={'Authorization': 'Basic %s' % base64.b64encode(
-                                      repo_url.split('/')[0] + ':' + token)})
+                                  headers={'Authorization': 'Basic %s' % base64.b64encode(repo_url.split('/')[0] + ':' + token)})
         logging.info('Got raw_data as ' + raw_data.content)
         json_data = json.loads(raw_data.content)
         if json_data and len(json_data) > 0:
@@ -335,13 +348,11 @@ class GithubWebhookHandler(webapp2.RequestHandler):
                                     command_data['name'] != 'start.py':
                         raw_data = urlfetch.fetch(url='https://raw.githubusercontent.com/' + repo_url +
                                                       '/master/commands/' + command_data['name'],
-                                                  headers={'Authorization': 'Basic %s' % base64.b64encode(
-                                                      repo_url.split('/')[0] + ':' + token)})
+                                                  headers={'Authorization': 'Basic %s' % base64.b64encode(repo_url.split('/')[0] + ':' + token)})
                         add.setCommandCode(str(command_data['name']).replace('.py', ''), raw_data.content)
                 return ''
             else:
                 return json_data['message']
-
 
 def load_code_as_module(module_name):
     if module_name != '':
@@ -355,7 +366,6 @@ def load_code_as_module(module_name):
                 return module
     return None
 
-
 def ReloadAllCommands():
     es = add.CommandsValue.query().fetch()
     if len(es) > 0:
@@ -367,12 +377,7 @@ def ReloadAllCommands():
 class GetCommandsHandler(webapp2.RequestHandler):
     def get(self):
         urlfetch.set_default_fetch_deadline(10)
-        es = add.CommandsValue.query().fetch()
-        command_names = []
-        if len(es) > 0:
-            for mod in es:
-                command_names.append(str(mod.key._Key__pairs[0][1]))
-        self.response.write(command_names)
+        self.response.write(TelegramWebhookHandler().commandCascade)
         return self.response
 
 
