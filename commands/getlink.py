@@ -101,7 +101,7 @@ def search_results_walker(args, chat_id, data, number, requestText, results_this
                           total_offset=0, total_sent=''):
     offset_this_page = 0
     if number != 1:
-        total_sent = str(number) + ' ' + requestText + ' links:\n'
+        total_sent = requestText + ' ' + str(number) + ' links:\n'
     while (total_sent == '' or len(total_sent.split(', ')) < int(number)) and int(offset_this_page) < int(results_this_page):
         link = str(data['items'][offset_this_page]['link'])
         offset_this_page += 1
