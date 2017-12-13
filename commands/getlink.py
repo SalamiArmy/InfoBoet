@@ -74,7 +74,7 @@ def Send_Links(chat_id, user, requestText, args, keyConfig, total_number_to_send
         total_offset, total_results, total_sent = search_results_walker(args, chat_id, data, total_number_to_send,
                                                                         user + ', ' + requestText, results_this_page,
                                                                         total_results, keyConfig)
-        if len(total_sent.split('\n')) < int(total_number_to_send):
+        if len(total_sent.split(', ')) < int(total_number_to_send):
             if int(total_number_to_send) > 1:
                 return 'I\'m sorry ' + (user if not user == '' else 'Dave') +\
                                                       ', I\'m afraid I can\'t find any more images for ' +\
@@ -100,20 +100,18 @@ def Send_Links(chat_id, user, requestText, args, keyConfig, total_number_to_send
 def search_results_walker(args, chat_id, data, number, requestText, results_this_page, total_results, keyConfig,
                           total_offset=0, total_sent=''):
     offset_this_page = 0
-    while (total_sent == '' or len(total_sent.split('\n'))/2 < int(number)) and int(offset_this_page) < int(results_this_page):
+    if number != 1:
+        total_sent = str(number) + ' ' + requestText + ' links:\n'
+    while (total_sent == '' or len(total_sent.split(', ')) < int(number)) and int(offset_this_page) < int(results_this_page):
         link = str(data['items'][offset_this_page]['link'])
         offset_this_page += 1
         total_offset = int(total_offset) + 1
         if not wasPreviouslySeenImage(link, chat_id):
             if number == 1:
-                message = requestText + (' ' + str(len(total_sent.split('\n'))/2+1) + ' of ' + str(number) if int(number) > 1 else '') +\
-                       ': ' + link
-                total_sent += ('\n' if total_sent != '' else '') + message
+                total_sent = requestText + ': ' + link
             else:
-                message = requestText + ': ' + \
-                          (str(len(total_sent.split('\n'))/2+1) + ' of ' + str(number) + '\n' if int(number) > 1 else '') + link
-                total_sent += ('\n' if total_sent != '' else '') + message
-    if (total_sent == '' or len(total_sent.split('\n'))/2 < int(number)) and int(total_offset) < int(total_results):
+                total_sent += (', ' if total_sent[-1:] != '\n' else '') + link
+    if (total_sent == '' or len(total_sent.split(', ')) < int(number)) and int(total_offset) < int(total_results):
         args['start'] = total_offset + 1
         data, total_results, results_this_page = Google_Custom_Search(args)
         return search_results_walker(args, chat_id, data, number, requestText, results_this_page, total_results, keyConfig,
