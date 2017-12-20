@@ -1,8 +1,7 @@
 # coding=utf-8
 import json
-import urllib
-import logging
 
+from google.appengine.api import urlfetch
 
 def run(bot, chat_id, user, keyConfig, message="", totalResults=1):
     priceGB, priceUS, priceZA, updateTime = get_bitcoin_prices()
@@ -15,20 +14,22 @@ def run(bot, chat_id, user, keyConfig, message="", totalResults=1):
 
 def get_bitcoin_prices():
     bcurl = 'https://api.coindesk.com/v1/bpi/currentprice/ZAR.json'
-    RAW_DATA = urllib.urlopen(bcurl)
-    logging.info('raw bitcoin data returned as: ' + RAW_DATA)
-    if RAW_DATA:
-        data = json.load(RAW_DATA)
+    RAW_DATA = urlfetch.fetch(bcurl)
+    if RAW_DATA.content != '':
+        data = json.loads(RAW_DATA.content)
         bcurl2 = 'https://api.coindesk.com/v1/bpi/currentprice.json'
-        rawJSON = urllib.urlopen(bcurl2)
-        try:
-            data2 = json.load(rawJSON)
-            updateTime = data['time']['updated']
-            priceUS = data['bpi']['USD']['rate']
-            priceZA = data['bpi']['ZAR']['rate']
-            priceGB = data2['bpi']['GBP']['rate']
-            return priceGB, priceUS, priceZA, updateTime
-        except ValueError:
-            print('Value error: ' + rawJSON.read)
+        RAW_DATA2 = urlfetch.fetch(bcurl2)
+        if RAW_DATA2.content != '':
+            try:
+                data2 = json.loads(RAW_DATA2.content)
+                updateTime = data['time']['updated']
+                priceUS = data['bpi']['USD']['rate']
+                priceZA = data['bpi']['ZAR']['rate']
+                priceGB = data2['bpi']['GBP']['rate']
+                return priceGB, priceUS, priceZA, updateTime
+            except ValueError:
+                print('Value error: ' + RAW_DATA2.content)
+        else:
+            print('raw bitcoin 2 data returned nothing.')
     else:
         print('raw bitcoin data returned nothing.')
