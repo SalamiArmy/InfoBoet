@@ -108,7 +108,7 @@ def search_results_walker(args, chat_id, data, number, requestText, results_this
         total_offset = int(total_offset) + 1
         if not wasPreviouslySeenImage(link, chat_id):
             if number == 1:
-                total_sent = requestText + ': ' + link
+                total_sent = requestText + ':\n' + link
             else:
                 total_sent += (', ' if total_sent[-1:] != '\n' else '') + link
     if (total_sent == '' or len(total_sent.split(', ')) < int(number)) and int(total_offset) < int(total_results):

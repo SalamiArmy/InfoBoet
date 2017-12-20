@@ -15,11 +15,11 @@ def run(bot, chat_id, user, keyConfig, message="", totalResults=1):
 def get_bitcoin_prices():
     bcurl = 'https://api.coindesk.com/v1/bpi/currentprice/ZAR.json'
     RAW_DATA = urlfetch.fetch(bcurl)
-    if RAW_DATA.content != '':
+    if RAW_DATA and RAW_DATA.content:
         data = json.loads(RAW_DATA.content)
         bcurl2 = 'https://api.coindesk.com/v1/bpi/currentprice.json'
         RAW_DATA2 = urlfetch.fetch(bcurl2)
-        if RAW_DATA2.content != '':
+        if RAW_DATA and RAW_DATA2.content:
             try:
                 data2 = json.loads(RAW_DATA2.content)
                 updateTime = data['time']['updated']
