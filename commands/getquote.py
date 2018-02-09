@@ -8,13 +8,13 @@ def run(user, message, chat_id='', totalResults=1):
     requestText = str(message).strip()
 
     data = wiki_search('%22' + requestText + '%22')
-    if len(data['query']['search']) >= 1:
+    if 'query' in data and len(data['query']['search']) >= 1:
         return (user + ': ' if not user == '' else '') + data['query']['search'][0]['snippet'] +\
                '\nhttps://en.wikiquote.org/wiki/' +\
                urllib.quote(data['query']['search'][0]['title'].encode('utf-8'))
     else:
         data = wiki_search(requestText)
-        if len(data['query']['search']) >= 1:
+        if 'query' in data and len(data['query']['search']) >= 1:
             return (user + ': ' if not user == '' else '') + data['query']['search'][0]['snippet'] +\
            '\nhttps://en.wikiquote.org/wiki/' +\
            urllib.quote(data['query']['search'][0]['title'].encode('utf-8'))
