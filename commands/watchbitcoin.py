@@ -52,10 +52,10 @@ def getAllWatches():
         return es.all_chat_ids
     return ''
 
-def removeFromAllWatches(watch):
-    setAllWatchesValue(getAllWatches().replace(',' + watch + ',', ',')
-                       .replace(',' + watch, '')
-                       .replace(watch + ',', ''))
+def removeFromAllWatches(chat_id):
+    setAllWatchesValue(getAllWatches().replace(',' + str(chat_id) + ',', ',')
+                       .replace(',' + str(chat_id), '')
+                       .replace(str(chat_id) + ',', ''))
 
 
 def run(bot, chat_id, user, keyConfig, message, totalResults=1):
