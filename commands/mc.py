@@ -38,4 +38,6 @@ def get_mc_data(keyConfig, user):
             mcServer + ':' + str(mcPort),
             data['players'],
             str(data['ping']))
+    else:
+        mc_data_formatted = str(data)
     return mc_data_formatted, mc_server_found, mc_server_not_found_message
