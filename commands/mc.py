@@ -22,7 +22,7 @@ def get_mc_data(keyConfig, user):
     dynmapPort = keyConfig.get('Minecraft', 'DYNMAP_PORT')
     mc_server_not_found_message = 'I\'m sorry ' + (
         user if not user == '' else 'Dave') + ', I\'m afraid I can\'t find any information about the Minecraft server at ' + mcServer + ':' + mcPort
-    mcApiUrl = 'http://minecraft-server.li/server/api.php'
+    mcApiUrl = 'mcapi.us/server/status'
     args = {'ip': mcServer,
             'port': mcPort}
     realUrl = mcApiUrl + '?' + urllib.urlencode(args)
