@@ -77,13 +77,13 @@ def Send_Links(chat_id, user, requestText, args, keyConfig, total_number_to_send
         if len(total_sent.split(', ')) < int(total_number_to_send):
             if int(total_number_to_send) > 1:
                 return 'I\'m sorry ' + (user if not user == '' else 'Dave') +\
-                                                      ', I\'m afraid I can\'t find any more images for ' +\
+                                                      ', I\'m afraid I can\'t find any more links for ' +\
                                                       string.capwords(requestText.encode('utf-8') + '.' +
                                                                       ' I could only find ' + str(
                                                           len(total_sent.split('\n'))) + ' out of ' + str(total_number_to_send))
             else:
                 return 'I\'m sorry ' + (user if not user == '' else 'Dave') +\
-                                                      ', I\'m afraid I can\'t find any images for ' +\
+                                                      ', I\'m afraid I can\'t find any links for ' +\
                                                       string.capwords(requestText.encode('utf-8'))
         return total_sent
     else:
