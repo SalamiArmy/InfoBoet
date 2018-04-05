@@ -7,35 +7,55 @@ from google.appengine.api import urlfetch
 
 def run(bot, chat_id, user, keyConfig, message, totalResults=1):
     requestText = message.encode('utf-8')
-    if '<voice-transformation' in requestText or '<express-as' in requestText:
-        voice = 'en-US_AllisonVoice'
-    else:
-        voice = 'en-US_LisaVoice'
-    if not send_text_as_voice(chat_id, keyConfig, requestText, voice):
+    languageCode = 'en-GB'
+    voice = 'Standard-A'
+    if not send_text_as_voice(chat_id, keyConfig, requestText, voice, languageCode):
         bot.sendMessage(chat_id=str(chat_id), text='I\'m sorry ' + (user if not user == '' else 'Dave') +
                                                   ', I\'m afraid I can\'t say that.')
 
 
-def send_text_as_voice(chat_id, keyConfig, requestText, voice):
-    data = get_voice(requestText, keyConfig, voice)
+def send_text_as_voice(chat_id, keyConfig, requestText, voice, languageCode):
+    data = get_voice(requestText, keyConfig, voice, languageCode)
     if data:
         if 'error' not in data:
             requests.post('https://api.telegram.org/bot' + keyConfig.get('BotIDs', 'TELEGRAM_BOT_ID') +
                           '/sendVoice?chat_id=' + str(chat_id),
-                          files={'voice': ('no but what I\'M saying is.ogg', data, 'audio/ogg', {'Expires': '0'})})
+                          files={'voice': ('no but what I\'M saying is.mp3', data, 'audio/mp3', {'Expires': '0'})})
             return True
         else:
             print json.loads(data)['description']
     return False
 
 
-def get_voice(text, keyConfig, voice):
-    IBMusername = keyConfig.get('IBM', 'username')
-    IBMpassword = keyConfig.get('IBM', 'password')
-    args = urllib.urlencode({'text': text,
-                             'voice': voice,
-                             'caption': voice})
-    return urlfetch.fetch('https://stream.watsonplatform.net/text-to-speech/api/v1/synthesize?' + args,
-                          headers={'Authorization':'Basic %s' %
-                                                   base64.b64encode(IBMusername + ':' + IBMpassword)}).content
+def get_voice(text, keyConfig, voice, languageCode):
+    ApiKey = keyConfig.get('Google', 'GCSE_APP_ID')
+    strPayload = str({
+    "input": 
+    {
+        "text": str(text)
+    },
+    "voice": 
+    {
+        "name": str(languageCode) + "-" + str(text),
+        "languageCode": str(languageCode)
+    },
+    "audioConfig": 
+    {
+        "audioEncoding": "MP3"
+    }
+})
+    
+    try:
+        raw_data = urlfetch.fetch(
+            url='https://texttospeech.googleapis.com/v1beta1/text:synthesize?key=' + keyConfig.get('Google', 'GCSE_APP_ID'),
+            payload=strPayload,
+            method='POST',
+            headers={'Content-type': 'application/json'})
+    except:
+        return ''
+    speechData = json.loads(raw_data.content)
+    if 'error' not in visionData:
+        return visionData['audioContent']
+    else:
+        return str(visionData)
 
