@@ -22,27 +22,17 @@ class TestSay(unittest.TestCase):
         ndb.get_context().clear_cache()
 
     def test_say(self):
-        requestText = u'kilnamanagh drimnagh'
+        requestText = u'It\'s said that women and men are from two different planets when it comes to communication'
 
         keyConfig = ConfigParser.ConfigParser()
-        keyConfig.read(["keys.ini", "..\keys.ini"])
-        bot = telegram.Bot(keyConfig.get('BotIDs', 'TESTING_TELEGRAM_BOT_ID'))
-        chatId = int(keyConfig.get('BotAdministration', 'TESTING_PRIVATE_CHAT_ID'))
+        keyConfig.read(["bot_keys.ini", "..\\bot_keys.ini"])
+        bot = telegram.Bot(keyConfig.get('BotIDs', 'TELEGRAM_BOT_ID'))
+        chatId = int(keyConfig.get('BotAdministration', 'TESTING_TELEGRAM_PRIVATE_CHAT_ID'))
 
         say.run(bot, chatId, 'SalamiArmy', keyConfig, requestText, 1)
 
     def test_say_group(self):
         requestText = u'cuunt vag mate'
-
-        keyConfig = ConfigParser.ConfigParser()
-        keyConfig.read(["keys.ini", "..\keys.ini"])
-        bot = telegram.Bot(keyConfig.get('BotIDs', 'TESTING_TELEGRAM_BOT_ID'))
-        chatId = int(keyConfig.get('BotAdministration', 'TESTING_GROUP_CHAT_ID'))
-
-        say.run(bot, chatId, 'SalamiArmy', keyConfig, requestText, 1)
-
-    def test_say_with_transform(self):
-        requestText = u'<voice-transformation type="Custom" rate="-50%">come come come</voice-transformation>'
 
         keyConfig = ConfigParser.ConfigParser()
         keyConfig.read(["keys.ini", "..\keys.ini"])

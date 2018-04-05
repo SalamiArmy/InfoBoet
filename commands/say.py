@@ -28,7 +28,6 @@ def send_text_as_voice(chat_id, keyConfig, requestText, voice, languageCode):
 
 
 def get_voice(text, keyConfig, voice, languageCode):
-    ApiKey = keyConfig.get('Google', 'GCSE_APP_ID')
     strPayload = str({
     "input": 
     {
@@ -36,7 +35,7 @@ def get_voice(text, keyConfig, voice, languageCode):
     },
     "voice": 
     {
-        "name": str(languageCode) + "-" + str(text),
+        "name": str(languageCode) + "-" + str(voice),
         "languageCode": str(languageCode)
     },
     "audioConfig": 
