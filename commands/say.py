@@ -54,8 +54,7 @@ def get_voice(text, keyConfig, voice, languageCode):
     except:
         return ''
     speechData = json.loads(raw_data.content)
-    if 'error' not in visionData:
-        return visionData['audioContent']
+    if 'error' not in speechData:
+        return speechData['audioContent']
     else:
-        return str(visionData)
-
+        return str(speechData)
