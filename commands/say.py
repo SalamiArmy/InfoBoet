@@ -52,8 +52,10 @@ def get_voice(text, keyConfig, voice, languageCode):
             headers={'Content-type': 'application/json'})
     except:
         return ''
+    print raw_data.content
     speechData = json.loads(raw_data.content)
-    if 'error' not in speechData:
+    if 'error' not in speechData and 'audioContent' in speechData:
         return speechData['audioContent']
     else:
+        print str(speechData)
         return str(speechData)
