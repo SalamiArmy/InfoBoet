@@ -25,7 +25,7 @@ class TestSay(unittest.TestCase):
         requestText = u'It\'s said that women and men are from two different planets when it comes to communication'
 
         keyConfig = ConfigParser.ConfigParser()
-        keyConfig.read(["bot_keys.ini", "..\\bot_keys.ini"])
+        keyConfig.read(["bot_keys.ini", "..\\bot_keys.ini", "keys.ini", "..\keys.ini"])
         bot = telegram.Bot(keyConfig.get('BotIDs', 'TELEGRAM_BOT_ID'))
         chatId = int(keyConfig.get('BotAdministration', 'TESTING_TELEGRAM_PRIVATE_CHAT_ID'))
 
