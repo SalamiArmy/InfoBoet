@@ -16,14 +16,12 @@ def run(bot, chat_id, user, keyConfig, message, totalResults=1):
 
 def send_text_as_voice(chat_id, keyConfig, requestText, voice, languageCode):
     data = get_voice(requestText, keyConfig, voice, languageCode)
-    if data:
-        if 'error' not in data:
-            requests.post('https://api.telegram.org/bot' + keyConfig.get('BotIDs', 'TELEGRAM_BOT_ID') +
-                          '/sendVoice?chat_id=' + str(chat_id),
-                          files={'voice': ('no but what I\'M saying is.ogg', data, 'audio/ogg', {'Expires': '0'})})
-            return True
-        else:
-            print json.loads(data)['description']
+    print str(data)
+    if data and 'error' not in data:
+        requests.post('https://api.telegram.org/bot' + keyConfig.get('BotIDs', 'TELEGRAM_BOT_ID') +
+                      '/sendVoice?chat_id=' + str(chat_id),
+                      files={'voice': ('no but what I\'M saying is.ogg', data, 'audio/ogg', {'Expires': '0'})})
+        return True
     return False
 
 
