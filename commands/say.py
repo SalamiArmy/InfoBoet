@@ -10,7 +10,6 @@ from google.appengine.api import urlfetch
 def run(bot, chat_id, user, keyConfig, message, totalResults=1):
     requestText = str(message)
     logging.info('Saying: ' + requestText)
-    #print 'Saying: ' + requestText
     languageCode = 'en-GB'
     voice = 'Standard-A'
     if not send_text_as_voice(chat_id, keyConfig, requestText, voice, languageCode):
@@ -20,7 +19,7 @@ def run(bot, chat_id, user, keyConfig, message, totalResults=1):
 
 def send_text_as_voice(chat_id, keyConfig, requestText, voice, languageCode):
     data = get_voice(requestText, keyConfig, voice, languageCode)
-    print str(data)
+    logging.info('Got voice data as: ' + data)
     if data and 'error' not in data:
         requests.post('https://api.telegram.org/bot' + keyConfig.get('BotIDs', 'TELEGRAM_BOT_ID') +
                       '/sendVoice?chat_id=' + str(chat_id),
@@ -54,10 +53,10 @@ def get_voice(text, keyConfig, voice, languageCode):
             headers={'Content-type': 'application/json'})
     except:
         return ''
-    print raw_data.content
+    logging.info('Got raw voice data as: ' + raw_data.content)
     speechData = json.loads(raw_data.content)
     if 'error' not in speechData and 'audioContent' in speechData:
         return speechData['audioContent']
     else:
-        print str(speechData)
+        logging.info('Got raw error data as: ' + speechData)
         return str(speechData)
