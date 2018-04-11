@@ -3,6 +3,7 @@ import base64
 import json
 import urllib
 import requests
+import logging
 
 from google.appengine.api import urlfetch
 
