@@ -20,6 +20,13 @@ def run(bot, chat_id, user, keyConfig, message, totalResults=1):
 def send_text_as_voice(chat_id, keyConfig, requestText, voice, languageCode):
     data = get_voice(requestText, keyConfig, voice, languageCode)
     logging.info('Got voice data as: ' + data)
+    
+    import io
+    import soundfile as sf
+    sfData, samplerate = sf.read(io.BytesIO(data))
+    logging.info('Got soundfile data as: ' + sfData)
+    logging.info('Got soundfile samplerate as: ' + samplerate)
+    
     if data and 'error' not in data:
         requests.post('https://api.telegram.org/bot' + keyConfig.get('BotIDs', 'TELEGRAM_BOT_ID') +
                       '/sendVoice?chat_id=' + str(chat_id),
