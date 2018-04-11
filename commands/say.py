@@ -8,8 +8,8 @@ from google.appengine.api import urlfetch
 
 def run(bot, chat_id, user, keyConfig, message, totalResults=1):
     requestText = str(message)
-    #logging.info('Saying: ' + requestText)
-    print 'Saying: ' + requestText
+    logging.info('Saying: ' + requestText)
+    #print 'Saying: ' + requestText
     languageCode = 'en-GB'
     voice = 'Standard-A'
     if not send_text_as_voice(chat_id, keyConfig, requestText, voice, languageCode):
