@@ -1,6 +1,7 @@
 # coding=utf-8
 import json
 import urllib
+import string
 from google.appengine.ext import ndb
 from google.appengine.api import urlfetch
 
@@ -101,8 +102,7 @@ def search_results_walker(args, bot, chat_id, data, number, requestText, results
         total_offset = int(total_offset) + 1
         if is_valid_video(vidlink, chat_id):
             if number == 1:
-                bot.sendMessage(chat_id=chat_id, text=(user + ': ' if not user == '' else '') +
-                                'https://www.youtube.com/watch?v=' + vidlink + '&type=video')
+                bot.sendMessage(chat_id=chat_id, text='https://www.youtube.com/watch?v=' + vidlink + '&type=video')
                 total_sent.append('https://www.youtube.com/watch?v=' + vidlink + '&type=video')
             else:
                 message = requestText + ': ' + \
