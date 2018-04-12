@@ -32,7 +32,7 @@ def wasPreviouslySeenVideo(video_link, chat_id):
             allWhoveSeenVideo.endswith(',' + str(chat_id)) or \
                     allWhoveSeenVideo == str(chat_id):
         return True
-    addPreviouslySeenVideosValue(videore_link, chat_id)
+    addPreviouslySeenVideosValue(video_link, chat_id)
     return False
 
 def run(bot, chat_id, user, keyConfig, message, totalResults=1):
@@ -50,11 +50,10 @@ def Google_Custom_Search(args):
     data = json.loads(urlfetch.fetch(realUrl).content)
     total_results = 0
     results_this_page = 0
-    if 'searchInformation' in data and 'totalResults' in data['searchInformation']:
-        total_results = data['searchInformation']['totalResults']
-    if 'queries' in data and 'request' in data['queries'] and len(data['queries']['request']) > 0 and 'count' in \
-            data['queries']['request'][0]:
-        results_this_page = data['queries']['request'][0]['count']
+    if 'pageInfo' in data and 'totalResults' in data['pageInfo']:
+        total_results = data['pageInfo']['totalResults']
+    if 'items' in data and len(data['items']) > 0:
+        results_this_page = len(data['items'])
     return data, total_results, results_this_page
 
 def is_valid_video(video_url, chat_id):
