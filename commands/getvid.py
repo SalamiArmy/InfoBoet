@@ -6,31 +6,31 @@ from google.appengine.ext import ndb
 CommandName = 'getvid'
 
 class WhosSeenVideoUrls(ndb.Model):
-    # key name: ImageUrl
+    # key name: VideoUrl
     whoseSeenVideo = ndb.StringProperty(indexed=False, default='')
     
-def addPreviouslySeenVideosValue(image_url, chat_id):
-    es = WhosSeenVideoUrls.get_or_insert(image_url)
+def addPreviouslySeenVideosValue(video_url, chat_id):
+    es = WhosSeenVideoUrls.get_or_insert(video_url)
     if es.whoseSeenVideo == '':
         es.whoseSeenVideo = str(chat_id)
     else:
         es.whoseSeenVideo += ',' + str(chat_id)
     es.put()
     
-def getwhoseSeenVideosValue(image_link):
-    es = WhosSeenVideoUrls.get_or_insert(image_link)
+def getwhoseSeenVideosValue(video_link):
+    es = WhosSeenVideoUrls.get_or_insert(video_link)
     if es:
         return str(es.whoseSeenVideo)
     return ''
 
-def wasPreviouslySeenVideo(image_link, chat_id):
-    allWhoveSeenVideo = getwhoseSeenVideosValue(image_link)
+def wasPreviouslySeenVideo(video_link, chat_id):
+    allWhoveSeenVideo = getwhoseSeenVideosValue(video_link)
     if ',' + str(chat_id) + ',' in allWhoveSeenVideo or \
             allWhoveSeenVideo.startswith(str(chat_id) + ',') or \
             allWhoveSeenVideo.endswith(',' + str(chat_id)) or \
                     allWhoveSeenVideo == str(chat_id):
         return True
-    addPreviouslySeenVideosValue(image_link, chat_id)
+    addPreviouslySeenVideosValue(videore_link, chat_id)
     return False
 
 def run(bot, chat_id, user, keyConfig, message, totalResults=1):
