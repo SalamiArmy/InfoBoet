@@ -2,6 +2,7 @@
 import json
 import urllib
 from google.appengine.ext import ndb
+from google.appengine.api import urlfetch
 
 CommandName = 'getvid'
 
