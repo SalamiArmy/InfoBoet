@@ -105,8 +105,8 @@ def search_results_walker(args, bot, chat_id, data, number, requestText, results
                 total_sent.append('https://www.youtube.com/watch?v=' + vidlink + '&type=video')
             else:
                 message = requestText + ': ' + \
-                          (str(len(total_sent) + 1) + ' of ' + str(number) + '\n' if int(number) > 1 else '') + 
-                    'https://www.youtube.com/watch?v=' + vidlink + '&type=video'
+                          (str(len(total_sent) + 1) + ' of ' + str(number) + '\n' if int(number) > 1 else '') + \
+                          'https://www.youtube.com/watch?v=' + vidlink + '&type=video'
                 bot.sendMessage(chat_id=chat_id, text=message)
                 total_sent.append('https://www.youtube.com/watch?v=' + vidlink + '&type=video')
     if len(total_sent) < int(number) and int(total_offset) < int(total_results):
