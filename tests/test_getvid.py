@@ -31,7 +31,7 @@ class TestGetVid(unittest.TestCase):
         bot = telegram.Bot(keyConfig.get('BotIDs', 'TELEGRAM_BOT_ID'))
         chatId = keyConfig.get('BotAdministration', 'TESTING_TELEGRAM_PRIVATE_CHAT_ID')
 
-        getvid.run(bot, chatId, 'Admin', keyConfig, requestText)
+        getvid.run(bot, chatId, 'Admin', keyConfig, requestText, 16)
 
     def test_getvid_group(self):
         requestText = 'hippie sabotage - high enough'

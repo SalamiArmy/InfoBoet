@@ -41,7 +41,8 @@ def run(bot, chat_id, user, keyConfig, message, totalResults=1):
             'type': 'video',
             'safeSearch': 'none',
             'q': requestText,
-            'part': 'snippet'}
+            'part': 'snippet',
+            'maxResults': 25}
     return Send_Videos(bot, chat_id, user, requestText, args, keyConfig, totalResults)
 
 def Google_Custom_Search(args):
@@ -110,7 +111,7 @@ def search_results_walker(args, bot, chat_id, data, number, requestText, results
                 bot.sendMessage(chat_id=chat_id, text=message)
                 total_sent.append('https://www.youtube.com/watch?v=' + vidlink + '&type=video')
     if len(total_sent) < int(number) and int(total_offset) < int(total_results):
-        args['start'] = total_offset + 1
+        args['pageToken'] = data['nextPageToken']
         data, total_results, results_this_page = Google_Custom_Search(args)
         return search_results_walker(args, bot, chat_id, data, number, requestText, results_this_page, total_results, keyConfig,
                                      total_offset, total_sent)
