@@ -20,11 +20,7 @@ def run(bot, chat_id, user, keyConfig, message, totalResults=1):
                  'en-GB-Standard-A',
                  'en-GB-Standard-B',
                  'en-GB-Standard-C',
-                 'en-GB-Standard-D',
-                 'en-AU-Standard-A',
-                 'en-AU-Standard-B',
-                 'en-AU-Standard-C',
-                 'en-AU-Standard-D']
+                 'en-GB-Standard-D']
     for voice in fullVoice:
         languageCode = voice.split('-')[0] + '-' + voice.split('-')[1]
         voice = voice.split('-')[2] + '-' + voice.split('-')[3]
