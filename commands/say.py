@@ -7,16 +7,10 @@ from google.appengine.api import urlfetch
 
 def run(bot, chat_id, user, keyConfig, message, totalResults=1):
     requestText = str(message)
-    fullVoice = ['en-US-Wavenet-A',
-                 'en-US-Wavenet-B',
-                 'en-US-Wavenet-C',
-                 'en-US-Wavenet-D',
-                 'en-US-Wavenet-E',
-                 'en-US-Wavenet-F',
-                 'en-US-Standard-B',
-                 'en-US-Standard-C',
-                 'en-US-Standard-D',
-                 'en-US-Standard-E',
+    fullVoice = ['en-AU-Standard-A',	
+                 'en-AU-Standard-B',	
+                 'en-AU-Standard-C',	
+                 'en-AU-Standard-D',
                  'en-GB-Standard-A',
                  'en-GB-Standard-B',
                  'en-GB-Standard-C',
