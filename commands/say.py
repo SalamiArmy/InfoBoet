@@ -7,8 +7,7 @@ from google.appengine.api import urlfetch
 
 def run(bot, chat_id, user, keyConfig, message, totalResults=1):
     requestText = str(message)
-    fullVoice = ['en-GB-Standard-A',
-                'en-GB-Standard-B']
+    fullVoice = ['en-GB-Standard-B']
     for voice in fullVoice:
         languageCode = voice.split('-')[0] + '-' + voice.split('-')[1]
         voice = voice.split('-')[2] + '-' + voice.split('-')[3]
