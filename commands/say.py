@@ -7,13 +7,7 @@ from google.appengine.api import urlfetch
 
 def run(bot, chat_id, user, keyConfig, message, totalResults=1):
     requestText = str(message)
-    fullVoice = ['es-ES-Standard-A',
-                 'ja-JP-Standard-A',
-                 'pt-BR-Standard-A',
-                 'tr-TR-Standard-A',
-                 'sv-SE-Standard-A',
-                 'nl-NL-Standard-A',
-                 'en-US-Wavenet-A',
+    fullVoice = ['en-US-Wavenet-A',
                  'en-US-Wavenet-B',
                  'en-US-Wavenet-C',
                  'en-US-Wavenet-D',
@@ -27,18 +21,10 @@ def run(bot, chat_id, user, keyConfig, message, totalResults=1):
                  'en-US-Standard-C',
                  'en-US-Standard-D',
                  'en-US-Standard-E',
-                 'de-DE-Standard-A',
-                 'de-DE-Standard-B',
                  'en-AU-Standard-A',
                  'en-AU-Standard-B',
                  'en-AU-Standard-C',
-                 'en-AU-Standard-D',
-                 'fr-CA-Standard-A',
-                 'fr-CA-Standard-B',
-                 'fr-CA-Standard-C',
-                 'fr-CA-Standard-D',
-                 'fr-FR-Standard-C',
-                 'fr-FR-Standard-D']
+                 'en-AU-Standard-D']
     for voice in fullVoice:
         languageCode = voice.split('-')[0] + '-' + voice.split('-')[1]
         voice = voice.split('-')[2] + '-' + voice.split('-')[3]
