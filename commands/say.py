@@ -2,17 +2,50 @@
 import base64
 import json
 import requests
-import logging
 
 from google.appengine.api import urlfetch
 
 def run(bot, chat_id, user, keyConfig, message, totalResults=1):
     requestText = str(message)
-    languageCode = 'en-GB'
-    voice = 'Standard-A'
-    if not send_text_as_voice(chat_id, keyConfig, requestText, voice, languageCode):
-        bot.sendMessage(chat_id=str(chat_id), text='I\'m sorry ' + (user if not user == '' else 'Dave') +
-                                                  ', I\'m afraid I can\'t say that.')
+    fullVoice = ['es-ES-Standard-A',
+                 'ja-JP-Standard-A',
+                 'pt-BR-Standard-A',
+                 'tr-TR-Standard-A',
+                 'sv-SE-Standard-A',
+                 'nl-NL-Standard-A',
+                 'en-US-Wavenet-A',
+                 'en-US-Wavenet-B',
+                 'en-US-Wavenet-C',
+                 'en-US-Wavenet-D',
+                 'en-US-Wavenet-E',
+                 'en-US-Wavenet-F',
+                 'en-GB-Standard-A',
+                 'en-GB-Standard-B',
+                 'en-GB-Standard-C',
+                 'en-GB-Standard-D',
+                 'en-US-Standard-B',
+                 'en-US-Standard-C',
+                 'en-US-Standard-D',
+                 'en-US-Standard-E',
+                 'de-DE-Standard-A',
+                 'de-DE-Standard-B',
+                 'en-AU-Standard-A',
+                 'en-AU-Standard-B',
+                 'en-AU-Standard-C',
+                 'en-AU-Standard-D',
+                 'fr-CA-Standard-A',
+                 'fr-CA-Standard-B',
+                 'fr-CA-Standard-C',
+                 'fr-CA-Standard-D',
+                 'fr-FR-Standard-C',
+                 'fr-FR-Standard-D']
+    for voice in fullVoice:
+        languageCode = voice.split('-')[0] + '-' + voice.split('-')[1]
+        voice = voice.split('-')[2] + '-' + voice.split('-')[3]
+        bot.sendMessage(chat_id=str(chat_id), text=str(languageCode) + "-" + str(voice) + ':')
+        if not send_text_as_voice(chat_id, keyConfig, requestText, voice, languageCode):
+            bot.sendMessage(chat_id=str(chat_id), text='I\'m sorry ' + (user if not user == '' else 'Dave') +
+                                                      ', I\'m afraid I can\'t say that.')
 
 
 def send_text_as_voice(chat_id, keyConfig, requestText, voice, languageCode):
