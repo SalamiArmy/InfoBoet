@@ -3,7 +3,9 @@ import json
 
 from google.appengine.api import urlfetch
 
-def run(bot, chat_id, user, keyConfig, message="BTC", totalResults=1):
+def run(bot, chat_id, user, keyConfig, message='BTC', totalResults=1):
+    if message == '':
+        message = 'BTC'
     bcurl = 'https://min-api.cryptocompare.com/data/price?fsym=' + message + '&tsyms=ZAR,USD,EUR'
     RAW_DATA = urlfetch.fetch(bcurl)
     data = json.loads(RAW_DATA.content)
