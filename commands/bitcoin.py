@@ -11,7 +11,7 @@ def run(bot, chat_id, user, keyConfig, message='BTC', totalResults=1):
     data = json.loads(RAW_DATA.content)
     if 'USD' in data and 'EUR' in data and 'ZAR' in data:
         bot.sendMessage(chat_id=chat_id,
-                        text='The Current Price of 1 ' + message + ':\n\n' + str(data['USD']) +
+                        text='The Current Price of 1 ' + message.upper() + ':\n\n' + str(data['USD']) +
                              ' USD\n' + str(data['EUR']) +
                              ' EUR\n' + str(data['ZAR']) + ' ZAR')
     else:
