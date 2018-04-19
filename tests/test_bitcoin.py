@@ -27,7 +27,7 @@ class TestBitcoin(unittest.TestCase):
         bot = telegram.Bot(keyConfig.get('BotIDs', 'TELEGRAM_BOT_ID'))
         chatId = keyConfig.get('BotAdministration', 'TESTING_TELEGRAM_PRIVATE_CHAT_ID')
 
-        bitcoin.run(bot, chatId, 'Admin', keyConfig)
+        bitcoin.run(bot, chatId, 'Admin', keyConfig, 'ETH')
 
     def test_bitcoin_group(self):
         keyConfig = ConfigParser.ConfigParser()
