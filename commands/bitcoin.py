@@ -23,8 +23,8 @@ def run(bot, chat_id, user, keyConfig, message="", totalResults=1):
         RAW_DATA = urlfetch.fetch(bcurl)
         data = json.loads(RAW_DATA.content)
         bot.sendMessage(chat_id=chat_id,
-                        text='The Current Price of 1 ' + ticker + ':\n\n' + data['USD'] +
-                             ' USD\n' + data['EUR'] +
-                             ' EUR\n' + data['ZAR'] + ' ZAR')
+                        text='The Current Price of 1 ' + ticker + ':\n\n' + str(data['USD']) +
+                             ' USD\n' + str(data['EUR']) +
+                             ' EUR\n' + str(data['ZAR']) + ' ZAR')
     return True
         
