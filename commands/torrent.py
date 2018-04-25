@@ -2,27 +2,41 @@
 import json
 import urllib
 
+from google.appengine.api import urlfetch
 
 def run(bot, chat_id, user, keyConfig, message, totalResults=1):
     requestText = message.replace(bot.name, "").strip()
+    torrentSearchText = GetTorrentSearchText(requestText, keyConfig)
 
-    tor1Url = 'https://torrentproject.se/?s='
-    searchUrl = tor1Url + requestText.encode('utf-8') + '&out=json'
-    data = json.load(urllib.urlopen(searchUrl))
-    torrageUrl = 'http://torrage.info/torrent.php?h='
-    if data['total_found'] >= 1 and '1' in data:
-        torrent = data['1']['torrent_hash']
-        tTitle = data['1']['title']
-        seeds = str(data['1']['seeds'])
-        leechs = str(data['1']['leechs'])
-        downloadUrl = torrageUrl + torrent.upper()
-        bot.sendMessage(chat_id=chat_id, text='Torrent Name: ' + tTitle + \
-                                              '\nDownload Link: ' + downloadUrl + \
-                                              '\nSeeds: ' + seeds + \
-                                              '\nLeechers: ' + leechs,
-                        disable_web_page_preview=True)
-        return True
+    if torrentSearchText:
+        bot.sendMessage(chat_id=chat_id, text=torrentSearchText)
     else:
         bot.sendMessage(chat_id=chat_id, text='I\'m sorry ' + (user if not user == '' else 'Dave') + \
                                               ', I can\'t find any torrents for ' + \
                                               requestText.encode('utf-8') + '.')
+
+def GetTorrentSearchText(text, keyConfig):
+    raw_data = urlfetch.fetch(
+        url='https://oneom.tk/search/serial?limit=1&title=' + text,
+        headers={'Accept': 'application/json'})
+    torrentData = json.loads(raw_data.content)
+    if 'error' not in torrentData and 'serials' in torrentData:
+        if len(torrentData['serials']) > 0 and 'id' in torrentData['serials'][0]:
+            return GetTorrentMagnetLink(str(torrentData['serials'][0]['id']), keyConfig)
+        else:
+            return ''
+    else:
+        return str(torrentData)
+
+def GetTorrentMagnetLink(text, keyConfig):
+    raw_data = urlfetch.fetch(
+        url='https://oneom.tk/ep/' + text,
+        headers={'Accept': 'application/json'})
+    torrentData = json.loads(raw_data.content)
+    if 'error' not in torrentData and 'torrent' in torrentData:
+        if len(torrentData['torrent']) > 0 and 'value' in torrentData['torrent'][0]:
+            return str(torrentData['torrent'][0]['value'])
+        else:
+            return ''
+    else:
+        return str(torrentData)
