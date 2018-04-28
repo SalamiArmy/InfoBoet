@@ -43,9 +43,7 @@ def GetTVMagnetLink(text):
         return str(torrentData)
 
 def GetMovieSearchText(text):
-    raw_data = urlfetch.fetch(
-        url='https://yts.am/api/v2/list_movies.json?limit=1&query_term=' + text,
-        headers={'Accept': 'application/json'})
+    raw_data = urlfetch.fetch(url='https://yts.am/api/v2/list_movies.json?limit=1&' + urllib.urlencode({'query_term' : text}))
     torrentData = json.loads(raw_data.content)
     if 'error' not in torrentData and 'data' in torrentData and 'movies' in torrentData['data']:
         if len(torrentData['data']['movies']) > 0 and 'torrents' in torrentData['data']['movies'][0] and 'hash' in torrentData['data']['movies'][0]['torrents']:
