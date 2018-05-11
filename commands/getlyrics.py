@@ -6,7 +6,7 @@ import sys
 reload(sys)
 sys.setdefaultencoding('utf8')
 
-def run(user, message, chat_id='', totalResults=1):
+def run(bot, chat_id, user, keyConfig, message, totalResults=1):
     requestText = str(message).strip()
     keyConfig = ConfigParser.ConfigParser()
     keyConfig.read(["keys.ini", "..\keys.ini"])
@@ -39,8 +39,9 @@ def run(user, message, chat_id='', totalResults=1):
             lyrics_body = data['message']['body']['lyrics']['lyrics_body'].replace(
                 '******* This Lyrics is NOT for Commercial use *******\n(1409612423371)', '').replace('*','').replace(requestText,'*' + requestText + '*')
         FormattedResponse = ((user + ': ') if not user == '' else '') + track_name + ' by ' + artist_name + (('\nListen at: https://api.soundcloud.com/tracks/' + track_soundcloud_id) if not track_soundcloud_id == '0' else '') + (('\n' + lyrics_body) if not lyrics_body == '' else '')
-        return str(FormattedResponse)[:4093] + ('...' if len(FormattedResponse) > 4093 else '')
+        result = str(FormattedResponse)[:4093] + ('...' if len(FormattedResponse) > 4093 else '')
     else:
-        return 'I\'m sorry ' + (user if not user == '' else 'Dave') + \
+        result = 'I\'m sorry ' + (user if not user == '' else 'Dave') + \
                ', I\'m afraid I can\'t find any tracks for the lyrics ' + \
                requestText.encode('utf-8')
+    bot.sendMessage(chat_id=chat_id, text=result)

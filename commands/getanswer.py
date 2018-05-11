@@ -1,14 +1,8 @@
 # coding=utf-8
-import ConfigParser
-
 import tungsten
 
-
-def run(user, message, chat_id='', totalResults=1):
+def run(bot, chat_id, user, keyConfig, message, totalResults=1):
     requestText = str(message).strip()
-    keyConfig = ConfigParser.ConfigParser()
-    keyConfig.read(["keys.ini", "..\keys.ini"])
-
     client = tungsten.Tungsten(keyConfig.get('Wolfram', 'WOLF_APP_ID'))
     result = client.query(requestText)
     allAnswers = result.pods
@@ -23,8 +17,7 @@ def run(user, message, chat_id='', totalResults=1):
                     if answer is not None:
                         fullAnswer += answer + '.\n'
         result = (user + ': ' if not user == '' else '') + fullAnswer
-        return result
     else:
         result = 'I\'m sorry ' + (user if not user == '' else 'Dave') + ', I\'m afraid I can\'t find any answers for '\
                  + str(requestText)
-        return result
+    bot.sendMessage(chat_id=chat_id, text=result)

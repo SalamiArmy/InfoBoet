@@ -4,9 +4,7 @@ import urllib
 
 
 def run(bot, chat_id, user, keyConfig, message, totalResults=1):
-    data = get_cric_data(user)
-    bot.sendMessage(chat_id=chat_id, text=data)
-
+    bot.sendMessage(chat_id=chat_id, text=get_cric_data(user))
 
 def get_cric_data(user):
     allMatchesUrl = 'http://cricscore-api.appspot.com/csa'

@@ -44,7 +44,7 @@ def wasPreviouslySeenImage(image_link, chat_id):
     addPreviouslySeenUrlsValue(image_link, chat_id)
     return False
 
-def run(user, message, chat_id='', total_requested_results=1):
+def run(bot, chat_id, user, keyConfig, message, totalResults=1):
     requestText = str(message).strip()
     keyConfig = ConfigParser.ConfigParser()
     keyConfig.read(["keys.ini", "..\keys.ini"])
@@ -53,7 +53,7 @@ def run(user, message, chat_id='', total_requested_results=1):
             'key': keyConfig.get('Google', 'GCSE_APP_ID'),
             'safe': "off",
             'q': requestText}
-    return Send_Links(chat_id, user, requestText, args, keyConfig, total_requested_results)
+    bot.sendMessage(chat_id=chat_id, text=Send_Links(chat_id, user, requestText, args, keyConfig, totalResults))
 
 def Google_Custom_Search(args):
     googurl = 'https://www.googleapis.com/customsearch/v1'

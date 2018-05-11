@@ -5,7 +5,7 @@ import logging
 import urllib
 
 
-def run(user, message, chat_id='', totalResults=1):
+def run(bot, chat_id, user, keyConfig, message, totalResults=1):
     requestText = str(message).strip()
     keyConfig = ConfigParser.ConfigParser()
     keyConfig.read(["keys.ini", "..\keys.ini"])
@@ -28,16 +28,19 @@ def run(user, message, chat_id='', totalResults=1):
                                                 if lang['language'] == detectedLanguage][0]['name']
             else:
                 detectedLanguageSemanticName = ''
-            return (user + ': ' if not user == '' else '') + \
+            result = (user + ': ' if not user == '' else '') + \
                                                   'Detected language: ' + detectedLanguageSemanticName + \
                                                   '\nMeaning: ' + translation\
                             .replace('&#39;', '\'')\
                             .replace('&quot;', '"') + '.'
         else:
-            return 'I\'m sorry ' + (user if not user == '' else 'Dave') + \
+            result = 'I\'m sorry ' + (user if not user == '' else 'Dave') + \
                                                   ', I\'m afraid I can\'t find any translations for ' + \
                                                   requestText.encode('utf-8') + '.'
     else:
         if 'error' in data and 'message' in data['error']:
-            return 'I\'m sorry ' + (user if not user == '' else 'Dave') +\
+            result = 'I\'m sorry ' + (user if not user == '' else 'Dave') +\
                    ', ' + data['error']['message']
+        else:
+            result = 'Cannot parse ' + str(data)
+    bot.sendMessage(chat_id=chat_id, text=result)

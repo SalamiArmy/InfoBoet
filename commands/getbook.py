@@ -44,7 +44,7 @@ def wasPreviouslySeenBook(chat_id, book_title):
     return False
 
 
-def run(user, message, chat_id, totalResults=1):
+def run(bot, chat_id, user, keyConfig, message, totalResults=1):
     requestText = str(message).strip()
     keyConfig = ConfigParser.ConfigParser()
     keyConfig.read(["keys.ini", "..\keys.ini"])
@@ -79,7 +79,7 @@ def run(user, message, chat_id, totalResults=1):
         result = 'I\'m sorry ' + (user if not user == '' else 'Dave') + ', I\'m afraid I can\'t find any books' + (
         ' that you haven\'t already seen' if len(bookTitles) > 0 and offset > 0 else '') + ' for ' + str(requestText) \
                  + '.'
-    return result
+    bot.sendMessage(chat_id=chat_id, text=result)
 
 def FormatDesc(Desc):
     return Desc.replace('<br />', '\n')\

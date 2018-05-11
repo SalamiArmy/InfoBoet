@@ -3,7 +3,7 @@ import json
 import urllib
 
 
-def run(user, message, chat_id='', totalResults=1):
+def run(bot, chat_id, user, keyConfig, message, totalResults=1):
     requestText = str(message).strip()
 
     wikiUrl = \
@@ -30,4 +30,4 @@ def run(user, message, chat_id='', totalResults=1):
                    ', I\'m afraid I can\'t find any wiki articles for ' +\
                    requestText.encode('utf-8') + '.'
         return result
-    return result
+    bot.sendMessage(chat_id=chat_id, text=result)

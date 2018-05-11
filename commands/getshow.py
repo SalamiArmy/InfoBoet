@@ -9,7 +9,7 @@ import json
 import re
 import urllib
 
-def run(user, message, chat_id='', totalResults=1):
+def run(bot, chat_id, user, keyConfig, message, totalResults=1):
     requestText = str(message).strip()
 
     showsUrl = 'http://api.tvmaze.com/search/shows?q='
