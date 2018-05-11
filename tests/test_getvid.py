@@ -2,7 +2,7 @@ import ConfigParser
 import unittest
 import telegram
 
-import commands.getvid as getvid
+import telegram_commands.getvid as getvid
 from google.appengine.ext import ndb
 from google.appengine.ext import testbed
 

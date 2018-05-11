@@ -4,7 +4,7 @@ import unittest
 
 import telegram
 
-import commands.getbook as getbook
+import telegram_commands.getbook as getbook
 from google.appengine.ext import ndb
 from google.appengine.ext import testbed
 

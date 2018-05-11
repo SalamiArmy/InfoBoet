@@ -3,7 +3,7 @@ import ConfigParser
 import unittest
 import telegram
 
-import commands.pronounce as pronounce
+import telegram_commands.pronounce as pronounce
 
 
 class TestTorrent(unittest.TestCase):

@@ -3,7 +3,7 @@ import unittest
 
 import telegram
 
-import commands.chess as chess
+import telegram_commands.chess as chess
 
 
 class TestChess(unittest.TestCase):

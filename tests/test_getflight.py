@@ -3,7 +3,7 @@ import ConfigParser
 import unittest
 import telegram
 
-import commands.getflight as getflight
+import telegram_commands.getflight as getflight
 
 
 class TestPlace(unittest.TestCase):

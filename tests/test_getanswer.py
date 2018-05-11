@@ -2,12 +2,11 @@ import ConfigParser
 import unittest
 
 import telegram
+from google.appengine.ext import ndb
+from google.appengine.ext import testbed
 
 import main
 from commands import add
-
-from google.appengine.ext import ndb
-from google.appengine.ext import testbed
 
 
 class TestGetAnswer(unittest.TestCase):

@@ -3,7 +3,7 @@ import ConfigParser
 import unittest
 import telegram
 
-import commands.getlyrics as getlyrics
+import telegram_commands.getlyrics as getlyrics
 
 
 class TestGetLyrics(unittest.TestCase):

@@ -3,7 +3,7 @@ import ConfigParser
 import unittest
 import telegram
 
-import commands.place as place
+import telegram_commands.place as place
 
 
 class TestPlace(unittest.TestCase):

@@ -2,7 +2,7 @@ import ConfigParser
 import unittest
 import telegram
 
-import commands.getsuggestion as getsuggestion
+import telegram_commands.getsuggestion as getsuggestion
 
 
 class TestGet(unittest.TestCase):

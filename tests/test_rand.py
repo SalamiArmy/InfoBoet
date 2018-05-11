@@ -3,7 +3,7 @@ import unittest
 
 import telegram
 
-import commands.rand as rand
+import telegram_commands.rand as rand
 
 
 class TestRand(unittest.TestCase):

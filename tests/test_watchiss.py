@@ -6,7 +6,7 @@ import unittest
 from google.appengine.ext import ndb
 from google.appengine.ext import testbed
 
-import commands.watchiss as watchiss
+import telegram_commands.watchiss as watchiss
 
 class TestWatchBitcoin(unittest.TestCase):
     def setUp(self):

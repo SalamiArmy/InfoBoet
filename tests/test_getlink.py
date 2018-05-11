@@ -2,7 +2,7 @@ import ConfigParser
 import unittest
 import telegram
 
-import commands.getlink as getlink
+import telegram_commands.getlink as getlink
 from google.appengine.ext import ndb
 from google.appengine.ext import testbed
 

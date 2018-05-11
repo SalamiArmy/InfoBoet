@@ -3,9 +3,9 @@ import ConfigParser
 import base64
 import json
 import logging
-import urllib
-import sys
 import re
+import sys
+import urllib
 
 reload(sys)
 sys.setdefaultencoding('utf8')
@@ -22,8 +22,7 @@ from google.appengine.api import urlfetch
 
 import webapp2
 
-from commands import start
-from commands import add
+from commands import add, start
 
 # Read keys.ini file at program start (don't forget to put your bot keys in there!)
 keyConfig = ConfigParser.ConfigParser()

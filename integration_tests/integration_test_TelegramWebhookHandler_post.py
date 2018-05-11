@@ -1,11 +1,13 @@
 # coding=utf-8
 import ConfigParser
 import unittest
+
 from google.appengine.ext import ndb
 from google.appengine.ext import testbed
 
 import main
 from commands import add
+
 
 class TestTelegramWebhookHandlerPost(unittest.TestCase):
     def setUp(self):

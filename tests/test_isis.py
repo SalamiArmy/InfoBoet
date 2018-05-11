@@ -2,7 +2,7 @@ import ConfigParser
 import unittest
 import telegram
 
-import commands.isis as isis
+import telegram_commands.isis as isis
 
 
 class TestISIS(unittest.TestCase):

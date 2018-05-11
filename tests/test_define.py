@@ -4,7 +4,7 @@ import unittest
 
 import telegram
 
-import commands.define as define
+import telegram_commands.define as define
 
 
 class TestDefine(unittest.TestCase):

@@ -1,12 +1,11 @@
 import ConfigParser
+import unittest
 
 import telegram
-
-from commands import add
-
-import unittest
 from google.appengine.ext import ndb
 from google.appengine.ext import testbed
+
+from commands import add
 
 
 class TestWatchBitcoin(unittest.TestCase):
@@ -34,7 +33,7 @@ class TestWatchBitcoin(unittest.TestCase):
 
         add.setCommandCode('getlink', open('../commands/getlink.py').read())
 
-        import commands.watchlink as watchlink
+        import telegram_commands.watchlink as watchlink
         watchlink.run(bot, chatId, 'SalamiArmy', keyConfig, 'Dot Durban')
         watchlink.run(bot, chatId, 'SalamiArmy', keyConfig, 'Dot Mumbi')
         watchlink.unwatch(bot, chatId, 'Durban')

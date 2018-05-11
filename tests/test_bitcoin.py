@@ -3,7 +3,7 @@ import unittest
 
 import telegram
 
-import commands.bitcoin as bitcoin
+import telegram_commands.bitcoin as bitcoin
 from google.appengine.ext import testbed
 
 

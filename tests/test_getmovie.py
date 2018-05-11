@@ -2,7 +2,7 @@ import ConfigParser
 import unittest
 import telegram
 
-import commands.getmovie as getmovie
+import telegram_commands.getmovie as getmovie
 
 
 class TestGetMovie(unittest.TestCase):

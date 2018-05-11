@@ -2,7 +2,7 @@ import ConfigParser
 import unittest
 import telegram
 
-import commands.getquote as getquote
+import telegram_commands.getquote as getquote
 
 
 class TestGetQuote(unittest.TestCase):

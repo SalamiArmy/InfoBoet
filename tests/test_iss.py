@@ -2,7 +2,7 @@ import ConfigParser
 import unittest
 import telegram
 
-import commands.iss as iss
+import telegram_commands.iss as iss
 
 
 class TestISS(unittest.TestCase):

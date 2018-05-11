@@ -2,7 +2,7 @@ import ConfigParser
 import unittest
 import telegram
 
-import commands.wiki as wiki
+import telegram_commands.wiki as wiki
 
 
 class TestWiki(unittest.TestCase):

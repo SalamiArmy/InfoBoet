@@ -1,6 +1,6 @@
 import unittest
 import telegram
-import commands.pick as pick
+import telegram_commands.pick as pick
 
 class TestPick(unittest.TestCase):
     def test_choose(self):

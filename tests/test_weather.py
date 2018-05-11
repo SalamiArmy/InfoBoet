@@ -1,6 +1,6 @@
 import unittest
 import telegram
-import commands.weather as weather
+import telegram_commands.weather as weather
 
 class TestWeather(unittest.TestCase):
     def test_is_zip_code(self):

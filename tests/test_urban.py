@@ -2,7 +2,7 @@ import ConfigParser
 import unittest
 import telegram
 
-import commands.urban as urban
+import telegram_commands.urban as urban
 
 
 class TestUrban(unittest.TestCase):

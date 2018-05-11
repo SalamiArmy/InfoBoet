@@ -8,7 +8,7 @@ import unittest
 from google.appengine.ext import ndb
 from google.appengine.ext import testbed
 
-import commands.watchmc as watchmc
+import telegram_commands.watchmc as watchmc
 
 class TestWatchMC(unittest.TestCase):
     def setUp(self):

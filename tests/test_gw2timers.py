@@ -3,7 +3,7 @@ import unittest
 
 import telegram
 
-import commands.gw2timers as gw2timers
+import telegram_commands.gw2timers as gw2timers
 
 
 class TestGetGame(unittest.TestCase):

@@ -2,7 +2,7 @@ import ConfigParser
 import unittest
 import telegram
 
-import commands.reverseimage as reverseimage
+import telegram_commands.reverseimage as reverseimage
 from google.appengine.ext import ndb
 from google.appengine.ext import testbed
 

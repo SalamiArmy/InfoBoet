@@ -2,7 +2,7 @@ import ConfigParser
 import unittest
 import telegram
 
-import commands.torrent as torrent
+import telegram_commands.torrent as torrent
 from google.appengine.ext import ndb
 from google.appengine.ext import testbed
 

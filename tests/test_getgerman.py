@@ -2,7 +2,7 @@ import ConfigParser
 import unittest
 import telegram
 
-import commands.getgerman as getgerman
+import telegram_commands.getgerman as getgerman
 
 
 class TestTorrent(unittest.TestCase):

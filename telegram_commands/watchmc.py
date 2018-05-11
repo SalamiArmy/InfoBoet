@@ -1,7 +1,7 @@
 # coding=utf-8
 
 from google.appengine.ext import ndb
-from commands.mc import get_mc_data
+from telegram_commands.mc import get_mc_data
 
 watchedCommandName = 'mc'
 

@@ -1,6 +1,6 @@
 import unittest
 import telegram
-import commands.hello as hello
+import telegram_commands.hello as hello
 
 class TestHello(unittest.TestCase):
     def test_hello(self):

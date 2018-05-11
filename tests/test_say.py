@@ -3,7 +3,7 @@ import ConfigParser
 import unittest
 import telegram
 
-import commands.say as say
+import telegram_commands.say as say
 from google.appengine.ext import ndb
 from google.appengine.ext import testbed
 

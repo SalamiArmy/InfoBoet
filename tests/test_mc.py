@@ -2,7 +2,7 @@ import ConfigParser
 import unittest
 import telegram
 
-import commands.mc as mc
+import telegram_commands.mc as mc
 
 
 class TestMC(unittest.TestCase):

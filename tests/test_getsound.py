@@ -2,7 +2,7 @@ import ConfigParser
 import unittest
 import telegram
 
-from commands.getsound import run
+from telegram_commands.getsound import run
 from google.appengine.ext import ndb
 from google.appengine.ext import testbed
 

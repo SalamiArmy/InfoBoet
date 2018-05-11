@@ -3,7 +3,7 @@ import unittest
 
 import telegram
 
-import commands.getacronym as getacronym
+import telegram_commands.getacronym as getacronym
 
 
 class TestGetGame(unittest.TestCase):

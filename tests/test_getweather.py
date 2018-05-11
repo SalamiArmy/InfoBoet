@@ -2,7 +2,7 @@ import ConfigParser
 import unittest
 import telegram
 
-import commands.getweather as getweather
+import telegram_commands.getweather as getweather
 
 
 class TestGetWeather(unittest.TestCase):

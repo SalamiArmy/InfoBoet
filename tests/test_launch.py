@@ -2,7 +2,7 @@ import ConfigParser
 import unittest
 import telegram
 
-import commands.launch as launch
+import telegram_commands.launch as launch
 
 
 class TestLaunch(unittest.TestCase):

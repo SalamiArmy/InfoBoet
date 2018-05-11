@@ -6,7 +6,7 @@ import telegram
 from google.appengine.ext import ndb
 from google.appengine.ext import testbed
 from google.appengine.api import urlfetch
-from commands import define
+from telegram_commands import define
 
 import main
 

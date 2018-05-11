@@ -3,7 +3,7 @@ import ConfigParser
 import unittest
 import telegram
 
-import commands.translate as translate
+import telegram_commands.translate as translate
 
 
 class TestTorrent(unittest.TestCase):

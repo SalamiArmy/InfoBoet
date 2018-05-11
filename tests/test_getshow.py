@@ -1,11 +1,12 @@
 import ConfigParser
 import unittest
-import telegram
-from commands import add
-import main
 
+import telegram
 from google.appengine.ext import ndb
 from google.appengine.ext import testbed
+
+import main
+from commands import add
 
 
 class TestGetShow(unittest.TestCase):

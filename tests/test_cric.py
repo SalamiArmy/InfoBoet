@@ -3,7 +3,7 @@ import ConfigParser
 import unittest
 import telegram
 
-import commands.cric as cric
+import telegram_commands.cric as cric
 
 
 class TestCric(unittest.TestCase):
