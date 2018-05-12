@@ -1,6 +1,6 @@
 import unittest
 
-import tests.the_rules as rules
+import telegram_tests.the_rules as rules
 
 
 class TestTheRules(unittest.TestCase):
