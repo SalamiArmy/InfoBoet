@@ -93,7 +93,7 @@ def Send_Links(chat_id, user, requestText, args, keyConfig, total_number_to_send
             return errorMsg
         else:
             errorMsg = 'I\'m sorry ' + (user if not user == '' else 'Dave') + \
-                       ', I\'m afraid I can\'t find any images for ' + \
+                       ', I\'m afraid I can\'t find any links for ' + \
                        string.capwords(requestText.encode('utf-8'))
             return errorMsg
 
