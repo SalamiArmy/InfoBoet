@@ -1,9 +1,7 @@
 # coding=utf-8
 import urllib
-import urllib2
 
 from bs4 import BeautifulSoup
-import re
 
 
 def run(bot, chat_id, user, keyConfig, message, totalResults=1):
@@ -35,7 +33,7 @@ def acronym_results_printer(request, list):
         encodedItem = item.encode('utf-8')
         if (encodedItem != 'None'):
             AllGameDetailsFormatted += '\n'
-            for char in encodedItem.replace('Definition', '').replace('***', ''):
+            for char in encodedItem.replace('Definition', '').replace('*', '\*'):
                 if char.isupper():
                     AllGameDetailsFormatted += '*' + char + '*'
                 else:
