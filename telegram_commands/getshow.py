@@ -16,6 +16,7 @@ def run(bot, chat_id, user, keyConfig, message, totalResults=1):
     data = json.load(urllib.urlopen(showsUrl + requestText))
     logging.info('got show data:')
     logging.info(data)
+    result = ''
     if len(data) >= 1:
         formattedShowSummary = re.sub(r'<[^>]*?>', '',
                                       str(data[0]['show']['summary'])
@@ -29,14 +30,13 @@ def run(bot, chat_id, user, keyConfig, message, totalResults=1):
         image_original = ''
         if 'image' in data[0]['show'] and data[0]['show']['image'] is not None:
             image_original = data[0]['show']['image']['original'].encode('utf-8')
-        details = (user if not user == '' else 'Dave') + ', ' + fullShowDetails + '\n' + \
+        result = (user if not user == '' else 'Dave') + ', ' + fullShowDetails + '\n' + \
                   formattedShowSummary + '\n' + image_original
-        return details
     else:
         result = 'I\'m sorry ' + (user if not user == '' else 'Dave') + \
                  ', I\'m afraid I cannot find the TV show ' + \
                  requestText.title()
-        return result
+    bot.sendMessage(chat_id=chat_id, text=result)
 
 
 def parse_show_details(data):
