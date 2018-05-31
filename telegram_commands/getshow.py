@@ -36,7 +36,7 @@ def run(bot, chat_id, user, keyConfig, message, totalResults=1):
         result = 'I\'m sorry ' + (user if not user == '' else 'Dave') + \
                  ', I\'m afraid I cannot find the TV show ' + \
                  requestText.title()
-    bot.sendMessage(chat_id=chat_id, text=result)
+    bot.sendMessage(chat_id=chat_id, text=result, parse_mode='Markdown')
 
 
 def parse_show_details(data):
