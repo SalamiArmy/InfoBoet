@@ -36,30 +36,85 @@ def setHookIDValue(repo_url, NewValue):
     es.currentValue = str(NewValue)
     es.put()
 
-class CommandsValue(ndb.Model):
+class Web_CommandsValue(ndb.Model):
     # key name: command_name
     codeValue = ndb.TextProperty(indexed=False, default='')
 
-def setCommandCode(command_name, NewValue):
-    es = CommandsValue.get_or_insert(command_name)
+def setWeb_CommandCode(command_name, NewValue):
+    es = Web_CommandsValue.get_or_insert(command_name)
+    es.codeValue = str(NewValue)
+    es.put()
+
+class Telegram_CommandsValue(ndb.Model):
+    # key name: command_name
+    codeValue = ndb.TextProperty(indexed=False, default='')
+
+def setTelegram_CommandCode(command_name, NewValue):
+    es = Telegram_CommandsValue.get_or_insert(command_name)
+    es.codeValue = str(NewValue)
+    es.put()
+
+class Discord_CommandsValue(ndb.Model):
+    # key name: command_name
+    codeValue = ndb.TextProperty(indexed=False, default='')
+
+def setDiscord_CommandCode(command_name, NewValue):
+    es = Discord_CommandsValue.get_or_insert(command_name)
+    es.codeValue = str(NewValue)
+    es.put()
+
+class Slack_CommandsValue(ndb.Model):
+    # key name: command_name
+    codeValue = ndb.TextProperty(indexed=False, default='')
+
+def setSlack_CommandCode(command_name, NewValue):
+    es = Slack_CommandsValue.get_or_insert(command_name)
+    es.codeValue = str(NewValue)
+    es.put()
+
+class Facebook_CommandsValue(ndb.Model):
+    # key name: command_name
+    codeValue = ndb.TextProperty(indexed=False, default='')
+
+def setFacebook_CommandCode(command_name, NewValue):
+    es = Facebook_CommandsValue.get_or_insert(command_name)
+    es.codeValue = str(NewValue)
+    es.put()
+
+class Skype_CommandsValue(ndb.Model):
+    # key name: command_name
+    codeValue = ndb.TextProperty(indexed=False, default='')
+
+def setSkype_CommandCode(command_name, NewValue):
+    es = Skype_CommandsValue.get_or_insert(command_name)
     es.codeValue = str(NewValue)
     es.put()
 
 # ================================
 
 def run(bot, chat_id, user='Dave', keyConfig=None, message='', totalResults=1):
-    request_text = str(message)
-    repo_url, request_token = parse_repo_url_and_token(request_text)
-    stored_token = getTokenValue(repo_url)
-    if request_token != '':
-        if stored_token != request_token:
-            create_hook(bot, chat_id, keyConfig, repo_url, request_token)
+    chat_id_str = str(chat_id)
+    logging.info('Checking the chat id of ' + chat_id_str + ' against the known admins ' +
+                 keyConfig.get('BotAdministration', 'TESTING_TELEGRAM_PRIVATE_CHAT_ID') + ' and ' +
+                 keyConfig.get('BotAdministration', 'TESTING_TELEGRAM_GROUP_CHAT_ID') + ' and ' +
+                 keyConfig.get('BotAdministration', 'TESTING_TELEGRAM_ALT_GROUP_CHAT_ID'))
+    if chat_id_str == keyConfig.get('BotAdministration', 'TESTING_TELEGRAM_PRIVATE_CHAT_ID') or \
+                    chat_id_str == keyConfig.get('BotAdministration', 'TESTING_TELEGRAM_GROUP_CHAT_ID') or \
+                    chat_id_str == keyConfig.get('BotAdministration', 'TESTING_TELEGRAM_ALT_GROUP_CHAT_ID'):
+        request_text = str(message)
+        repo_url, request_token = parse_repo_url_and_token(request_text)
+        stored_token = getTokenValue(repo_url)
+        if request_token != '':
+            if stored_token != request_token:
+                create_hook(bot, chat_id_str, keyConfig, repo_url, request_token)
+            else:
+                bot.sendMessage(chat_id=chat_id, text='The commands at ' + repo_url + ' have already been hooked.')
         else:
-            bot.sendMessage(chat_id=chat_id, text='The commands at ' + repo_url + ' have already been hooked.')
+            bot.sendMessage(chat_id=chat_id, text='A Github token is required. ' +
+                                                  'With permission to read all commands in the repo ' +
+                                                  'and create hooks.')
     else:
-        bot.sendMessage(chat_id=chat_id, text='A Github token is required. ' +
-                                              'With permission to read all commands in the repo ' +
-                                              'and create hooks.')
+        bot.sendMessage(chat_id=chat_id, text='GitHub Command Hooking reserved for admins only.')
 
 def parse_repo_url_and_token(request_text):
     repo_url = request_text.split(' ')[0] + '/' + request_text.split(' ')[1]
@@ -79,7 +134,10 @@ def create_hook(bot, chat_id, keyConfig, repo_url, token):
     if raw_data.status_code >= 200 and raw_data.status_code < 300:
         if 'id' in json_data:
             setHookIDValue(repo_url, json_data['id'])
-            bot.sendMessage(chat_id=chat_id, text='Webhook created:\n' + raw_data.content)
+            bot.sendMessage(chat_id=chat_id, text='Webhook created' +
+                                                  (':\n' + json_data['config']['test_url']
+                                                   if 'config' in json_data and 'test_url' in json_data['config']
+                                                   else ''))
             return True
         else:
             bot.sendMessage(chat_id=chat_id, text='Webhook creation failed:\n' + raw_data.content)

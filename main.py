@@ -353,6 +353,46 @@ class GithubWebhookHandler(webapp2.RequestHandler):
             else:
                 return json_data['message']
 
+def set_platform_command_code(platform, command_name, command_code):
+    if platform == 'web':
+        add.setWeb_CommandCode(command_name, command_code)
+    elif platform == 'telegram':
+        add.setTelegram_CommandCode(command_name, command_code)
+    elif platform == 'slack':
+        add.setSlack_CommandCode(command_name, command_code)
+    elif platform == 'discord':
+        add.setDiscord_CommandCode(command_name, command_code)
+    elif platform == 'facebook':
+        add.setFacebook_CommandCode(command_name, command_code)
+    elif platform == 'skype':
+        add.setSkype_CommandCode(command_name, command_code)
+
+def get_platform_command_code(platform, command_name):
+    if platform == 'web':
+        get_value_from_data_store = add.Web_CommandsValue.get_by_id(command_name)
+    elif platform == 'telegram':
+        get_value_from_data_store = add.Telegram_CommandsValue.get_by_id(command_name)
+    elif platform == 'slack':
+        get_value_from_data_store = add.Slack_CommandsValue.get_by_id(command_name)
+    elif platform == 'discord':
+        get_value_from_data_store = add.Discord_CommandsValue.get_by_id(command_name)
+    elif platform == 'facebook':
+        get_value_from_data_store = add.Facebook_CommandsValue.get_by_id(command_name)
+    elif platform == 'skype':
+        get_value_from_data_store = add.Skype_CommandsValue.get_by_id(command_name)
+    if get_value_from_data_store:
+        command_code = str(get_value_from_data_store.codeValue)
+        return load_command_module(command_name, command_code)
+    return ''
+
+def load_command_module(module_name, command_code):
+    if module_name != '' and command_code != '':
+        module = sys.modules.setdefault(module_name, imp.new_module(module_name))
+        logging.info('begin loading module ' + module_name)
+        exec command_code in module.__dict__
+        return module
+    return None
+
 def load_code_as_module(module_name):
     if module_name != '':
         get_value_from_data_store = add.CommandsValue.get_by_id(module_name)

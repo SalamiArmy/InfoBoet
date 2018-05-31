@@ -1,6 +1,4 @@
 # coding=utf-8
-import random
-
 import soundcloud
 from google.appengine.ext import ndb
 
