@@ -35,7 +35,7 @@ class TestGetShow(unittest.TestCase):
         bot = telegram.Bot(keyConfig.get('BotIDs', 'TELEGRAM_BOT_ID'))
         chatId = keyConfig.get('BotAdministration', 'TESTING_TELEGRAM_PRIVATE_CHAT_ID')
 
-        add.setTelegram_CommandCode('getshow', open('../commands/getshow.py').read())
+        add.setTelegram_CommandCode('getshow', open('../telegram_commands/getshow.py').read())
         getshow = main.load_code_as_module('getshow')
         getshow.run(bot, chatId, 'Admin', keyConfig, requestText)
 

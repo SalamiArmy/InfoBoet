@@ -395,7 +395,7 @@ def load_command_module(module_name, command_code):
 
 def load_code_as_module(module_name):
     if module_name != '':
-        get_value_from_data_store = add.CommandsValue.get_by_id(module_name)
+        get_value_from_data_store = add.Telegram_CommandsValue.get_by_id(module_name)
         if get_value_from_data_store:
             command_code = str(get_value_from_data_store.codeValue)
             if command_code != '':
@@ -406,7 +406,7 @@ def load_code_as_module(module_name):
     return None
 
 def ReloadAllCommands():
-    es = add.CommandsValue.query().fetch()
+    es = add.Telegram_CommandsValue.query().fetch()
     if len(es) > 0:
         for mod in es:
             command_name = str(mod.key._Key__pairs[0][1])

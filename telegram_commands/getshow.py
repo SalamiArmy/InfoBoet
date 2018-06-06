@@ -17,6 +17,7 @@ def run(bot, chat_id, user, keyConfig, message, totalResults=1):
     logging.info('got show data:')
     logging.info(data)
     result = ''
+    image_original = ''
     if len(data) >= 1:
         formattedShowSummary = re.sub(r'<[^>]*?>', '',
                                       str(data[0]['show']['summary'])
@@ -27,30 +28,30 @@ def run(bot, chat_id, user, keyConfig, message, totalResults=1):
                                        .replace(']', '')
                                        .replace('\\', ''))
         fullShowDetails = parse_show_details(data[0]['show'])
-        image_original = ''
-        if 'image' in data[0]['show'] and data[0]['show']['image'] is not None:
-            image_original = data[0]['show']['image']['original'].encode('utf-8')
+        if 'image' in str(data[0]['show']) and str(data[0]['show']['image']) is not None:
+            image_original = str(data[0]['show']['image']['original'])
         result = (user if not user == '' else 'Dave') + ', ' + fullShowDetails + '\n' + \
-                  formattedShowSummary + '\n' + image_original
+                  formattedShowSummary# + '\n' + image_original
     else:
-        result = 'I\'m sorry ' + (user if not user == '' else 'Dave') + \
+        result = 'I\'m sorry ' + str(user if not user == '' else 'Dave') + \
                  ', I\'m afraid I cannot find the TV show ' + \
-                 requestText.title()
+                 str(requestText)
+    print image_original
     bot.sendMessage(chat_id=chat_id, text=result, parse_mode='Markdown')
 
 
 def parse_show_details(data):
-    fullShowDetails = str(data['name']) + ': ' + \
+    fullShowDetails = str(data['name']) + ' Is ' + \
                       ('An' if data['status'][0] in ['A', 'E', 'I', 'O', 'U'] else 'A') + ' ' + \
                       str(data['status']) + ' ' + \
                       str(data['type']) + ' ' + \
                       ', '.join(data['genres'])
     if data['premiered'] != None:
-        fullShowDetails += '\nPremiere: ' + data['premiered']
+        fullShowDetails += '\nPremiere: ' + str(data['premiered'])
     showSchedule = ', '.join(['{0}s'.format(day) for day in data['schedule']['days']]) + \
-                   (' at ' + data['schedule']['time'] if data['schedule']['time'] != '' else '')
+                   (' at ' + str(data['schedule']['time']) if str(data['schedule']['time']) != '' else '')
     fullShowDetails += '\nRuntime: ' + str(data['runtime']) + ' mins' + \
                        (' ' + showSchedule if showSchedule != '' else '')
     if 'officialSite' in data and data['officialSite'] is not None:
-        fullShowDetails += '\n' + data['officialSite']
+        fullShowDetails += '\n' + str(data['officialSite'])
     return fullShowDetails
