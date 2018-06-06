@@ -36,7 +36,8 @@ def run(bot, chat_id, user, keyConfig, message, totalResults=1):
         result = 'I\'m sorry ' + str(user if not user == '' else 'Dave') + \
                  ', I\'m afraid I cannot find the TV show ' + \
                  str(requestText)
-    print image_original
+    if (image_original != ''):
+        bot.sendPhoto(chat_id=chat_id, photo=image_original)
     bot.sendMessage(chat_id=chat_id, text=result, parse_mode='Markdown')
 
 
