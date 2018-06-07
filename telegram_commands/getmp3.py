@@ -1,10 +1,9 @@
 # coding=utf-8
 import json
 import urllib
-import string
-from google.appengine.ext import ndb
 from google.appengine.api import urlfetch
 
+import main
 getvid = main.get_platform_command_code('telegram', 'getvid')
 
 def run(bot, chat_id, user, keyConfig, message, totalResults=1):
