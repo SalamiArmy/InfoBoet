@@ -13,9 +13,10 @@ def run(bot, chat_id, user, keyConfig, message, totalResults=1):
                 fullAnswer += question + '?\n'
         if len(allAnswers) > 1:
             for pod in allAnswers[1:]:
-                for answer in pod.format['plaintext']:
-                    if answer is not None:
-                        fullAnswer += answer + '.\n'
+                if 'plaintext' in pod.format:
+                    for answer in pod.format['plaintext']:
+                        if answer is not None:
+                            fullAnswer += answer + '.\n'
         result = (user + ': ' if not user == '' else '') + fullAnswer
     else:
         result = 'I\'m sorry ' + (user if not user == '' else 'Dave') + ', I\'m afraid I can\'t find any answers for '\
