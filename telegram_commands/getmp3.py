@@ -5,7 +5,7 @@ import string
 from google.appengine.ext import ndb
 from google.appengine.api import urlfetch
 
-import telegram_commands.getvid as getvid
+getvid = main.get_platform_command_code('telegram', 'getvid')
 
 def run(bot, chat_id, user, keyConfig, message, totalResults=1):
     requestText = str(message).replace(bot.name, "").strip()
