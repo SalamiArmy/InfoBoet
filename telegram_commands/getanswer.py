@@ -6,7 +6,7 @@ def run(bot, chat_id, user, keyConfig, message, totalResults=1):
     client = tungsten.Tungsten(keyConfig.get('Wolfram', 'WOLF_APP_ID'))
     result = client.query(requestText)
     allAnswers = result.pods
-    if len(allAnswers) > 0:
+    if len(allAnswers) > 0 and 'plaintext' in allAnswers[0].format:
         fullAnswer = ''
         for question in allAnswers[0].format['plaintext']:
             if question is not None:
