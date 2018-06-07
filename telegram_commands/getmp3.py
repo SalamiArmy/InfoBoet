@@ -36,6 +36,6 @@ def Google_Custom_Search(args):
     return data, total_results, results_this_page
 
 def is_valid_video(video_url, chat_id):
-    if video_url != '' and not wasPreviouslySeenVideo(video_url, chat_id):
+    if video_url != '' and not getvid.wasPreviouslySeenVideo(video_url, chat_id):
         return True
     return False
