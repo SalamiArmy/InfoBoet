@@ -27,7 +27,7 @@ class TestTelegramWebhookHandlerPost(unittest.TestCase):
         ndb.get_context().clear_cache()
 
     def integration_test_translate_post(self):
-        add.setCommandCode('getshow', open('../commands/getshow.py').read())
+        add.setTelegram_CommandCode('getshow', open('../commands/getshow.py').read())
         newRequestObject = main.TelegramWebhookHandler()
         class Object(object):
             pass
@@ -40,7 +40,7 @@ class TestTelegramWebhookHandlerPost(unittest.TestCase):
         newRequestObject.post()
 
     def integration_test_reverseimage_post(self):
-        add.setCommandCode('reverseimage', open('../commands/reverseimage.py').read())
+        add.setTelegram_CommandCode('reverseimage', open('../commands/reverseimage.py').read())
         newRequestObject = main.TelegramWebhookHandler()
         class Object(object):
             pass
@@ -53,7 +53,7 @@ class TestTelegramWebhookHandlerPost(unittest.TestCase):
         newRequestObject.post()
 
     def integration_test_getlink_post(self):
-        add.setCommandCode('getlink', open('../commands/getlink.py').read())
+        add.setTelegram_CommandCode('getlink', open('../commands/getlink.py').read())
         newRequestObject = main.TelegramWebhookHandler()
         class Object(object):
             pass
