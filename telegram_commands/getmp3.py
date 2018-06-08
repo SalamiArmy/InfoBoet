@@ -5,7 +5,7 @@ from google.appengine.ext import ndb
 from google.appengine.api import urlfetch
 
 import main
-getvid = main.load_code_as_module('getvid')
+getvid = main.get_platform_command_code('telegram', 'getvid')
 
 class WhosHeardMP3Urls(ndb.Model):
     # key name: MP3Url
