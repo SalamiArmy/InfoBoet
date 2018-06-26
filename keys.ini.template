@@ -53,3 +53,6 @@ KEY: {Your OMDB API key}
 [IBM]
 username: {Your IBM BlueMix username}
 password: {Your IBM BlueMix password}
+
+[Fixer]
+API_KEY: {Your Fixer API Key}

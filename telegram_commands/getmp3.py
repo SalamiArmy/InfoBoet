@@ -51,9 +51,9 @@ def run(bot, chat_id, user, keyConfig, message, totalResults=1):
         viddescription = str(data['items'][offset_this_page]['snippet']['description'])
         offset_this_page += 1
         if is_valid_video(vidlink, chat_id):
-            bot.sendMessage(chat_id=chat_id, text=(user if not user == '' else 'Dave') + ', *' + vidtitle + '*' +
-                                                  ', ' + viddescription +
-                                                  '\nhttps://youtube2mp3api.com/@api/button/mp3/' + vidlink,
+            bot.sendMessage(chat_id=chat_id,
+                            text=(user if not user == '' else 'Dave') + ', *' + vidtitle + '*, ' + viddescription +
+                                 '\nhttps://youtube2mp3api.com/@api/button/mp3/' + vidlink,
                             parse_mode='Markdown')
             return
 
