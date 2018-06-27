@@ -1,12 +1,12 @@
 import ConfigParser
 import unittest
 import telegram
+from commands import add
 
-import telegram_commands.getlink as getlink
 from google.appengine.ext import ndb
 from google.appengine.ext import testbed
 
-class TestGetLink(unittest.TestCase):
+class TestGetMP3(unittest.TestCase):
     def setUp(self):
         # First, create an instance of the Testbed class.
         self.testbed = testbed.Testbed()
@@ -23,35 +23,26 @@ class TestGetLink(unittest.TestCase):
         # using ndb.get_context().set_cache_policy(False)
         ndb.get_context().clear_cache()
 
-    def test_getlink(self):
-        requestText = 'the cancun typhoon'
+    def test_getmp3(self):
+        add.setTelegram_CommandCode('getvid', open('../telegram_commands/getvid.py').read())
+        import telegram_commands.getmp3 as getmp3
+        requestText = 'trippy swirl'
 
         keyConfig = ConfigParser.ConfigParser()
         keyConfig.read(["keys.ini", "..\keys.ini"])
-        keyConfig.read(["bot_keys.ini", "..\\bot_keys.ini"])
         bot = telegram.Bot(keyConfig.get('BotIDs', 'TELEGRAM_BOT_ID'))
         chatId = keyConfig.get('BotAdministration', 'TESTING_TELEGRAM_PRIVATE_CHAT_ID')
 
-        getlink.run(bot, chatId, 'SalamiArmy', keyConfig, requestText)
+        getmp3.run(bot, chatId, 'Admin', keyConfig, requestText)
 
-    def test_getlink_multi(self):
-        requestText = 'world of warcraft classic'
-
-        keyConfig = ConfigParser.ConfigParser()
-        keyConfig.read(["keys.ini", "..\keys.ini"])
-        keyConfig.read(["bot_keys.ini", "..\\bot_keys.ini"])
-        bot = telegram.Bot(keyConfig.get('BotIDs', 'TELEGRAM_BOT_ID'))
-        chatId = keyConfig.get('BotAdministration', 'TESTING_TELEGRAM_PRIVATE_CHAT_ID')
-
-        getlink.run(bot, chatId, 'SalamiArmy', keyConfig, requestText, 10)
-
-    def test_getlink_group(self):
-        requestText = 'pussy wrecked by giant dildo'
+    def test_getmp3_group(self):
+        add.setTelegram_CommandCode('getvid', open('../telegram_commands/getvid.py').read())
+        import telegram_commands.getmp3 as getmp3
+        requestText = 'hippie sabotage - high enough'
 
         keyConfig = ConfigParser.ConfigParser()
         keyConfig.read(["keys.ini", "..\keys.ini"])
-        keyConfig.read(["bot_keys.ini", "..\\bot_keys.ini"])
-        bot = telegram.Bot(keyConfig.get('BotIDs', 'TESTING_TELEGRAM_BOT_ID'))
+        bot = telegram.Bot(keyConfig.get('BotIDs', 'TELEGRAM_GROUP_CHAT_ID'))
         chatId = keyConfig.get('BotAdministration', 'TESTING_TELEGRAM_GROUP_CHAT_ID')
 
-        getlink.run(bot, chatId, 'SalamiArmy', keyConfig, requestText)
+        getmp3.run(bot, chatId, 'Admin', keyConfig, requestText)

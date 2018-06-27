@@ -30,13 +30,12 @@ def run(bot, chat_id, user, keyConfig, message, totalResults=1):
         fullShowDetails = parse_show_details(data[0]['show'])
         if 'image' in str(data[0]['show']) and str(data[0]['show']['image']) is not None:
             image_original = str(data[0]['show']['image']['original'])
-        result = (user if not user == '' else 'Dave') + ', ' + fullShowDetails + '\n' + \
-                  formattedShowSummary# + '\n' + image_original
+        result = (user if not user == '' else 'Dave') + ', ' + fullShowDetails + '\n' + formattedShowSummary
     else:
         result = 'I\'m sorry ' + str(user if not user == '' else 'Dave') + \
                  ', I\'m afraid I cannot find the TV show ' + \
                  str(requestText)
-    if (image_original != ''):
+    if image_original != '':
         bot.sendPhoto(chat_id=chat_id, photo=image_original)
     bot.sendMessage(chat_id=chat_id, text=result, parse_mode='Markdown')
 
