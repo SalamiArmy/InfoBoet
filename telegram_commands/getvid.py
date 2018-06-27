@@ -5,8 +5,6 @@ import string
 from google.appengine.ext import ndb
 from google.appengine.api import urlfetch
 
-CommandName = 'getvid'
-
 class WhosSeenVideoUrls(ndb.Model):
     # key name: VideoUrl
     whoseSeenVideo = ndb.StringProperty(indexed=False, default='')
