@@ -25,5 +25,5 @@ def get_airport_code(cityName):
     data = BeautifulSoup(code, 'html.parser')
     error = data.find('b').string
     rawAirportCode = str(data.findAll('b')[1]) if error != 'No matching entries found...' else ''
-    airportCode = rawAirportCode[4:rawAirportCode.index(')<br>')] if len(rawAirportCode) > 15 else ''
+    airportCode = rawAirportCode[4:rawAirportCode.index(')<br/>')] if len(rawAirportCode) > 13 else ''
     return airportCode, error.replace('Here are the results of your search:', '')
