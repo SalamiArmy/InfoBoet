@@ -18,6 +18,6 @@ def run(keyConfig, message, totalResults=1):
                 return airportCode
             else:
                 if error:
-                    return 'I\'m sorry Dave' + error
+                    return 'I\'m sorry Dave, ' + error
                 else:
                     return 'I\'m sorry Dave, I\'m afraid I can\'t quite place ' + str(requestText) + '.'

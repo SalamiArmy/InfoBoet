@@ -21,7 +21,7 @@ def run(bot, chat_id, user, keyConfig, message, totalResults=1):
             else:
                 if error:
                     bot.sendMessage(chat_id=chat_id,
-                                    text='I\'m sorry ' + (user if not user == '' else 'Dave') +
+                                    text='I\'m sorry ' + (user if not user == '' else 'Dave') + ', ' +
                                          error)
                 else:
                     bot.sendMessage(chat_id=chat_id,
