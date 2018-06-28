@@ -19,7 +19,7 @@ class TestPlace(unittest.TestCase):
         getflight.run(bot, chatId, 'Admin', keyConfig, requestText)
 
     def test_getonewayflight(self):
-        requestText = 'DUR DUB 2019-04-14'
+        requestText = 'DUR DUB 2018-08-15'
 
         keyConfig = ConfigParser.ConfigParser()
         keyConfig.read(["keys.ini", "..\keys.ini"])

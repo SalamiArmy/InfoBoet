@@ -7,7 +7,7 @@ telegramgetflight = main.get_platform_command_code('telegram', 'getflight')
 
 def run(keyConfig, message, totalResults=1):
     requestText = message.strip()
-    if (requestText[3] == " " and requestText[7] == " " and requestText[12] == "-" and requestText[15] == "-" and requestText[18] == " " and requestText[23] == "-" and requestText[26] == "-"):
+    if (requestText[3] == " " and requestText[7] == " " and requestText[12] == "-" and requestText[15] == "-" and len(requestText) > 19 and requestText[18] == " " and requestText[23] == "-" and requestText[26] == "-"):
         return telegramgetflight.get_returnflights(requestText)
     else:
         if (requestText[3] == " " and requestText[7] == " " and requestText[12] == "-" and requestText[15] == "-"):
