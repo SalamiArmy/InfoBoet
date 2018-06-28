@@ -14,7 +14,7 @@ def run(keyConfig, message, totalResults=1):
             return telegramgetflight.get_flights(requestText)
         else:
             airportCode, error = telegramgetflight.get_airport_code(requestText)
-            if airportCode != 'No matching entries found...':
+            if airportCode != '':
                 return airportCode
             else:
                 if error:

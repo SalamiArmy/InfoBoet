@@ -8,7 +8,7 @@ import telegram_commands.getflight as getflight
 
 class TestPlace(unittest.TestCase):
     def test_getairport(self):
-        requestText = 'lucerne'
+        requestText = 'timbuktu'
 
         keyConfig = ConfigParser.ConfigParser()
         keyConfig.read(["keys.ini", "..\keys.ini"])

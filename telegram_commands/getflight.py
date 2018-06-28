@@ -15,7 +15,7 @@ def run(bot, chat_id, user, keyConfig, message, totalResults=1):
             return True
         else:
             airportCode, error = get_airport_code(requestText)
-            if airportCode != 'No matching entries found...':
+            if airportCode != '':
                 bot.sendMessage(chat_id=chat_id, text=airportCode)
                 return True
             else:
