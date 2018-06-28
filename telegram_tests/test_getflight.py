@@ -7,8 +7,30 @@ import telegram_commands.getflight as getflight
 
 
 class TestPlace(unittest.TestCase):
-    def test_place(self):
+    def test_getairport(self):
         requestText = 'lucerne'
+
+        keyConfig = ConfigParser.ConfigParser()
+        keyConfig.read(["keys.ini", "..\keys.ini"])
+        keyConfig.read(["bot_keys.ini", "..\\bot_keys.ini"])
+        bot = telegram.Bot(keyConfig.get('BotIDs', 'TELEGRAM_BOT_ID'))
+        chatId = keyConfig.get('BotAdministration', 'TESTING_TELEGRAM_PRIVATE_CHAT_ID')
+
+        getflight.run(bot, chatId, 'Admin', keyConfig, requestText)
+
+    def test_getonewayflight(self):
+        requestText = 'DUR DUB 2019-04-14'
+
+        keyConfig = ConfigParser.ConfigParser()
+        keyConfig.read(["keys.ini", "..\keys.ini"])
+        keyConfig.read(["bot_keys.ini", "..\\bot_keys.ini"])
+        bot = telegram.Bot(keyConfig.get('BotIDs', 'TELEGRAM_BOT_ID'))
+        chatId = keyConfig.get('BotAdministration', 'TESTING_TELEGRAM_PRIVATE_CHAT_ID')
+
+        getflight.run(bot, chatId, 'Admin', keyConfig, requestText)
+
+    def test_getreturnflight(self):
+        requestText = 'DUR DUB 2019-04-14 2019-04-16'
 
         keyConfig = ConfigParser.ConfigParser()
         keyConfig.read(["keys.ini", "..\keys.ini"])
