@@ -39,7 +39,14 @@ def get_airport_code(cityName):
     data = BeautifulSoup(code, 'html.parser')
     error = data.find('b').string
     rawAirportCode = str(data.findAll('b')[1]) if error != 'No matching entries found...' else ''
-    airportCode = rawAirportCode[4:rawAirportCode.index(')<br/>')] if len(rawAirportCode) > 13 else ''
+    if rawAirportCode != '':
+        if rawAirportCode.replace('<b>', '').replace('</b>', '') != cityName:
+            airportCode = rawAirportCode[4:rawAirportCode.index(')<br/>')] if len(rawAirportCode) > 13 else ''
+        else:
+            airportCode = str(data.findAll('center')[0])\
+                .replace('<center>\n<b>Airport list:</b><br/>\n\t\t\n\t\t\t', '')\
+                .replace('<br/>\n\t\t\t', '\n')\
+                .replace('<br/>\n<br/><br/>\n<!-- /tomany -->\n<!-- nomatch -->\n<p align="CENTER"><b><a href="index.php">Search again?</a></b></p>\n</center>', '')
     return airportCode, error.replace('Here are the results of your search:', '')
 
 def get_flights(requestText):
