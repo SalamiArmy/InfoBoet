@@ -14,8 +14,8 @@ def run(bot, chat_id, user, keyConfig, message, totalResults=1):
     else:
         data = wiki_search(requestText)
         if 'query' in data and len(data['query']['search']) >= 1:
-            result = (user + ': ' if not user == '' else '') + data['query']['search'][0]['snippet']
-                    .replace('[', '\[')
+            result = (user + ': ' if not user == '' else '') + data['query']['search'][0]['snippet']\
+                    .replace('[', '\[')\
                     .replace(']', '\]') +\
            '\nhttps://en.wikiquote.org/wiki/' +\
            urllib.quote(data['query']['search'][0]['title'].encode('utf-8'))
