@@ -27,7 +27,7 @@ def run(bot, chat_id, user, keyConfig, message, totalResults=1):
                    requestText.encode('utf-8') + '.'
     bot.sendMessage(chat_id=chat_id, text=result
                     .replace('<span class="searchmatch">', '*')
-                    .replace('</span>', '*'))
+                    .replace('</span>', '*'), parse_mode='Markdown')
 
 
 def wiki_search(requestText):
