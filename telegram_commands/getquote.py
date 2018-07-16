@@ -8,9 +8,11 @@ def run(bot, chat_id, user, keyConfig, message, totalResults=1):
 
     data = wiki_search('%22' + requestText + '%22')
     if 'query' in data and len(data['query']['search']) >= 1:
-        result = (user + ': ' if not user == '' else '') + data['query']['search'][0]['snippet'] +\
-               '\nhttps://en.wikiquote.org/wiki/' +\
-               urllib.quote(data['query']['search'][0]['title'].encode('utf-8'))
+        result = (user + ': ' if not user == '' else '') + data['query']['search'][0]['snippet']\
+                .replace('[', '\[')\
+                .replace(']', '\]') +\
+       '\nhttps://en.wikiquote.org/wiki/' +\
+       urllib.quote(str(data['query']['search'][0]['title']))
     else:
         data = wiki_search(requestText)
         if 'query' in data and len(data['query']['search']) >= 1:
@@ -18,7 +20,7 @@ def run(bot, chat_id, user, keyConfig, message, totalResults=1):
                     .replace('[', '\[')\
                     .replace(']', '\]') +\
            '\nhttps://en.wikiquote.org/wiki/' +\
-           urllib.quote(data['query']['search'][0]['title'].encode('utf-8'))
+           urllib.quote(str(data['query']['search'][0]['title']))
         else:
             result = 'I\'m sorry ' + (user if not user == '' else 'Dave') +\
                    ', I\'m afraid I can\'t find any quotes for ' +\
