@@ -20,5 +20,5 @@ def run(bot, chat_id, user, keyConfig, message, totalResults=1):
                  ', I\'m afraid I can\'t find any urban definitions for ' + str(requestText) + '.'
     try:
         bot.sendMessage(chat_id=chat_id, text=result, parse_mode='Markdown')
-    except BadRequest:
+    except requests.exceptions.BadRequest:
         bot.sendMessage(chat_id=chat_id, text=result)
