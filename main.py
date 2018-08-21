@@ -11,10 +11,8 @@ reload(sys)
 sys.setdefaultencoding('utf8')
 import urllib2
 import imp
-import endpoints
 
 import telegram
-from pymessager.message import Messager
 
 # standard app engine imports
 from google.appengine.ext import ndb
@@ -32,8 +30,6 @@ keyConfig.read(["keys.ini", "..\keys.ini"])
 #Telegram Bot Info
 BASE_TELEGRAM_URL = 'https://api.telegram.org/bot'
 telegramBot = telegram.Bot(keyConfig.get('BotIDs', 'TELEGRAM_BOT_ID'))
-
-facebookBot = Messager(keyConfig.get('BotIDs', 'FACEBOOK_BOT_ID'))
 
 # ================================
 
@@ -68,27 +64,6 @@ def getAllWatches():
 
 def removeFromAllWatches(watch):
     setAllWatchesValue(getAllWatches().replace(',' + watch.replace(',', '%2C'), '').replace(watch.replace(',', '%2C'), ''))
-
-# ================================
-
-class FacebookWebhookHandler(webapp2.RequestHandler):
-    def get(self):
-        verification_code = keyConfig.get('BotIDs', 'FACEBOOK_VERIFICATION_CODE')
-        verify_token = self.request.get('hub.verify_token')
-        if verification_code == verify_token:
-            return self.request.get('hub.challenge')
-
-    def post(self):
-        urlfetch.set_default_fetch_deadline(120)
-        body = json.loads(self.request.body)
-        logging.info('request body:')
-        logging.info(body)
-        self.response.write(json.dumps(body))
-        if 'entry' in body:
-            for entry in body['entry']:
-                for message in entry['messaging']:
-                    if 'message' in message and 'sender' in message:
-                        facebookBot.send_text(message['sender']['id'], 'Hey Boet! I got ' + message['message']['text'])
 
 
 class TelegramWebhookHandler(webapp2.RequestHandler):
@@ -316,16 +291,8 @@ class GithubWebhookHandler(webapp2.RequestHandler):
                                                  '\n' + response,
                                             disable_web_page_preview=True)
                     self.response.write(response)
-                    if response == 'Bad credentials':
-                        raise endpoints.UnauthorizedException()
-                    else:
-                        raise endpoints.InternalServerErrorException()
-            else:
-                raise endpoints.InternalServerErrorException('Internal data store error: no token found ' +
-                                                             'in the data store for ' + repo_url)
         else:
             self.response.write('unrecognized ' + json.dumps(body))
-            raise endpoints.InternalServerErrorException()
 
     def update_commands(self, repo_url, token):
         github_contents_url = 'https://api.github.com/repos/' + repo_url + '/contents/commands'
@@ -426,6 +393,5 @@ app = webapp2.WSGIApplication([
     ('/list_commands', GetCommandsHandler),
     ('/telegram_webhook', TelegramWebhookHandler),
     ('/github_webhook', GithubWebhookHandler),
-    ('/facebook_webhook', FacebookWebhookHandler),
     ('/webhook', WebhookHandler)
 ], debug=True)
