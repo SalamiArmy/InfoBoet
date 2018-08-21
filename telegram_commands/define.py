@@ -35,9 +35,19 @@ def get_define_data(keyConfig, user, requestText):
             print('HTTP Error: ' + definitionUrl + formatted_entry.lower())
         if data and 'results' in data and len(data['results']) > 0 and 'lexicalEntries' in data['results'][0] and len(data['results'][0]['lexicalEntries']) > 0 and 'entries' in data['results'][0]['lexicalEntries'][0] and len(data['results'][0]['lexicalEntries'][0]['entries']) > 0 and 'senses' in data['results'][0]['lexicalEntries'][0]['entries'][0] and len(data['results'][0]['lexicalEntries'][0]['entries'][0]['senses']) > 0 and 'definitions' in data['results'][0]['lexicalEntries'][0]['entries'][0]['senses'][0] and len(data['results'][0]['lexicalEntries'][0]['entries'][0]['senses'][0]['definitions']) > 0:
             pronounce = ''
-            definition = data['results'][0]['lexicalEntries'][0]['entries'][0]['senses'][0]['definitions'][0]
-            if 'results' in data and len(data['results']) > 0 and 'lexicalEntries' in data['results'][0] and len(data['results'][0]['lexicalEntries']) > 0 and 'pronunciations' in data['results'][0]['lexicalEntries'][0] and len(data['results'][0]['lexicalEntries'][0]['pronunciations']) > 0 and 'audioFile' in data['results'][0]['lexicalEntries'][0]['pronunciations'][0]:
+            if 'results' in data and len(data['results']) > 0 and 'lexicalEntries' in data['results'][0] and len(data['results'][0]['lexicalEntries']) > 0 and 'entries' in data['results'][0]['lexicalEntries'][0] and len(data['results'][0]['lexicalEntries'][0]['entries']) > 0 and 'audioFile' in data['results'][0]['lexicalEntries'][0]['entries'][0]:
                 pronounce = data['results'][0]['lexicalEntries'][0]['pronunciations'][0]['audioFile']
-            return (user if not user == '' else 'Dave') + ', ' + formatted_entry + ': ' + definition + ('\n' + pronounce if not pronounce == '' else '')
+            definition = data['results'][0]['lexicalEntries'][0]['entries'][0]['senses'][0]['definitions'][0]
+            synonymsReq = urllib2.Request(definitionUrl + formatted_entry.lower() + '/synonyms')
+            synonymsReq.add_header('app_id', keyConfig.get('OxfordDictionaries', 'ID'))
+            synonymsReq.add_header('app_key', keyConfig.get('OxfordDictionaries', 'KEY'))
+            try:
+                synonymsData = json.load(urllib2.urlopen(synonymsReq))
+            except urllib2.HTTPError:
+                print('HTTP Error for Synonyms: ' + definitionUrl + formatted_entry.lower())
+            synonyms = ''
+            if 'results' in data and len(data['results']) > 0 and 'lexicalEntries' in data['results'][0] and len(data['results'][0]['lexicalEntries']) > 0 and 'pronunciations' in data['results'][0]['lexicalEntries'][0] and len(data['results'][0]['lexicalEntries'][0]['pronunciations']) > 0 and 'senses' in data['results'][0]['lexicalEntries'][0]['pronunciations'][0] and len(data['results'][0]['lexicalEntries'][0]['pronunciations'][0]['senses']) > 0 and 'synonyms' in data['results'][0]['lexicalEntries'][0]['pronunciations'][0]['senses'][0] and len(data['results'][0]['lexicalEntries'][0]['pronunciations'][0]['senses'][0]['synonyms']) > 0:
+                synonyms = ', '.join(o['text'] for o in data['results'][0]['lexicalEntries'][0]['pronunciations'][0]['senses'][0]['synonyms'])
+            return (user if not user == '' else 'Dave') + ', ' + formatted_entry + ': ' + definition + ('\n' + pronounce if not pronounce == '' else '') + ('\n' + synonyms if not synonyms == '' else '')
     return 'I\'m sorry ' + (user if not user == '' else 'Dave') +\
            ', I\'m afraid I can\'t find any definitions for the word ' + requestText
