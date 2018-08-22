@@ -38,13 +38,15 @@ def get_define_data(keyConfig, user, requestText):
             if 'results' in data and len(data['results']) > 0 and 'lexicalEntries' in data['results'][0] and len(data['results'][0]['lexicalEntries']) > 0 and 'entries' in data['results'][0]['lexicalEntries'][0] and len(data['results'][0]['lexicalEntries'][0]['entries']) > 0 and 'audioFile' in data['results'][0]['lexicalEntries'][0]['entries'][0]:
                 pronounce = data['results'][0]['lexicalEntries'][0]['pronunciations'][0]['audioFile']
             definition = data['results'][0]['lexicalEntries'][0]['entries'][0]['senses'][0]['definitions'][0]
-            synonymsReq = urllib2.Request(definitionUrl + formatted_entry.lower() + '/synonyms')
+            synonymsUrl = definitionUrl + formatted_entry.lower() + '/synonyms'
+            synonymsReq = urllib2.Request(synonymsUrl)
             synonymsReq.add_header('app_id', keyConfig.get('OxfordDictionaries', 'ID'))
             synonymsReq.add_header('app_key', keyConfig.get('OxfordDictionaries', 'KEY'))
+            synonymsData = {}
             try:
                 synonymsData = json.load(urllib2.urlopen(synonymsReq))
-            except urllib2.HTTPError:
-                print('HTTP Error for Synonyms: ' + definitionUrl + formatted_entry.lower())
+            except urllib2.HTTPError as e:
+                print('HTTP Error ' + str(e.code) + ' for Synonyms: ' + synonymsUrl)
             synonyms = ''
             if 'results' in synonymsData and len(synonymsData['results']) > 0 and 'lexicalEntries' in synonymsData['results'][0] and len(synonymsData['results'][0]['lexicalEntries']) > 0 and 'entries' in synonymsData['results'][0]['lexicalEntries'][0] and len(synonymsData['results'][0]['lexicalEntries'][0]['entries']) > 0 and 'senses' in synonymsData['results'][0]['lexicalEntries'][0]['entries'][0] and len(synonymsData['results'][0]['lexicalEntries'][0]['entries'][0]['senses']) > 0 and 'synonyms' in synonymsData['results'][0]['lexicalEntries'][0]['entries'][0]['senses'][0] and len(synonymsData['results'][0]['lexicalEntries'][0]['entries'][0]['senses'][0]['synonyms']) > 0:
                 synonyms = ', '.join(o['text'] for o in synonymsData['results'][0]['lexicalEntries'][0]['entries'][0]['senses'][0]['synonyms'])
