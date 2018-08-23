@@ -37,7 +37,10 @@ def run(bot, chat_id, user, keyConfig, message, totalResults=1):
                  str(requestText)
     if image_original != '':
         bot.sendPhoto(chat_id=chat_id, photo=image_original)
-    bot.sendMessage(chat_id=chat_id, text=result, parse_mode='Markdown')
+    try:
+        bot.sendMessage(chat_id=chat_id, text=result, parse_mode='Markdown')
+    except:
+        bot.sendMessage(chat_id=chat_id, text=result)
 
 
 def parse_show_details(data):
