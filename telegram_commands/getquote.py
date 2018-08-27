@@ -25,7 +25,7 @@ def run(bot, chat_id, user, keyConfig, message, totalResults=1):
             result = 'I\'m sorry ' + (user if not user == '' else 'Dave') +\
                    ', I\'m afraid I can\'t find any quotes for ' +\
                    requestText.encode('utf-8') + '.'
-        result=result.replace('<span class="searchmatch">', '*').replace('</span>', '*')
+    result=result.replace('<span class="searchmatch">', '*').replace('</span>', '*')
     try:
         bot.sendMessage(chat_id=chat_id, text=result, parse_mode='Markdown')
     except:
