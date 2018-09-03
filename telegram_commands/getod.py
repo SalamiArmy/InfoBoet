@@ -10,7 +10,7 @@ getlink = main.get_platform_command_code('telegram', 'getlink')
 
 def run(bot, chat_id, user, keyConfig, message, totalResults=1):
     requestText = str(message).strip()
-    requestTest = '+(.mkv|.mp4|.avi|.mov|.mpg|.wmv)  ' + requestText + '  intitle:"index of" -inurl:(jsp|pl|php|html|aspx|htm|cf|shtml) -inurl:(listen77|mp3raid|mp3toss|mp3drug|index_of|wallywashis)'
+    requestText = '+(.mkv|.mp4|.avi|.mov|.mpg|.wmv)  ' + requestText + '  intitle:"index of" -inurl:(jsp|pl|php|html|aspx|htm|cf|shtml) -inurl:(listen77|mp3raid|mp3toss|mp3drug|index_of|wallywashis)'
     keyConfig = ConfigParser.ConfigParser()
     keyConfig.read(["keys.ini", "..\keys.ini"])
 
