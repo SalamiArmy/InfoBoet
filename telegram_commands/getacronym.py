@@ -20,7 +20,7 @@ def run(bot, chat_id, user, keyConfig, message, totalResults=1):
     try:
         bot.sendMessage(chat_id=chat_id, text=result, parse_mode='Markdown')
     except:
-        bot.sendMessage(chat_id=chat_id, text=result)
+        bot.sendMessage(chat_id=chat_id, text=result.replace('*', ''))
 
 
 def acronym_results_parser(code):
@@ -33,7 +33,7 @@ def acronym_results_parser(code):
 def acronym_results_printer(request, list):
     AllGameDetailsFormatted = '*' + str(request) + '* could mean:'
     for item in list:
-        encodedItem = item.encode('utf-8')
+        encodedItem = str(item)
         if (encodedItem != 'None'):
             AllGameDetailsFormatted += '\n'
             for char in encodedItem.replace('Definition', '').replace('*', '\*'):
