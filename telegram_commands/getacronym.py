@@ -9,15 +9,18 @@ def run(bot, chat_id, user, keyConfig, message, totalResults=1):
 
     code = urllib.urlopen('http://www.abbreviations.com/' + requestText).read()
     resultsList = acronym_results_parser(code)
+    result = ''
     if resultsList:
         searchResults = acronym_results_printer(requestText, resultsList)
-        bot.sendMessage(chat_id=chat_id, text=user + ', ' + searchResults,
-                        disable_web_page_preview=True, parse_mode='Markdown')
-        return True
+        result = user + ', ' + searchResults
     else:
-        bot.sendMessage(chat_id=chat_id, text='I\'m sorry ' + (user if not user == '' else 'Dave') + \
+        result='I\'m sorry ' + (user if not user == '' else 'Dave') + \
                                               ', I\'m afraid I can\'t find the acronym *' + \
-                                              requestText.encode('utf-8') + '*', parse_mode='Markdown')
+                                              str(requestText) + '*'
+    try:
+        bot.sendMessage(chat_id=chat_id, text=result, parse_mode='Markdown')
+    except:
+        bot.sendMessage(chat_id=chat_id, text=result)
 
 
 def acronym_results_parser(code):
