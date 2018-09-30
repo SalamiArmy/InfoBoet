@@ -8,7 +8,7 @@ def run(bot, chat_id, user, keyConfig, message, totalResults=1):
     requestText = message.replace(bot.name, "").strip()
     torrentsSearchText = GetTorrentSearchText(requestText)
 
-    if tvSearchText:
+    if torrentsSearchText:
         bot.sendMessage(chat_id=chat_id, text='Serial Magent Link:\n' + str(torrentsSearchText))
     else:
         bot.sendMessage(chat_id=chat_id, text='I\'m sorry ' + (user if not user == '' else 'Dave') + \
