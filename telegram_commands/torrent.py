@@ -21,7 +21,7 @@ def GetTorrentSearchText(text):
         headers={'Accept': 'application/json'})
     tokenData = json.loads(raw_token_data.content)
     fetchUrl = 'https://torrentapi.org/pubapi_v2.php?token=' + tokenData['token'] + '&app_id=hey+boet&mode=search&search_string=' + text
-    Print fetchUrl
+    print(fetchUrl)
     raw_data = urlfetch.fetch(
         url=fetchUrl,
         headers={'Accept': 'application/json'})
