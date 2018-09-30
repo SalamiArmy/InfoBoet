@@ -9,7 +9,7 @@ def run(bot, chat_id, user, keyConfig, message, totalResults=1):
     torrentsSearchText = GetTorrentSearchText(requestText)
 
     if tvSearchText:
-        bot.sendMessage(chat_id=chat_id, text='Serial Magent Link:\n' + torrentsSearchText)
+        bot.sendMessage(chat_id=chat_id, text='Serial Magent Link:\n' + str(torrentsSearchText))
     else:
         bot.sendMessage(chat_id=chat_id, text='I\'m sorry ' + (user if not user == '' else 'Dave') + \
                                               ', I can\'t find any torrents for ' + \
@@ -21,7 +21,7 @@ def GetTorrentSearchText(text):
         headers={'Accept': 'application/json'})
     tokenData = json.loads(raw_data.content)
     raw_data = urlfetch.fetch(
-        url='https://torrentapi.org/pubapi_v2.php?token=' + tokenData + '&app_id=hey+boet&mode=search&search_string=' + text,
+        url='https://torrentapi.org/pubapi_v2.php?token=' + tokenData['token'] + '&app_id=hey+boet&mode=search&search_string=' + text,
         headers={'Accept': 'application/json'})
     torrentData = json.loads(raw_data.content)
     if 'error' not in torrentData and 'torrent_results' in torrentData:
