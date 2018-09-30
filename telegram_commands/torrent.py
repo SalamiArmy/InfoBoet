@@ -16,12 +16,14 @@ def run(bot, chat_id, user, keyConfig, message, totalResults=1):
                                               str(requestText) + '.')
 
 def GetTorrentSearchText(text):
-    raw_data = urlfetch.fetch(
+    raw_token_data = urlfetch.fetch(
         url='https://torrentapi.org/pubapi_v2.php?get_token=get_token&app_id=hey+boet',
         headers={'Accept': 'application/json'})
-    tokenData = json.loads(raw_data.content)
+    tokenData = json.loads(raw_token_data.content)
+    fetchUrl = 'https://torrentapi.org/pubapi_v2.php?token=' + tokenData['token'] + '&app_id=hey+boet&mode=search&search_string=' + text
+    Print fetchUrl
     raw_data = urlfetch.fetch(
-        url='https://torrentapi.org/pubapi_v2.php?token=' + tokenData['token'] + '&app_id=hey+boet&mode=search&search_string=' + text,
+        url=fetchUrl,
         headers={'Accept': 'application/json'})
     torrentData = json.loads(raw_data.content)
     if 'error' not in torrentData and 'torrent_results' in torrentData:
