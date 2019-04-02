@@ -15,8 +15,8 @@ def run(bot, chat_id, user, keyConfig, message, totalResults=1):
        urllib.quote(str(data['query']['search'][0]['title']))
     else:
         data = wiki_search(requestText)
-        snippetText = data['query']['search'][0]['snippet']
         if 'query' in data and len(data['query']['search']) >= 1:
+            snippetText = data['query']['search'][0]['snippet']
             result = (user + ': ' if not user == '' else '') + snippetText\
                     .replace('[', '\[')\
                     .replace(']', '\]')\
