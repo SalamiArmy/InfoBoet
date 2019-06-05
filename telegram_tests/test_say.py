@@ -40,3 +40,14 @@ class TestSay(unittest.TestCase):
         chatId = int(keyConfig.get('BotAdministration', 'TESTING_GROUP_CHAT_ID'))
 
         say.run(bot, chatId, 'SalamiArmy', keyConfig, requestText, 1)
+
+    def test_say_url(self):
+        requestText = u'http://www.airbnb.com/home/cancellation_policies'
+
+        keyConfig = ConfigParser.ConfigParser()
+        keyConfig.read(["bot_keys.ini", "..\\bot_keys.ini"])
+        keyConfig.read(["keys.ini", "..\\keys.ini"])
+        bot = telegram.Bot(keyConfig.get('BotIDs', 'TESTING_TELEGRAM_BOT_ID'))
+        chatId = int(keyConfig.get('BotAdministration', 'TESTING_TELEGRAM_PRIVATE_CHAT_ID'))
+
+        say.run(bot, chatId, 'SalamiArmy', keyConfig, requestText, 1)

@@ -3,10 +3,14 @@ import base64
 import json
 import requests
 
+from bs4 import BeautifulSoup
+
 from google.appengine.api import urlfetch
 
 def run(bot, chat_id, user, keyConfig, message, totalResults=1):
     requestText = str(message)
+    if ('.' in requestText and ' ' not in requestText):
+        requestText = getUrlText(requestText);
     fullVoice = ['en-GB-Standard-B']
     for voice in fullVoice:
         languageCode = voice.split('-')[0] + '-' + voice.split('-')[1]
@@ -54,3 +58,22 @@ def get_voice(text, keyConfig, voice, languageCode):
         return speechData['audioContent']
     else:
         return str(speechData)
+
+def getUrlText(urlToSay):
+    soup = BeautifulSoup(urlfetch.fetch(
+        url=urlToSay,
+        method='GET'
+    ).content, 'html.parser')
+
+    allElements = soup.recursiveChildGenerator()
+    sayableElements = []
+    if allElements is not None:
+        for elem in allElements:
+            if elem.string != None and ' ' in elem.string and elem.string.count('.') > 1 and '{' not in elem.string:
+                sayableElements.append(elem.string)
+    if sayableElements:
+        return ' '.join(sayableElements)\
+            .replace('.\n', ' ')\
+            .replace('\n', '')\
+            .encode('utf8')[0:4999]
+    return urlToSay

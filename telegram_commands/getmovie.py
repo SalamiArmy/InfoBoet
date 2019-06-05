@@ -5,12 +5,14 @@ import urllib
 
 
 def run(bot, chat_id, user, keyConfig, message, totalResults=1):
+    bot.sendMessage(chat_id=chat_id, text="/getmovie is offline until I can get another OMDB key...")
+    return
     requestText = str(message).strip()
     keyConfig = ConfigParser.ConfigParser()
     keyConfig.read(["keys.ini", "..\keys.ini"])
 
     movieUrl = 'http://www.omdbapi.com/?apikey=' + keyConfig.get('OMDB', 'KEY') + '&plot=short&r=json&y=&t='
-    realUrl = movieUrl + requestText.encode('utf-8')
+    realUrl = movieUrl + str(requestText)
     data = json.load(urllib.urlopen(realUrl))
     result = ''
     if 'Error' not in data:
