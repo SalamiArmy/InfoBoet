@@ -5,8 +5,6 @@ import urllib
 
 
 def run(bot, chat_id, user, keyConfig, message, totalResults=1):
-    bot.sendMessage(chat_id=chat_id, text="/getmovie is offline until I can get another OMDB key...")
-    return
     requestText = str(message).strip()
     keyConfig = ConfigParser.ConfigParser()
     keyConfig.read(["keys.ini", "..\keys.ini"])
