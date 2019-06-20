@@ -62,7 +62,7 @@ def run(bot, chat_id, user, keyConfig, message, totalResults=1):
 #                            parse_mode='Markdown')
         bot.sendMessage(chat_id=chat_id,
                         text=(user if not user == '' else 'Dave') +
-                             '/getmp3 is down for while I import the api for pafy.',
+                             '/getmp3 is down while I import the api for pafy.',
                         parse_mode='Markdown')
         return
 
