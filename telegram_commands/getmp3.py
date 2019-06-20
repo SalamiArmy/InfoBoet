@@ -3,7 +3,7 @@ import json
 import urllib
 from google.appengine.ext import ndb
 from google.appengine.api import urlfetch
-import pafy
+#import pafy
 
 import main
 getvid = main.get_platform_command_code('telegram', 'getvid')
@@ -37,30 +37,34 @@ def wasPreviouslyHeardMP3(video_link, chat_id):
     return False
 
 def run(bot, chat_id, user, keyConfig, message, totalResults=1):
-    requestText = str(message).replace(bot.name, "").strip()
-    args = {'key': keyConfig.get('Google', 'GCSE_APP_ID'),
-            'type': 'video',
-            'safeSearch': 'none',
-            'q': requestText,
-            'part': 'snippet',
-            'maxResults': 25}
-    data, total_results, results_this_page = Google_Custom_Search(args)
-    offset_this_page = 0
-    while offset_this_page < results_this_page:
-        vidlink = str(data['items'][offset_this_page]['id']['videoId'])
-        vidtitle = str(data['items'][offset_this_page]['snippet']['title'])
-        viddescription = str(data['items'][offset_this_page]['snippet']['description'])
-        offset_this_page += 1
-        if is_valid_video(vidlink, chat_id):
-            streams = pafy.new("https://www.youtube.com/watch?v=" + vidlink).streams
-            results = ''
-            for s in streams:
-                results += s.resolution + ', ' + s.extension + ': ' + s.url + '\n'
-            bot.sendMessage(chat_id=chat_id,
-                            text=(user if not user == '' else 'Dave') +
-                                 ', *' + vidtitle + '*, ' + viddescription + results,
-                            parse_mode='Markdown')
-            return
+#    requestText = str(message).replace(bot.name, "").strip()
+#    args = {'key': keyConfig.get('Google', 'GCSE_APP_ID'),
+#            'type': 'video',
+#            'safeSearch': 'none',
+#            'q': requestText,
+#            'part': 'snippet',
+#            'maxResults': 25}
+#    data, total_results, results_this_page = Google_Custom_Search(args)
+#    offset_this_page = 0
+#    while offset_this_page < results_this_page:
+#        vidlink = str(data['items'][offset_this_page]['id']['videoId'])
+#        vidtitle = str(data['items'][offset_this_page]['snippet']['title'])
+#        viddescription = str(data['items'][offset_this_page]['snippet']['description'])
+#        offset_this_page += 1
+#        if is_valid_video(vidlink, chat_id):
+#            streams = pafy.new("https://www.youtube.com/watch?v=" + vidlink).streams
+#            results = ''
+#            for s in streams:
+#                results += s.resolution + ', ' + s.extension + ': ' + s.url + '\n'
+#            bot.sendMessage(chat_id=chat_id,
+#                            text=(user if not user == '' else 'Dave') +
+#                                 ', *' + vidtitle + '*, ' + viddescription + results,
+#                            parse_mode='Markdown')
+        bot.sendMessage(chat_id=chat_id,
+                        text=(user if not user == '' else 'Dave') +
+                             '/getmp3 is down for while I import the api for pafy.',
+                        parse_mode='Markdown')
+        return
 
 def Google_Custom_Search(args):
     googurl = 'https://www.googleapis.com/youtube/v3/search'
