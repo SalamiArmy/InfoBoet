@@ -3,6 +3,7 @@ import json
 import urllib
 from google.appengine.ext import ndb
 from google.appengine.api import urlfetch
+import pafy
 
 import main
 getvid = main.get_platform_command_code('telegram', 'getvid')
@@ -51,9 +52,13 @@ def run(bot, chat_id, user, keyConfig, message, totalResults=1):
         viddescription = str(data['items'][offset_this_page]['snippet']['description'])
         offset_this_page += 1
         if is_valid_video(vidlink, chat_id):
+            streams = pafy.new("https://www.youtube.com/watch?v=" + vidlink).streams
+            results = ''
+            for s in streams:
+                results += s.resolution + ', ' + s.extension + ': ' + s.url + '\n'
             bot.sendMessage(chat_id=chat_id,
-                            text=(user if not user == '' else 'Dave') + ', *' + vidtitle + '*, ' + viddescription +
-                                 '\nhttps://youtube2mp3api.com/@api/button/mp3/' + vidlink,
+                            text=(user if not user == '' else 'Dave') +
+                                 ', *' + vidtitle + '*, ' + viddescription + results,
                             parse_mode='Markdown')
             return
 
