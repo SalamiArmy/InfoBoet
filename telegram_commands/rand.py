@@ -9,7 +9,7 @@ def run(bot, chat_id, user, keyConfig, message, totalResults=1):
 
 def get_exchange_data():
     usdurl = 'https://api.exchangeratesapi.io/latest?base=USD'
-    gbpurl = 'https://api.exchangeratesapi.io/latest?base=UGBP'
+    gbpurl = 'https://api.exchangeratesapi.io/latest?base=GBP'
     eururl = 'https://api.exchangeratesapi.io/latest?base=EUR'
     audurl = 'https://api.exchangeratesapi.io/latest?base=AUD'
     data1 = json.load(urllib.urlopen(usdurl))
