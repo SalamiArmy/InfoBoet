@@ -20,5 +20,5 @@ def get_exchange_data():
     zargbp = float(data2['rates']['ZAR'])
     zareur = float(data3['rates']['ZAR'])
     zaraud = float(data4['rates']['ZAR'])
-    formatted_exchange_data = '1 USD = ' + str(zarusd) + ' ZAR\n1 GBP = ' + str(zargbp) + ' ZAR\n1 EUR = ' + str(zareur) + ' ZAR\n1 AUD = ' + str(zaraud) + ' ZAR'
+    formatted_exchange_data = '1 GBP = ' + str(zargbp) + ' ZAR\n1 EUR = ' + str(zareur) + ' ZAR\n1 USD = ' + str(zarusd) + ' ZAR\n1 AUD = ' + str(zaraud) + ' ZAR'
     return formatted_exchange_data
