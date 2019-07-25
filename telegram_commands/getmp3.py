@@ -52,15 +52,21 @@ def run(bot, chat_id, user, keyConfig, message, totalResults=1):
         viddescription = str(data['items'][offset_this_page]['snippet']['description'])
         offset_this_page += 1
         if is_valid_video(vidlink, chat_id):
-            streams = pafy.new("https://www.youtube.com/watch?v=" + vidlink, basic=True).streams
-            results = ''
-            for s in streams:
-                results += s.resolution + ', ' + s.extension + ': ' + s.url + '\n'
-            bot.sendMessage(chat_id=chat_id,
-                            text=(user if not user == '' else 'Dave') +
-                                 ', *' + vidtitle + '*, ' + viddescription + results,
-                            parse_mode='Markdown')
-            return
+            try:
+                streams = pafy.new("https://www.youtube.com/watch?v=" + vidlink).streams
+                results = ''
+                for s in streams:
+                    results += s.resolution + ', ' + s.extension + ': ' + s.url + '\n'
+                bot.sendMessage(chat_id=chat_id,
+                                text=(user if not user == '' else 'Dave') +
+                                     ', *' + vidtitle + '*, ' + viddescription + results,
+                                parse_mode='Markdown')
+                return
+            except IOError as e:
+                bot.sendMessage(chat_id=chat_id,
+                                text='I\'m sorry, ' + (user if not user == '' else 'Dave') +
+                                     '\n' + e,
+                                parse_mode='Markdown')
 
 def Google_Custom_Search(args):
     googurl = 'https://www.googleapis.com/youtube/v3/search'
