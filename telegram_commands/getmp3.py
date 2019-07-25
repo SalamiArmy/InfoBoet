@@ -52,7 +52,7 @@ def run(bot, chat_id, user, keyConfig, message, totalResults=1):
         viddescription = str(data['items'][offset_this_page]['snippet']['description'])
         offset_this_page += 1
         if is_valid_video(vidlink, chat_id):
-            streams = pafy.new("https://www.youtube.com/watch?v=" + vidlink).streams
+            streams = pafy.new("https://www.youtube.com/watch?v=" + vidlink, basic=True).streams
             results = ''
             for s in streams:
                 results += s.resolution + ', ' + s.extension + ': ' + s.url + '\n'
