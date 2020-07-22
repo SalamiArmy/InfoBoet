@@ -9,7 +9,7 @@ from google.appengine.api import urlfetch
 
 def run(bot, chat_id, user, keyConfig, message, totalResults=1):
     requestText = str(message)
-    if ('.' in requestText and ' ' not in requestText):
+    if ('.' in requestText and ' ' not in requestText and requestText[4:] == 'http'):
         requestText = getUrlText(requestText);
     fullVoice = ['en-GB-Standard-B']
     for voice in fullVoice:
