@@ -28,7 +28,7 @@ def run(bot, chat_id, user, keyConfig, message, totalResults=1):
                                        .replace(']', '')
                                        .replace('\\', ''))
         fullShowDetails = parse_show_details(data[0]['show'])
-        if 'image' in str(data[0]['show']) and str(data[0]['show']['image']) is not None:
+        if 'image' in data[0]['show'] and data[0]['show']['image'] is not None:
             image_original = str(data[0]['show']['image']['original'])
         result = (user if not user == '' else 'Dave') + ', ' + fullShowDetails + '\n' + formattedShowSummary
     else:
