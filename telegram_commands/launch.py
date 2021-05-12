@@ -16,19 +16,26 @@ def run(bot, chat_id, user, keyConfig, message='', totalResults=1):
                         parse_mode=telegram.ParseMode.MARKDOWN, disable_web_page_preview=True)
         return True
     else:
+        if formattedLaunchInfo:
+            bot.sendMessage(chat_id=chat_id, text='I\'m sorry ' + (user if not user == '' else 'Dave') + \
+                                                  formattedLaunchInfo)
+            return False
         bot.sendMessage(chat_id=chat_id, text='I\'m sorry ' + (user if not user == '' else 'Dave') + \
                                               ', I\'m afraid I can\'t find any upcoming rocket launches.')
 
 
 def get_launch_data(formattedLaunchInfo, keyConfig):
-    rocketUrl = 'https://launchlibrary.net/1.2.1/launch/next/5'
+    rocketUrl = 'https://ll.thespacedevs.com/2.0.0/launch/?format=json&offset=5'
     rocketUrlRequest = urllib2.Request(rocketUrl, headers={'User-Agent': "Magic Browser"})
-    rocketData = json.load(urllib2.urlopen(rocketUrlRequest))
-    has_results = 'launches' in rocketData
-    if has_results:
-        blast = rocketData['launches']
-        formattedLaunchInfo = formatted_launch_message(blast, keyConfig)
-    return formattedLaunchInfo, has_results
+    rawData = urllib2.urlopen(rocketUrlRequest)
+    if is_json(rawData):
+        rocketData = json.load()
+        has_results = 'launches' in rocketData
+        if has_results:
+            blast = rocketData['launches']
+            formattedLaunchInfo = formatted_launch_message(blast, keyConfig)
+        return formattedLaunchInfo, has_results
+    return rawData, False
 
 
 def formatted_launch_message(blast, keyConfig):
@@ -103,3 +110,10 @@ def formatted_launch_message(blast, keyConfig):
                                                                                    'mapURL'] != '' and b5['location']['pads'][0]['mapURL'] != None else '') + \
                           ('\nWatch live at ' + b5['vidURL'] if 'vidURL' in b5 and b5['vidURL'] != '' and b5['vidURL'] != None else '')
     return formattedLaunchInfo
+
+def is_json(myjson):
+  try:
+    json_object = json.loads(myjson)
+  except ValueError as e:
+    return False
+  return True
