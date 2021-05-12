@@ -27,9 +27,9 @@ def run(bot, chat_id, user, keyConfig, message='', totalResults=1):
 def get_launch_data(formattedLaunchInfo, keyConfig):
     rocketUrl = 'https://ll.thespacedevs.com/2.0.0/launch/?format=json&offset=5'
     rocketUrlRequest = urllib2.Request(rocketUrl, headers={'User-Agent': "Magic Browser"})
-    rawData = urllib2.urlopen(rocketUrlRequest)
+    rawData = urllib2.urlopen(rocketUrlRequest).read()
     if is_json(rawData):
-        rocketData = json.load()
+        rocketData = json.loads(rawData)
         has_results = 'launches' in rocketData
         if has_results:
             blast = rocketData['launches']
