@@ -23,7 +23,7 @@ def get_cric_data(user):
             try:
                 match = json.load(raw_data)
             except ValueError:
-                return raw_data
+                return raw_data.read()
             return match[0]['si'] + '\n' + match[0]['de']
     else:
         return 'I\'m sorry ' + (user if not user == '' else 'Dave') + \
