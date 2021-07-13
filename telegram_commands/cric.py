@@ -22,7 +22,7 @@ def get_cric_data(user):
             raw_data = urllib.urlopen(matchesUrl)
             try:
                 match = json.load(raw_data)
-            catch ValueError:
+            except ValueError:
                 return raw_data
             return match[0]['si'] + '\n' + match[0]['de']
     else:
