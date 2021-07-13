@@ -19,7 +19,11 @@ def get_cric_data(user):
             return 'I\'m sorry ' + (user if not user == '' else 'Dave') + ', I\'m afraid the Proteas are not playing right now.'
         else:
             matchesUrl = 'http://cricscore-api.appspot.com/csa?id=' + str(proteasMatchId)
-            match = json.load(urllib.urlopen(matchesUrl))
+            raw_data = urllib.urlopen(matchesUrl)
+            try:
+                match = json.load(raw_data)
+            catch ValueError:
+                return raw_data
             return match[0]['si'] + '\n' + match[0]['de']
     else:
         return 'I\'m sorry ' + (user if not user == '' else 'Dave') + \
