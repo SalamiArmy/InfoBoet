@@ -17,6 +17,7 @@ def get_define_data(user, requestText):
     req = urllib2.Request(defineUrl + requestText)
     definitionData = json.load(urllib2.urlopen(req))
     returnData = ''
-    for definition in definitionData:
-        returnData = returnData + '\n' + definition.dumps()
+    length = len(definitionData)
+    for i in range(length):
+        returnData = returnData + '\n' + definitionData[i].dumps()        
     return returnData
