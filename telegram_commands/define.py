@@ -18,4 +18,7 @@ def get_define_data(keyConfig, user, requestText):
     defineUrl = 'https://api.dictionaryapi.dev/api/v2/entries/en/'
     req = urllib2.Request(defineUrl + requestText)
     definitionData = json.load(urllib2.urlopen(req))
-    return definitionData.dumps()
+    returnData = ''
+    for definition in definitionData:
+        returnData += definition
+    return returnData
