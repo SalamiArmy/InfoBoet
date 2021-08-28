@@ -18,6 +18,18 @@ def get_define_data(user, requestText):
     definitionData = json.load(urllib2.urlopen(req))
     returnData = ''
     length = len(definitionData)
-    for i in range(length):
-        returnData = returnData + '\n' + json.dumps(definitionData[i])        
+    if length > 0:
+        for i in range(length):
+            returnData = returnData + '\n*' + definitionData[i] + ':*'
+            if 'meanings' in definitionData[i] and len(definitionData[i]['meanings']) > 0:
+                for j in range(len(definitionData[i]['meanings'])):
+                    if 'definitions' in definitionData[i]['meanings'][j] and len(definitionData[i]['meanings'][j]['definitions']) > 0:
+                        for k in range(len(definitionData[i]['meanings'][j]['definitions'])):
+                            if 'definition' in definitionData[i]['meanings'][j]['definitions'][k]:
+                                returnData = returnData + '\n' + definitionData[i]['meanings'][j]['definitions'][k]['definition']
+                            if 'synonyms' in definitionData[i]['meanings'][j]['definitions'][k] and len(definitionData[i]['meanings'][j]['definitions'][k]['synonyms']) > 0:
+                                returnData = returnData + '\n`'
+                                for l in range(len(definitionData[i]['meanings'][j]['definitions'][k]['synonyms'])):
+                                    returnData = returnData + ',' + definitionData[i]['meanings'][j]['definitions'][k]['synonyms'][l]
+                                returnData = returnData + '`'
     return returnData
