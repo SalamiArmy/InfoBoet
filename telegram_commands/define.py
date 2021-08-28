@@ -20,7 +20,7 @@ def get_define_data(user, requestText):
     length = len(definitionData)
     if length > 0:
         for i in range(length):
-            returnData = returnData + '\n*' + definitionData[i] + ':*'
+            returnData = returnData + '\n*' + definitionData[i]['word'] + ':*'
             if 'meanings' in definitionData[i] and len(definitionData[i]['meanings']) > 0:
                 for j in range(len(definitionData[i]['meanings'])):
                     if 'definitions' in definitionData[i]['meanings'][j] and len(definitionData[i]['meanings'][j]['definitions']) > 0:
