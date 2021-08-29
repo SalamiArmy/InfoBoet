@@ -15,23 +15,23 @@ def run(bot, chat_id, user, keyConfig, message, totalResults=1):
 def get_define_data(user, requestText):
     defineUrl = 'https://api.dictionaryapi.dev/api/v2/entries/en/'
     req = urllib2.Request(defineUrl + requestText)
-    definitionData = json.load(urllib2.urlopen(req))
+    defineData = json.load(urllib2.urlopen(req))
     returnData = ''
-    length = len(definitionData)
+    length = len(defineData)
     if length > 0:
         for i in range(length):
-            returnData = returnData + '\n*' + definitionData[i]['word'] + ':*'
-            if 'meanings' in definitionData[i] and len(definitionData[i]['meanings']) > 0:
+            returnData = returnData + '\n*' + defineData[i]['word'] + ':*'
+            if 'meanings' in defineData[i] and len(defineData[i]['meanings']) > 0:
                 definitionData = ''
                 synonymData = '`'
-                for j in range(len(definitionData[i]['meanings'])):
-                    if 'definitions' in definitionData[i]['meanings'][j] and len(definitionData[i]['meanings'][j]['definitions']) > 0:
-                        for k in range(len(definitionData[i]['meanings'][j]['definitions'])):
-                            if 'definition' in definitionData[i]['meanings'][j]['definitions'][k]:
-                                definitionData = definitionData + ' ' + definitionData[i]['meanings'][j]['definitions'][k]['definition']
-                            if 'synonyms' in definitionData[i]['meanings'][j]['definitions'][k] and len(definitionData[i]['meanings'][j]['definitions'][k]['synonyms']) > 0:
-                                for l in range(len(definitionData[i]['meanings'][j]['definitions'][k]['synonyms'])):
-                                    synonymData = synonymData + ',' + definitionData[i]['meanings'][j]['definitions'][k]['synonyms'][l]
+                for j in range(len(defineData[i]['meanings'])):
+                    if 'definitions' in defineData[i]['meanings'][j] and len(defineData[i]['meanings'][j]['definitions']) > 0:
+                        for k in range(len(defineData[i]['meanings'][j]['definitions'])):
+                            if 'definition' in defineData[i]['meanings'][j]['definitions'][k]:
+                                definitionData = definitionData + ' ' + defineData[i]['meanings'][j]['definitions'][k]['definition']
+                            if 'synonyms' in defineData[i]['meanings'][j]['definitions'][k] and len(defineData[i]['meanings'][j]['definitions'][k]['synonyms']) > 0:
+                                for l in range(len(defineData[i]['meanings'][j]['definitions'][k]['synonyms'])):
+                                    synonymData = synonymData + ',' + defineData[i]['meanings'][j]['definitions'][k]['synonyms'][l]
                 synonymData = synonymData.lstrip(',') + '`'
                 definitionData = definitionData.lstrip(' ')
             returnData = returnData + '\n' + definitionData + '\n' + synonymData
