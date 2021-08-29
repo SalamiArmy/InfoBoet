@@ -19,7 +19,7 @@ def get_define_data(user, requestText):
         tryOpenUrl = urllib2.urlopen(req)
     except HTTPError:
         return 'I\'m sorry ' + (user if not user == '' else 'Dave') +\
-           ', I\'m afraid I cannot find a defnition for ' + requestText + '.')
+           ', I\'m afraid I cannot find a defnition for ' + requestText + '.'
     defineData = json.load(tryOpenUrl)
     returnData = ''
     length = len(defineData)
