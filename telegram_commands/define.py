@@ -15,7 +15,12 @@ def run(bot, chat_id, user, keyConfig, message, totalResults=1):
 def get_define_data(user, requestText):
     defineUrl = 'https://api.dictionaryapi.dev/api/v2/entries/en/'
     req = urllib2.Request(defineUrl + requestText)
-    defineData = json.load(urllib2.urlopen(req))
+    try:
+        tryOpenUrl = urllib2.urlopen(req)
+    except HTTPError:
+        return 'I\'m sorry ' + (user if not user == '' else 'Dave') +\
+           ', I\'m afraid I cannot find a defnition for ' + requestText + '.')
+    defineData = json.load(tryOpenUrl)
     returnData = ''
     length = len(defineData)
     if length > 0:
@@ -34,7 +39,9 @@ def get_define_data(user, requestText):
                                     synonymData = synonymData + (', ' if synonymData != '`' else '') + defineData[i]['meanings'][j]['definitions'][k]['synonyms'][l]
                 synonymData = synonymData + '`'
                 definitionData = definitionData.lstrip(' ')
-            returnData = returnData + '\n' + definitionData + '\n' + synonymData
+            returnData = returnData + '\n' + definitionData
+            if synonymData != '``':
+                returnData = returnData + '\n' + synonymData
             if 'phonetics' in defineData[i] and len(defineData[i]['phonetics']) > 0:
                 returnData = returnData + '\nhttp:' + defineData[i]['phonetics'][0]['audio'].replace('_','\_')
     return returnData
