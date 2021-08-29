@@ -36,5 +36,5 @@ def get_define_data(user, requestText):
                 definitionData = definitionData.lstrip(' ')
             returnData = returnData + '\n' + definitionData + '\n' + synonymData
             if 'phonetics' in defineData[i] and len(defineData[i]['phonetics']) > 0:
-                returnData = returnData + '\n' + defineData[i]['phonetics'][0]['audio'].replace('_','\_')
+                returnData = returnData + '\nhttp:' + defineData[i]['phonetics'][0]['audio'].replace('_','\_')
     return returnData
