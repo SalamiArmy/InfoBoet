@@ -38,7 +38,9 @@ def get_define_data(user, requestText):
                             if 'synonyms' in defineData[i]['meanings'][j]['definitions'][k] and len(defineData[i]['meanings'][j]['definitions'][k]['synonyms']) > 0:
                                 for l in range(len(defineData[i]['meanings'][j]['definitions'][k]['synonyms'])):
                                     synonymData = synonymData + (', ' if synonymData != '`' else '') + defineData[i]['meanings'][j]['definitions'][k]['synonyms'][l]
+                synonymData = (synonymData[:1000] + '...') if len(synonymData) > 1000 else synonymData
                 synonymData = synonymData + '`'
+                definitionData = (definitionData[:1000] + '...') if len(definitionData) > 1000 else definitionData
                 definitionData = definitionData.lstrip(' ')
             returnData = returnData + '\n' + definitionData
             if synonymData != '``':
