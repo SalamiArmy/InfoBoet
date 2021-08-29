@@ -31,10 +31,10 @@ def get_define_data(user, requestText):
                                 definitionData = definitionData + ' ' + defineData[i]['meanings'][j]['definitions'][k]['definition']
                             if 'synonyms' in defineData[i]['meanings'][j]['definitions'][k] and len(defineData[i]['meanings'][j]['definitions'][k]['synonyms']) > 0:
                                 for l in range(len(defineData[i]['meanings'][j]['definitions'][k]['synonyms'])):
-                                    synonymData = synonymData + ', ' + defineData[i]['meanings'][j]['definitions'][k]['synonyms'][l]
-                synonymData = synonymData.lstrip(', ') + '`'
+                                    synonymData = synonymData + (', ' if synonymData != '`' else '') + defineData[i]['meanings'][j]['definitions'][k]['synonyms'][l]
+                synonymData = synonymData + '`'
                 definitionData = definitionData.lstrip(' ')
             returnData = returnData + '\n' + definitionData + '\n' + synonymData
             if 'phonetics' in defineData[i] and len(defineData[i]['phonetics']) > 0:
-                returnData = returnData + '\n' + defineData[i]['phonetics'][0]['audio']
+                returnData = returnData + '\n' + defineData[i]['phonetics'][0]['audio'].replace('_','\_')
     return returnData
