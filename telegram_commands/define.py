@@ -20,7 +20,7 @@ def get_define_data(user, requestText):
     length = len(defineData)
     if length > 0:
         for i in range(length):
-            returnData = returnData + '\n*' + defineData[i]['word'] + ':*'
+            returnData = returnData + '\n*' + defineData[i]['word'].upper() + ':*'
             if 'meanings' in defineData[i] and len(defineData[i]['meanings']) > 0:
                 definitionData = ''
                 synonymData = '`'
@@ -31,8 +31,10 @@ def get_define_data(user, requestText):
                                 definitionData = definitionData + ' ' + defineData[i]['meanings'][j]['definitions'][k]['definition']
                             if 'synonyms' in defineData[i]['meanings'][j]['definitions'][k] and len(defineData[i]['meanings'][j]['definitions'][k]['synonyms']) > 0:
                                 for l in range(len(defineData[i]['meanings'][j]['definitions'][k]['synonyms'])):
-                                    synonymData = synonymData + ',' + defineData[i]['meanings'][j]['definitions'][k]['synonyms'][l]
-                synonymData = synonymData.lstrip(',') + '`'
+                                    synonymData = synonymData + ', ' + defineData[i]['meanings'][j]['definitions'][k]['synonyms'][l]
+                synonymData = synonymData.lstrip(', ') + '`'
                 definitionData = definitionData.lstrip(' ')
             returnData = returnData + '\n' + definitionData + '\n' + synonymData
+            if 'phonetics' in defineData[i] and len(defineData[i]['phonetics']) > 0:
+                returnData = returnData + '\n' + defineData[i]['phonetics'][0]['audio']
     return returnData
