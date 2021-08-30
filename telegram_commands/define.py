@@ -25,26 +25,25 @@ def get_define_data(user, requestText):
     returnData = ''
     length = len(defineData)
     if length > 0:
-        for i in range(length):
-            returnData = returnData + '\n*' + defineData[i]['word'].upper() + ':*'
-            if 'meanings' in defineData[i] and len(defineData[i]['meanings']) > 0:
-                definitionData = ''
-                synonymData = '`'
-                for j in range(len(defineData[i]['meanings'])):
-                    if 'definitions' in defineData[i]['meanings'][j] and len(defineData[i]['meanings'][j]['definitions']) > 0:
-                        for k in range(len(defineData[i]['meanings'][j]['definitions'])):
-                            if 'definition' in defineData[i]['meanings'][j]['definitions'][k]:
-                                definitionData = definitionData + ' ' + defineData[i]['meanings'][j]['definitions'][k]['definition']
-                            if 'synonyms' in defineData[i]['meanings'][j]['definitions'][k] and len(defineData[i]['meanings'][j]['definitions'][k]['synonyms']) > 0:
-                                for l in range(len(defineData[i]['meanings'][j]['definitions'][k]['synonyms'])):
-                                    synonymData = synonymData + (', ' if synonymData != '`' else '') + defineData[i]['meanings'][j]['definitions'][k]['synonyms'][l]
-                synonymData = (synonymData[:1000] + '...') if len(synonymData) > 1000 else synonymData
-                synonymData = synonymData + '`'
-                definitionData = (definitionData[:1000] + '...') if len(definitionData) > 1000 else definitionData
-                definitionData = definitionData.lstrip(' ')
-            returnData = returnData + '\n' + definitionData
-            if synonymData != '``':
-                returnData = returnData + '\n' + synonymData
-            if 'phonetics' in defineData[i] and len(defineData[i]['phonetics']) > 0 and 'audio' in defineData[i]['phonetics'][0]:
-                returnData = returnData + '\nhttp:' + defineData[i]['phonetics'][0]['audio'].replace('_','\_')
+        returnData = returnData + '\n*' + defineData[0]['word'].upper() + ':*'
+        if 'meanings' in defineData[0] and len(defineData[0]['meanings']) > 0:
+            definitionData = ''
+            synonymData = '`'
+            for j in range(len(defineData[0]['meanings'])):
+                if 'definitions' in defineData[0]['meanings'][j] and len(defineData[0]['meanings'][j]['definitions']) > 0:
+                    for k in range(len(defineData[0]['meanings'][j]['definitions'])):
+                        if 'definition' in defineData[0]['meanings'][j]['definitions'][k]:
+                            definitionData = definitionData + ' ' + defineData[0]['meanings'][j]['definitions'][k]['definition']
+                        if 'synonyms' in defineData[0]['meanings'][j]['definitions'][k] and len(defineData[0]['meanings'][j]['definitions'][k]['synonyms']) > 0:
+                            for l in range(len(defineData[0]['meanings'][j]['definitions'][k]['synonyms'])):
+                                synonymData = synonymData + (', ' if synonymData != '`' else '') + defineData[0]['meanings'][j]['definitions'][k]['synonyms'][l]
+            synonymData = (synonymData[:1000] + '...') if len(synonymData) > 1000 else synonymData
+            synonymData = synonymData + '`'
+            definitionData = (definitionData[:1000] + '...') if len(definitionData) > 1000 else definitionData
+            definitionData = definitionData.lstrip(' ')
+        returnData = returnData + '\n' + definitionData
+        if synonymData != '``':
+            returnData = returnData + '\n' + synonymData
+        if 'phonetics' in defineData[0] and len(defineData[0]['phonetics']) > 0 and 'audio' in defineData[0]['phonetics'][0]:
+            returnData = returnData + '\nhttp:' + defineData[0]['phonetics'][0]['audio'].replace('_','\_')
     return returnData
