@@ -46,4 +46,7 @@ def get_define_data(user, requestText):
             returnData = returnData + '\n' + synonymData
         if 'phonetics' in defineData[0] and len(defineData[0]['phonetics']) > 0 and 'audio' in defineData[0]['phonetics'][0]:
             returnData = returnData + '\nhttp:' + defineData[0]['phonetics'][0]['audio'].replace('_','\_')
+    else:
+        return 'I\'m sorry ' + (user if not user == '' else 'Dave') +\
+           ', I\'m afraid I cannot find a defnition for ' + requestText + '.'
     return returnData
