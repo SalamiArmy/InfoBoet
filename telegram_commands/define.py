@@ -4,14 +4,13 @@ import json
 import urllib
 import urllib2
 from urllib2 import HTTPError
-from telegram.error import BadRequest
 
 def run(bot, chat_id, user, keyConfig, message, totalResults=1):
     requestText = str(message).strip()
     if requestText != '':
         try:
             bot.sendMessage(chat_id=chat_id, text=get_define_data(user, requestText), parse_mode='Markdown')
-        except BadRequest:
+        except:
             bot.sendMessage(chat_id=chat_id, text=get_define_data(user, requestText))
     else:
         bot.sendMessage(chat_id=chat_id, text='I\'m sorry ' + (user if not user == '' else 'Dave') +\
