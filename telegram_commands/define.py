@@ -4,7 +4,7 @@ import json
 import urllib
 import urllib2
 from urllib2 import HTTPError
-from werkzeug.exceptions import BadRequest
+from telegram.error import BadRequest
 
 def run(bot, chat_id, user, keyConfig, message, totalResults=1):
     requestText = str(message).strip()
