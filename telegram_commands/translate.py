@@ -2,7 +2,8 @@
 import ConfigParser
 import json
 import logging
-import urllib
+from urllib.parse import urlparse
+import urllib.request
 
 
 def run(bot, chat_id, user, keyConfig, message, totalResults=1):
