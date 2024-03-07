@@ -2,8 +2,13 @@
 import ConfigParser
 import json
 import logging
-from urllib.parse import urlparse
-import urllib.request
+try:
+    from urllib.parse import urlparse
+    from urllib.request import urlopen
+except ImportError:
+    # For Python 2
+    from urlparse import urlparse
+    from urllib2 import urlopen
 
 
 def run(bot, chat_id, user, keyConfig, message, totalResults=1):
