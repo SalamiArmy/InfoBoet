@@ -27,7 +27,7 @@ def run(bot, chat_id, user, keyConfig, message, totalResults=1):
             if len(data['data']['translations']) >= 1 and data['data']['translations'][0]['translatedText'] != requestText:
                 translation = data['data']['translations'][0]['translatedText']
                 detectedLanguage = data['data']['translations'][0]['detectedSourceLanguage']
-                languagesList = json.load(urllib.urlopen(
+                languagesList = json.load(urlopen(
                     'https://www.googleapis.com/language/translate/v2/languages?target=en&key=' + keyConfig.get(
                         'Google', 'GCSE_APP_ID')))['data']['languages']
                 if len([lang for lang in languagesList if lang['language'] == detectedLanguage]) > 0:
