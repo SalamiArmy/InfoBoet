@@ -20,7 +20,7 @@ def run(bot, chat_id, user, keyConfig, message, totalResults=1):
                    keyConfig.get('Google', 'GCSE_APP_ID') + '&target=en&q='
     realUrl = translateUrl + requestText
     if is_valid_url(realUrl):
-        data = json.load(urllib.request.urlopen(realUrl))
+        data = json.load(urlopen(realUrl))
         logging.info('response body:')
         logging.info(data)
         if 'data' in data and 'translations' in data['data']:
